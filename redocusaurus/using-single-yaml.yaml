@@ -708,7 +708,7 @@ components:
           example: John
         lastName:
           type: string
-          example: James
+          example: User
         email:
           type: string
           example: john@email.com
