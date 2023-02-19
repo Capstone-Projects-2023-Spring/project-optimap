@@ -1,27 +1,16 @@
 ---
 sidebar_position: 1
 ---
+# Design
 
-**Purpose**
+## Front-end Class Diagram
 
-The Design Document - Part I Architecture describes the software architecture and how the requirements are mapped into the design. This document will be a combination of diagrams and text that describes what the diagrams are showing.
+[![](https://mermaid.ink/img/pako:eNqVU01Lw0AQ_SthT4rtH8hBECsqVJFGPEgu6-40HZqdCZvZSin976ZNpbEmaTOXXeY95s3nRhm2oGJlcl2WE9SZ1y6lqLK9J5pyhpQYD0DRpgZ2duOBLPir6zhaMdojMF5osjkk4cuhdML31ZPBX3ibUlP4iR0M151ADgLdujmaZa_siy4-EL6HaH4yu-6EvM56BWccBJ6pCDJE887aKRstyNTJmYHjFZylvaO7ZB6vLDjHOtYbF6E4m-5JgAREkLJySJmPunyYV6oIZNZtSZ7WwVSK10hS9pbU3Orx-LaxbDXeWL4dfFiKVuw4v1b4X9taWb-9USPlwDuNtjrJfZ9SJQtwkKq4-lrtl6lKaVvxdBBO1mRULD7ASIXCaoHDBdfO7Q8q0TQX?type=png)](https://mermaid.live/edit#pako:eNqVU01Lw0AQ_SthT4rtH8hBECsqVJFGPEgu6-40HZqdCZvZSin976ZNpbEmaTOXXeY95s3nRhm2oGJlcl2WE9SZ1y6lqLK9J5pyhpQYD0DRpgZ2duOBLPir6zhaMdojMF5osjkk4cuhdML31ZPBX3ibUlP4iR0M151ADgLdujmaZa_siy4-EL6HaH4yu-6EvM56BWccBJ6pCDJE887aKRstyNTJmYHjFZylvaO7ZB6vLDjHOtYbF6E4m-5JgAREkLJySJmPunyYV6oIZNZtSZ7WwVSK10hS9pbU3Orx-LaxbDXeWL4dfFiKVuw4v1b4X9taWb-9USPlwDuNtjrJfZ9SJQtwkKq4-lrtl6lKaVvxdBBO1mRULD7ASIXCaoHDBdfO7Q8q0TQX)
 
-**Requirements**
+The LoginScreen class handles user's login credentials. The HomeScreen class shows the users the routes they have taken before and saved, along with directions. It then links to other classes such as MapView, RouteInput, NotificationPopup, and Settings. The MapView class shows the user the map of their route and allows them to interact with it, such as zooming in and out. The RouteInput class is where the user enters the locations they want to visit, and the time they plan to spend at each location. The NotifcationPopup class will allow the user to know if their planned route is not possible due to certain constraints such as traffic or time. The Settings class lets the user specify the time they plan to finish the route or other factors that would affect the route optimization. 
 
-In addition to the general requirements the Design Document - Part I Architecture will contain:
+## Back-end Class Diagram
 
-A description the different components and their interfaces. For example: client, server, database.
+[![](https://mermaid.ink/img/pako:eNp9VE1PwzAM_StRTiDoH9gBaQwhkPgSjFsvJvFGWJtMrjs0pv13kqxN163bpaqfnfeeXTcbqZxGOZJZluWWDRc4EregFhlaLSYFVJW4MzAnKHMba1TAEvRZIYksuxHvrmbMrRCvSzal-TsPTwlmM6PGb4_HuRfHxueAjbMfSCujIsEAHMuDg5C_A4YvqM6AyUsPPSHXq0kGjzL9RuJsorjYhFiIrPaBhRKbcOkLfh3pJqRg6cFU7GjdVhCujKv9iAlVMFU1iQpWqGMPLaIPSnbPq8LNjb247CJ_JoWKEBgjTcIC8x6yDY-unZhJ_RRuN6rWgx8MjvmpQXs-QOsWT1Jz5GnvxKBktxCb1OrPomKCPdWJN-ERY7n14vgb6R6Un2Z_IjNjdeSE4nSf3adMqryDwhfv8YUuutQg29C6NrRXNuTWYU0Gj6YFS80f6od9wU7aI4RMBld74FZeyxKpBKP97x2pcukH5FdRjvyrBlrkMrehDmp2H2ur5IipxmtZL70kNj95C6I2XvZ5d13EW2P7Dx0xZEI?type=png)](https://mermaid.live/edit#pako:eNp9VE1PwzAM_StRTiDoH9gBaQwhkPgSjFsvJvFGWJtMrjs0pv13kqxN163bpaqfnfeeXTcbqZxGOZJZluWWDRc4EregFhlaLSYFVJW4MzAnKHMba1TAEvRZIYksuxHvrmbMrRCvSzal-TsPTwlmM6PGb4_HuRfHxueAjbMfSCujIsEAHMuDg5C_A4YvqM6AyUsPPSHXq0kGjzL9RuJsorjYhFiIrPaBhRKbcOkLfh3pJqRg6cFU7GjdVhCujKv9iAlVMFU1iQpWqGMPLaIPSnbPq8LNjb247CJ_JoWKEBgjTcIC8x6yDY-unZhJ_RRuN6rWgx8MjvmpQXs-QOsWT1Jz5GnvxKBktxCb1OrPomKCPdWJN-ERY7n14vgb6R6Un2Z_IjNjdeSE4nSf3adMqryDwhfv8YUuutQg29C6NrRXNuTWYU0Gj6YFS80f6od9wU7aI4RMBld74FZeyxKpBKP97x2pcukH5FdRjvyrBlrkMrehDmp2H2ur5IipxmtZL70kNj95C6I2XvZ5d13EW2P7Dx0xZEI)
 
-For each component provide class diagrams showing the classes to be developed (or used) and their relationship.
-
-Sequence diagrams showing the data flow for _all_ use cases. One sequence diagram corresponds to one use case and different use cases should have different corresponding sequence diagrams.
-
-Describe algorithms employed in your project, e.g. neural network paradigm, training and training data set, etc.
-
-If there is a database:
-
-Entity-relation diagram.
-
-Table design.
-
-A check list for architecture design is attached here [architecture\_design\_checklist.pdf](https://templeu.instructure.com/courses/106563/files/16928870/download?wrap=1 "architecture_design_checklist.pdf")  and should be used as a guidance.
+The database class stores and retrieves data for other classes, such as, including user data, route data, notification service data, optimizer data, and traffic API data. TrafficAPI class handles traffic data which will then be sent to the optimizer class to optimize the route based on real-time traffic conditions.  Route class contains information regarding a specific route, such as the locations and time expected to spend at each location. The optimizer class handles finding the optimal route for the user's inputted location, time constraints, and any other factors. It uses Dijkstra's algorithm and references the TrafficAPI to get traffic data for better optimization. NotificationServices class is responsible to notify the user if their planned route is not possible or if their are any other issues such as traffic or road blockage. The User class contains user information such as, login credentials, saved routes, route history, and directions. It has methods for
