@@ -189,3 +189,32 @@ sequenceDiagram
 5. Google Maps API notifies OptiMap of road closure
 6. OptiMap re-runs optimization on different roads 
 7. OptiMap updates the map view and displays newly optimized route
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> LoginView: Start
+
+    LoginView --> Authentication
+    Authentication --> MenuScreen: Success
+    Authentication --> ErrorScreen: Fail
+   
+    MenuScreen --> SavedRoutes
+    SavedRoutes --> SelectFromSaved: Firebase DB Request
+    SelectFromSaved --> FindRoute
+
+    MenuScreen --> Profile
+    Profile --> AccountView
+    MenuScreen --> MapView
+    MapView --> SearchDestination
+    SearchDestination --> SearchDestination: Enter Destination
+    SearchDestination --> FindRoute
+    FindRoute --> ShowRoute: Route Optimization
+    ShowRoute --> SelectTransportationMode
+    ShowRoute --> [*]:Close App
+    SelectTransportationMode --> UpdateRoute: Selected
+    UpdateRoute --> ShowRoute: Real-Time Update
+
+```
+**Figure 1.8, *State Diagram* **
