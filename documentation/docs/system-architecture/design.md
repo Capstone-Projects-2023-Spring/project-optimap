@@ -189,3 +189,36 @@ sequenceDiagram
 5. Google Maps API notifies OptiMap of road closure
 6. OptiMap re-runs optimization on different roads 
 7. OptiMap updates the map view and displays newly optimized route
+
+## State Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> LoginView: Start
+
+    LoginView --> Authentication
+    Authentication --> MenuScreen: Success
+    Authentication --> ErrorScreen: Fail
+   
+    MenuScreen --> SavedRoutes
+    SavedRoutes --> SelectFromSaved: Firebase DB Request
+    SelectFromSaved --> FindRoute
+
+    MenuScreen --> Profile
+    Profile --> AccountView
+    MenuScreen --> MapView
+    MapView --> SearchDestination
+    SearchDestination --> SearchDestination: Enter Destination
+    SearchDestination --> FindRoute
+    FindRoute --> ShowRoute: Route Optimization
+    ShowRoute --> SelectTransportationMode
+    ShowRoute --> [*]:Close App
+    SelectTransportationMode --> UpdateRoute: Selected
+    UpdateRoute --> ShowRoute: Real-Time Update
+
+```
+**Figure 1.8, *State Diagram* **
+
+## Algorithm Description
+
+The algorithm that will be used is Dijsktra's algorithm to help find the shortest distance between each location inputted by the user. Dijkstra's algorithm will be used in the Optimizer class to help achieve that function. The Optimizer class allows for user input in the form of a list of locations and then Dijsktra's algorithm will help assign weights to each location to help find the shortest path. The weights allow for the algorithm to keep track of the currently known shortest distance from node to node and updates if a shorter path is found. This process continues until all nodes are added from the user inputted list. Once that is complete, the list of locations will be reordered into the fastest path and then displayed to the user.
