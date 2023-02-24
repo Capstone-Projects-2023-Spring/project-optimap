@@ -1,19 +1,33 @@
-import { getDatabase, ref, onValue } from "firebase/app";
-import db from "../firebase/firebase"
+// import { getDatabase, ref, onValue } from "firebase/database";
+import React, { useState, useEffect } from 'react'
+import { View, Text } from 'react-native'
+import {db} from "../firebase/firebase"
+import { doc, getDoc } from "firebase/firestore";
 
-const [message, setMessage] = useState("")
+
+
 
 export default function Read() {
-    db.database().ref('words/').on('value', (snapshot) => {
-        const words = snapshot.val();
-        console.log(words);
-        setMessage(words)
-      });
+    const [message, setMessage] = useState("")
 
-    return(
-        <View style = {[styles.screen]}>
-            <Text>{message}</Text>
-        </View>
-        
+    useEffect(() => {
+        async function fetchData() {
+          const docRef = doc(db, 'words', 'word');
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setMessage(docSnap.data());
+            console.log("message: " + message)
+          } else {
+            setMessage('No such document!');
+          }
+        }
+        fetchData();
+      }, []);
+
+    return (
+        <Text>
+            {message}
+        </Text>
+
     );
 }
