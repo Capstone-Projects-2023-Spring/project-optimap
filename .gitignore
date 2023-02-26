@@ -7,3 +7,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
+# node
+/node_modules
+node_modules
