@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Tasks
 
-##Planning/Elaboration Phase (PP)
+## Planning/Elaboration Phase (PP)
 | # | Task                                                              | Design of Unit X | Estimated Effort  | Finish Data                             | Assigned Individual(s) | Successor Tasks                  |
 | - | ----------------------------------------------------------------- | ---------------- | ----------------- | --------------------------------------- | ---------------------- | -------------------------------- |
 | 1 | Brainstorming                                                     | None             | Everyone - 1 week | Ideas                                   | Everyone               | Any                              |
@@ -17,7 +17,7 @@ sidebar_position: 2
 | 8 | Create Firebase Database for “Hello world” sample app             | PP3              | 1 person - 1 day  | Database                                |                        | PP9                              |
 | 9 | Create a React Native project connected to “Hello world” database | PP5              | 1 person - 1 week | accessible app with database connection |                        | Implementation phase             |
 
-##Implementation Phase (IP)
+## Implementation Phase (IP)
 | #  | Task                                                     | Design of Unit X | Estimated Effort  | Finish Data                                                        | Assigned Individual(s) | Successor Tasks                                                                          |
 | -- | -------------------------------------------------------- | ---------------- | ----------------- | ------------------------------------------------------------------ | ---------------------- | ---------------------------------------------------------------------------------------- |
 | 1  | Create new Firebase database for OptiMap                 | PP6              | 1 person - 1 day  | functional database                                                |                        | login page, save route feature                                                           |
@@ -32,7 +32,7 @@ sidebar_position: 2
 | 10 | Implement ability to specify avoidance (of roads, areas) | IP8              | 2 people - 1 week | fully customizable route preferences                               |                        | pre-determine places to avoid in addition to auto-rerouting (traffic)                    |
 | 11 | Implement route saving/favoriting feature                | IP1, IP2, IP6    | 1 person - 1 week | fully functional route saving ability                              |                        | favorited routes page                                                                    |
 
-##Testing Phase (TP)
+## Testing Phase (TP)
 | # | Task                                        | Design of Unit X | Estimated Effort        | Finish Data                                              | Assigned Individual(s) | Successor Tasks                              |
 | - | ------------------------------------------- | ---------------- | ----------------------- | -------------------------------------------------------- | ---------------------- | -------------------------------------------- |
 | 1 | Unit Testing                                | All IPs          | 1 person - 1 day        | individual functionalities are error-free and functional |                        | Integration Testing                          |
