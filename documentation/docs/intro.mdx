@@ -3,6 +3,14 @@ sidebar_position: 1
 ---
 # Introduction
 
-OptiMap is a React Native mobile application that will ensure users get the most efficient route 
-minimizing distance and time to any location they plug into Google Maps. The application will be 
-deployed on mobile.
+OptiMap is a mobile application developed using React Native. It ensures users get the most efficient route, minimizing distance and time to any location they plug into Google Maps. The application is designed for mobile devices and is also accessible through the web.
+
+OptiMap takes users' login credentials and authenticates them before allowing access to the service. OptiMap uses a Firebase database to store important information such as a history of routes, previous directions, saved routes, and directions. This allows the app to quickly retrieve the data. The firebase platform’s versatility and ease of application makes it the optimal choice to store and manage data for OptiMap.
+
+With the rise of product delivery programs, finding the most efficient route in a long list of locations becomes exceedingly important. OptiMap targets this problem by allowing users to enter any number of locations as they would need and then finding the optimal path. The locations do not particularly have to be in “order”, as our app determines the best route based on all of the plugged-in locations.
+
+The most efficient route depends on several key factors, such as gas efficiency, length of time spent at each location, and time restraints specified by the user. The app allows users to plug in any number of locations that they need to visit, as well as the amount of time they expect to spend at each location. Additionally, they may specify a time they need to finish the route. In order to assist users that plan on leaving on a specific time/day, OptiMap calls the API to find out traffic information. In doing so, the users can input the time they plan on leaving and get an optimal route in return. OptiMap will rearrange the order in which destinations are traveled to give users the most efficient path and to allow them to properly plan their travel. Once a route has been optimized and created, users may save that route for future use. 
+
+Additionally, our app notifies the user if the route they are attempting to do is “not possible”. For example, if they need to get to point X by 5pm, but the routes and times they plan to spend at 4 locations before that will exceed 5pm, OptiMap makes sure to inform them of this fact. By providing this information, we ensure that users have the most accurate information to plan their routes efficiently.
+
+Overall, OptiMap is a powerful and user-friendly application that can help users optimize their travel routes quickly and efficiently.
