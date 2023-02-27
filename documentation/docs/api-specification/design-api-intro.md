@@ -18,19 +18,22 @@ Design Document - Part II API
 **Methods:**
 - `render(): void`
     - Purpose: Renders the login screen.
-    - Pre-condition: None
-    - Parameters: None
-    - Return value: None
+    - Pre-condition: None.
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleSubmit(): void`
     - Purpose: Handles user authentication when the login button is clicked.
     - Pre-condition: The user must have entered valid login credentials.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleChange(): void`
     - Purpose: Updates the component's state when user inputs change.
     - Pre-condition: User inputs must have changed.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 
 
 ### Class: HomeScreen
@@ -44,19 +47,22 @@ Design Document - Part II API
 **Methods:**
 - `render(): void`
     - Purpose: Renders the home screen.
-    - Pre-condition: None
-    - Parameters: None
-    - Return value: None
+    - Pre-condition: None.
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleDelete(): void`
     - Purpose: Deletes a route from the user's history.
     - Pre-condition: The user must have selected a route to delete.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleClick(): void`
     - Purpose: Handles user clicks on a route.
     - Pre-condition: The user must have clicked on a valid route.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 
 
 ### Class: MapView
@@ -69,19 +75,22 @@ Design Document - Part II API
 **Methods:**
 - `render(): void`
     - Purpose: Renders the map.
-    - Pre-condition: None
-    - Parameters: None
-    - Return value: None
+    - Pre-condition: None.
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleZoom(): void`
     - Purpose: Handles zooming in and out of the map.
     - Pre-condition: The user must have interacted with the zoom controls.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleDrag(): void`
     - Purpose: Handles map dragging.
     - Pre-condition: The user must have dragged the map.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 
 
 ### Class: RouteInput
@@ -94,24 +103,28 @@ Design Document - Part II API
 **Methods:**
 - `render(): void`
     - Purpose: Renders the RouteInput component.
-    - Pre-condition: None
-    - Parameters: None
-    - Return value: None
+    - Pre-condition: None.
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleAddLocation(): void`
     - Purpose: Adds a new location to the list.
     - Pre-condition: The user must have entered a new location.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleRemoveLocation(): void`
     - Purpose: Removes a location from the list.
     - Pre-condition: The user must have selected a location to remove.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleTimeChange(): void`
     - Purpose: Handles changes to the time expected to spend at a location.
     - Pre-condition: The user must have changed the time expected to spend at a location.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 
 
 ### Class: NotificationPopup
@@ -123,9 +136,10 @@ Design Document - Part II API
 **Methods:**
 - `render(): void`
     - Purpose: Renders the NotificationPopup component.
-    - Pre-condition: None
-    - Parameters: None
-    - Return value: None
+    - Pre-condition: None.
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 
 
 ### Class: Settings
@@ -138,14 +152,16 @@ Methods:
 
 - `render(): void`
     - Purpose: Renders the Settings component.
-    - Pre-condition: None
-    - Parameters: None
-    - Return value: None
+    - Pre-condition: None.
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 - `handleTimeConstraintsChange(): void`
     - Purpose: Handles changes to the user's specified time constraints.
     - Pre-condition: The user must have entered valid time constraints.
-    - Parameters: None
-    - Return value: None
+    - Parameters: None.
+    - Return value: None.
+    - Exception Thrown: None.
 
 
 ## Back-end
@@ -171,22 +187,26 @@ Methods:
         - username: string - The username entered by the user.
         - password: string - The password entered by the user.
     - Return value: None.
+    - Exception Thrown: None.
 - `logout(): void`
     - Purpose: Logs the user out of the app.
     - Pre-condition: The user must be currently logged in.
     - Parameters: None.
     - Return value: None.
+    - Exception Thrown: None.
 - `createRoute(locations: array): void`
     - Purpose: Creates a new route for the user.
     - Pre-condition: The locations array must contain at least two valid locations.
     - Parameters:
         - locations: array - An array of locations for the new route.
     - Return value: None.
+    - Exception Thrown: None.
 - `saveRoute(): void`
     - Purpose: Saves the current route for the user.
     - Pre-condition: The user must have a current route.
     - Parameters: None.
     - Return value: None.
+    - Exception Thrown: None.
 
 ### Class: Route
 
@@ -203,12 +223,14 @@ Methods:
     - Parameters:
         - location: string - The location to be added to the route.
     - Return value: None.
+    - Exception Thrown: None.
 - `getTimeAtLocation(location: string): number`
     - Purpose: Returns the time spent at a specified location.
     - Pre-condition: The location entered by the user must be a valid location in the route.
     - Parameters:
         - location: string - The location to get the time spent for.
     - Return value: The time spent at the specified location.
+    - Exception Thrown: None.
 
 
 ### Class: Optimizer
@@ -226,6 +248,7 @@ Methods:
     - Pre-condition: The user must have at least two valid locations for the route.
     - Parameters: None.
     - Return value: An array of the optimal route.
+    - Exception Thrown: None.
 
 
 ### Class: TrafficAPI
@@ -241,6 +264,7 @@ Methods:
     - Pre-condition: The API must be functioning properly.
     - Parameters: None.
     - Return value: An object containing the retrieved traffic data.
+    - Exception Thrown: None.
 
 ### Class: NotificationService
 
@@ -256,6 +280,7 @@ Methods:
     - Parameters:
         - message: string - The message to be sent in the notification.
     - Return value: None.
+    - Exception Thrown: None.
 
 
 ### Class: Database
@@ -272,9 +297,11 @@ Methods:
         - key: string - The key to store the data under.
         - value: any - The value to be stored in the database.
     - Return value: None.
+    - Exception Thrown: None.
 - `retrieveData(key: string): any`
     - Purpose: Retrieves data from the database.
     - Pre-condition: The key entered must be a valid key in the database.
     - Parameters:
         - key: string - The key to retrieve data for.
     - Return value: The data stored under the specified key.
+    - Exception Thrown: None.
