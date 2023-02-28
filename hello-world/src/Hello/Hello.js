@@ -6,29 +6,46 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from "../firebase/Firebase"
-import { ref, onValue, set } from "firebase/database"
+import { ref, onValue, set, push, get, child} from "firebase/database"
 
 function Hello() {
 
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
 
+  // use effect updates every time we get new data from the database
   useEffect(() => {
-    setMessages([]);
+    /*setMessages([]);
+    const newMessages = []
     onValue(ref(db), snapshot => {
       const data = snapshot.val()
-      if (data !== null) {
-        Object.values(data).map(message => {
+      console.dir(data.messages);
+        Object.values(data.messages).map(message => {
           setMessages(oldArray => [...oldArray, message])
         })
+    })*/
+
+    const dbRef = ref(db);
+    get(child(dbRef, 'messsages')).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+      } else {
+        console.log("No data available");
       }
-    })
+    }).catch((error) => {
+      console.error(error);
+    });
+
   }, []);
 
-  // function to write user input to the database
+  // function to add record from user input to the database
   function handleClick() {
-    set(ref(db, 'messages/'), {
-      message: userInput
+    const messagesRef = ref(db, "messages")
+    const newMsgRef = push(messagesRef);
+    const newId = newMsgRef.key;
+    set(newMsgRef, {
+      message: userInput,
+      timestamp: Date.now(),
     });
   }
 
@@ -44,7 +61,7 @@ function Hello() {
       />
 
       <button onClick={handleClick}>
-        Write to the DB!
+        Add to the DB!
       </button>
     </div>
   );

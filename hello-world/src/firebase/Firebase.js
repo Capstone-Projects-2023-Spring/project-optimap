@@ -10,8 +10,5 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
  };
 
- console.log("Config KEY:")
- console.log(firebaseConfig.apiKey)
-
  const app = initializeApp(firebaseConfig)
  export const db = getDatabase(app)
