@@ -1,0 +1,30 @@
+.hello {
+    text-align: center;
+    margin: auto;
+}
+
+.hello .messages {
+    margin: auto;
+    width: 10%;
+    padding: 10px;
+    display: flex;
+}
+
+.hello .messages .message {
+    width: auto;
+    margin: auto;
+}
+
+.hello .messages .editIcon {
+    margin: auto;
+    float: left;
+}
+
+.hello .add {
+    margin-top: 5%;
+}
+
+.hello .title {
+    vertical-align: middle;
+    font-size: 5rem;
+}
