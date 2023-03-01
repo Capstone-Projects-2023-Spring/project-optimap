@@ -25,6 +25,6 @@
 }
 
 .hello .title {
-    border: 3px solid black;
     vertical-align: middle;
+    font-size: 5rem;
 }

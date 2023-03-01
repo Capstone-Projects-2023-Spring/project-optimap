@@ -59,7 +59,7 @@ function Hello() {
 
   return (
     <div className = "hello">
-      <h1 className="title"><FaReact style={{color: "#0099ff"}}/> & <FaFire style={{color: "#eda71c"}}/></h1>
+      <h1 className="title"><FaReact style={{color: "#0099ff", width: "5%", height: "5%"}}/> + <FaFire style={{color: "#eda71c", width: "5%", height: "5%"}}/></h1>
       <p>1. type and enter to add a record</p>
       <p>2. click any record to delete it</p>
       {messages.map((val) => (
