@@ -6,7 +6,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from "../firebase/Firebase"
-import { ref, onValue, set, push, get, child} from "firebase/database"
+import { ref, onValue, set, push, remove} from "firebase/database"
+import { FaFire, FaReact } from 'react-icons/fa';
+
+import "./hello.css"
 
 function Hello() {
 
@@ -15,26 +18,15 @@ function Hello() {
 
   // use effect updates every time we get new data from the database
   useEffect(() => {
-    /*setMessages([]);
+    setMessages([]);
     const newMessages = []
     onValue(ref(db), snapshot => {
       const data = snapshot.val()
-      console.dir(data.messages);
         Object.values(data.messages).map(message => {
-          setMessages(oldArray => [...oldArray, message])
+            setMessages(oldArray => [...oldArray, message])
         })
-    })*/
+    })
 
-    const dbRef = ref(db);
-    get(child(dbRef, 'messsages')).then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log(snapshot.val());
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
 
   }, []);
 
@@ -43,24 +35,44 @@ function Hello() {
     const messagesRef = ref(db, "messages")
     const newMsgRef = push(messagesRef);
     const newId = newMsgRef.key;
+    setMessages([])
     set(newMsgRef, {
       message: userInput,
       timestamp: Date.now(),
+      message_id: newId
     });
   }
 
+  // handle remove from firebase
+  function handleDelete(id) {
+      const tasksRef = ref(db, `messages/${id}`);
+
+      setMessages([])
+      remove(tasksRef).then(() => {
+        console.log("location removed");
+      });
+  }
+
+  function handleEdit(){
+
+  }
+
   return (
-    <div>
-      <h1>Your message (from Firebase):</h1>
+    <div className = "hello">
+      <h1 className="title"><FaReact style={{color: "#0099ff"}}/> & <FaFire style={{color: "#eda71c"}}/></h1>
+      <p>1. type and enter to add a record</p>
+      <p>2. click any record to delete it</p>
       {messages.map((val) => (
-        <h2>{val.message}</h2>
+        <div className="messages">
+          <h2 className="message" onClick={()=>handleDelete(val.message_id)}>{val.message}</h2>
+        </div>
       ))}
 
       <input
         onChange={(e) => setUserInput(e.target.value)}
       />
 
-      <button onClick={handleClick}>
+      <button className="add" onClick={handleClick}>
         Add to the DB!
       </button>
     </div>
