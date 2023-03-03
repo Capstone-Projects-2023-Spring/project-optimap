@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import Navbar from './Navbar';
+import { auth, createUserWithEmailAndPassword } from "../firebase/Firebase";
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isSignedUp, setIsSignedUp] = useState(false);
+  const [signedUpEmail, setSignedUpEmail] = useState('');
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -22,6 +25,20 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle sign-up logic here
+
+    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+        // Signed up successfully
+        const user = userCredential.user;
+        console.log(user);
+        setIsSignedUp(true);
+        setSignedUpEmail(email); // set state variable to the entered email
+      })
+      .catch((error) => {
+        // Handle errors
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
 
   return (
@@ -30,6 +47,10 @@ const Signup = () => {
     <Container className="d-flex justify-content-center align-items-center h-100">
       <div className="border p-5 rounded-lg shadow-sm" style={{ marginTop: '20vh', backgroundColor: '#dbd3d3' }}>
         <h2 className="text-center mb-4">Sign Up</h2>
+        {isSignedUp ? (
+        <p>You have successfully signed up with email: {signedUpEmail}!</p> // display entered email
+        ) : (
+
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -50,6 +71,7 @@ const Signup = () => {
             Sign Up
           </Button>
         </Form>
+      )}
       </div>
     </Container>
     </Container>
