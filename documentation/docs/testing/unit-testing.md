@@ -2,8 +2,98 @@
 sidebar_position: 1
 ---
 # Unit tests
-For each method, one or more test cases.
+Unit tests will be written using the Jest framework to test our React js application. 
 
-A test case consists of input parameter values and expected results.
+# Front-end
+- index.js
+    - testRenderSite() 
+        - Test: Verify site renders  
+        - Result: Pass if site renders successfully without error
 
-All external classes should be stubbed using mock objects.
+- App.js
+    - testFireBaseTokenGeneration()
+        - Test: Verify Firebase Autherntication generate token
+        - Result: Pass if user token is generated successfully
+    - testRoutes() 
+        - Test: Verify routing to different screen 
+        - Result: Pass if routing to different screen without error 
+    - testSignupImport()
+        - Test: Verify Signup component imports 
+        - Result: Pass if Signup component is found sucessfully
+    - testLoginImport()
+        - Test: Verify Signup component imports 
+        - Result: Pass if Login component is found sucessfully
+
+- Login.js
+    - testNavBarComponentRender()
+        - Test: Verify NavBar component Renders 
+        - Result: Pass if NavBar component renders correctly 
+    - testFormComponentRender()
+        - Test: Verify Login form component renders 
+        - Result: Pass if Login form component renders correctly 
+    - testEmailFieldRender()
+        - Test: Verify Email field renders 
+        - Result: Pass if Email field renders 
+    - testPasswordFieldRender()
+        - Test: Verify Password field renders 
+        - Result: Pass if Password field renders 
+    - testLoginButtonRender()
+        - Test: Verify Login buttom renders
+        - Result: Pass if Login button renders correctly
+    - testEmailHandler()
+        - Test: Verify handler function responds to a change of event on email input field
+        - Result: Pass if Email event triggers 
+    - testPasswordHandler()
+        - Test: Verify handler function responds to a change of event on password input field
+        - Result: Pass if password event triggers
+    - testFormSubmitHandler()
+        - Test: Verify handler function responds to a change of event on form submission
+        - Result: Pass if form submission event triggers
+    - testNullLoginEntry()
+        - Test: Verify if null entry displays an error 
+        - Result: Pass if error display upon user login with null entry
+    - testInvalidLoginEntry()
+        - Test: Verify if invalid login credentials displays an error 
+        - Result: Pass if error displays upon login with invalid credentials 
+
+- Signup.js
+    - testNavBarComponentRender()
+        - Test: Verify NavBar component Renders 
+        - Result: Pass if NavBar component renders correctly 
+    - testFormComponentRender()
+        - Test: Verify Signup form component renders 
+        - Result: Pass if Signup form component renders correctly 
+    - testEmailFieldRender()
+        - Test: Verify Email field renders 
+        - Result: Pass if Email field renders 
+    - testPasswordFieldRender()
+        - Test: Verify Password field renders 
+        - Result: Pass if Password field renders 
+    - testConfirmPasswordFieldRender()
+        - Test: Verify Confirm Password field renders 
+        - Result: Pass if Confirm Password field renders 
+    - testSignupButtonRender()
+        - Test: Verify Signup buttom renders
+        - Result: Pass if Signup button renders correctly
+    - testEmailHandler()
+        - Test: Verify handler function responds to a change of event on email input field
+        - Result: Pass if Email event triggers 
+    - testPasswordHandler()
+        - Test: Verify handler function responds to a change of event on password input field
+        - Result: Pass if password event triggers
+    - testConfirmPasswordHandler()
+        - Test: Verify handler function responds to a change of event on confirm password input field
+        - Result: Pass if password event triggers
+    - testFormSubmitHandler()
+        - Test: Verify handler function responds to a change of event on form submission
+        - Result: Pass if form submission event triggers
+    - testNullSignupEntry()
+        - Test: Verify if null entry displays an error 
+        - Result: Pass if error display upon user login with null entry
+    - testInvalidSignupEntry()
+        - Test: Verify if invalid Signup credentials displays an error 
+        - Result: Pass if error displays upon Signup with invalid credentials 
+
+- Navbar.js
+    - Test: Verify OptiMapLogo displays on navbar
+    - Result: Pass if image displays correctly
