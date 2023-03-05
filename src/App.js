@@ -1,25 +1,94 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Map, GoogleApiWrapper, Marker } from "google-maps-react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+const mapStyles = {
+  width: "100%",
+  height: "100%",
+};
+
+const API_KEY = "AIzaSyDHXOPXb76XMmNNXbXt27WfCCQHRbf8uIs";
+
+class App extends Component {
+  state = {
+    currentLocation: {
+      lat: 0,
+      lng: 0,
+    },
+    searchedLocation: "",
+    searchedLocationCoords: {
+      lat: 0,
+      lng: 0,
+    },
+  };
+
+  componentDidMount() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+
+          this.setState({
+            currentLocation: {
+              lat: latitude,
+              lng: longitude,
+            },
+          });
+        },
+        (error) => console.log(error)
+      );
+    } else {
+      console.log("Geolocation not supported");
+    }
+  }
+
+  handleSearch = () => {
+    const { searchedLocation } = this.state;
+    const geocoder = new window.google.maps.Geocoder();
+
+    geocoder.geocode({ address: searchedLocation }, (results, status) => {
+      if (status === "OK") {
+        const location = results[0].geometry.location;
+
+        this.setState({
+          searchedLocationCoords: {
+            lat: location.lat(),
+            lng: location.lng(),
+          },
+        });
+      } else {
+        console.log(status);
+      }
+    });
+  };
+
+  handleChange = (event) => {
+    this.setState({ searchedLocation: event.target.value });
+  };
+
+  render() {
+    const { currentLocation, searchedLocationCoords } = this.state;
+
+    return (
+      <div>
+        <div>
+          <input type="text" onChange={this.handleChange} />
+          <button onClick={this.handleSearch}>Search</button>
+        </div>
+        <Map
+          google={this.props.google}
+          zoom={14}
+          style={mapStyles}
+          initialCenter={currentLocation}
+          center={searchedLocationCoords}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          <Marker position={currentLocation} />
+          <Marker position={searchedLocationCoords} />
+        </Map>
+      </div>
+    );
+  }
 }
 
-export default App;
+export default GoogleApiWrapper({
+  apiKey: API_KEY,
+})(App);
