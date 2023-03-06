@@ -7,6 +7,8 @@ import Signup from './components/Signup';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Logout from './components/Logout';
+import ReadWrite from './components/Routes/ReadWrite';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +18,8 @@ root.render(
       <Route path = '/' element = {<App/>}/>
       <Route path = "/login" element = {<Login/>}/>
       <Route path = "/signup" element = {<Signup/>}/>
+      <Route path = "/logout" element = {<Logout/>}/>
+      <Route path = "/readWrite" element = {<ReadWrite/>}/>
     </Routes>
   </Router>
   </React.StrictMode>
