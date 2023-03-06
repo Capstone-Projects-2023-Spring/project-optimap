@@ -1,7 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navbar, Nav } from 'react-bootstrap';
 import logo from '../assets/OptiMapLogo.png';
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
@@ -13,12 +12,15 @@ const NavBar = () => {
 
   const [loggedIn, setLogedIn] = useState(false)
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
         setLogedIn(true)
-    } else {
+      } else {
         setLogedIn(false)
-    }
+      }
+    });
   });
 
   return (
