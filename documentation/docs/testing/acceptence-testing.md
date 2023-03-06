@@ -2,17 +2,17 @@
 sidebar_position: 3
 ---
 
-# Tasks
+## Acceptance Test 
 
-## Planning/Elaboration Phase (PP)
-| # | Task                                                              | Design of Unit X | Estimated Effort  | Finish Data                             | Assigned Individual(s) | Successor Tasks                  |
-| - | ----------------------------------------------------------------- | ---------------- | ----------------- | --------------------------------------- | ---------------------- | -------------------------------- |
-| 1 | Brainstorming                                                     | None             | Everyone - 1 week | Ideas                                   | Everyone               | Any                              |
-| 2 | Research on Firebase account Authentication                       | PP1              | 1 person - 1 week | Research                                |                        | Credentials storage Design Model |
-| 3 | Research on Firebase Database                                     | PP1              | 1 person - 1 week | Research                                |                        | Route data storage Design Model  |
-| 4 | Research on Google Maps APIs                                      | PP1              | 1 person - 1 week | Research                                |                        | Route Calculation Design Model   |
-| 5 | Research on React Native (front-end)                              | PP1              | 1 person - 1 week | Research                                |                        | All coding tasks                 |
-| 6 | Design Database/Authentication Model                              | PP2, PP3         | 1 person - 1 week | Flowcharts and System Block Diagram     |                        | Database Creation and Login page |
-| 7 | Design Maps API call Model                                        | PP4              | 1 person - 1 week | Flowcharts and System Block Diagram     |                        | Maps API Configuration           |
-| 8 | Create Firebase Database for “Hello world” sample app             | PP3              | 1 person - 1 day  | Database                                |                        | PP9                              |
-| 9 | Create a React Native project connected to “Hello world” database | PP5              | 1 person - 1 week | accessible app with database connection |                        | Implementation phase             |
+| Project Name| OptiMap | Block/Skip(B) | 0 | |
+| :---: | :---: | :---: | :---: | :---: |
+| **Q/A technical support lead** | **TBD** | **Pass(P)** | **0** |  |
+| **Q/A round** | **1** | **Fail(F)** | **0** |  |
+| **Platform** |  |  |  |  |
+| **Tester Name** |  | **% Complete** | **0%** | **Notes if failed** |
+| Test ID | **Action/Steps**| **Notes/Expected Result** |  |  |
+| 1 | **Sign up to the app** Open the website and click on the sign up button and enter your credentials | You should be signed up and redirected to the log in page |  |  |
+| 2 | **Log in to the app** Open the website and click on the Log in button and enter your credentials | If the credentials match you should be redirected to your user page |  |  |
+| 3 | **Add a destination** Log in to your account and go in the create route page and add a destination| You should see a route from your current location to the destination and the estimated time |  |  |
+| 4 | **Access previous trips** Log in to your account and open the route history page.  | The app should now give you a list of the most recent routes. |  |  |
+| 5 | **Start a previous trip** Log in to your account and view the route history page. Select one of the trips on the list and click "begin route."| The app should now display directions based on the selected trip. | |  |
