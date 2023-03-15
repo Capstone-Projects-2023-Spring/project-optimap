@@ -23,10 +23,6 @@ R: entered addresses are verified via Maps API
 
 R: entered locations and desired directions are provided via Maps API
 
-F: Create and run route
-
-R: Optimization algorithm to organize locations
-
 R: successful continuous API calls to grab directions (Point A -> Point B)
 
 ## Milestone Demo 2 (4-3-2023)
@@ -46,6 +42,10 @@ F: Algorithm optimization based on time constraints
 R: update algorithm to account for time constraints
 
 R: algorithm tells user if route isn’t possible based on time constraints
+
+F: Create and run route
+
+R: Optimization algorithm to organize locations
 
 ## Milestone Demo 3 (4-17-2023)
 
