@@ -1,12 +1,14 @@
 import './App.css';
-
+import React from 'react';
 import Navbar from './components/Navbar'
 
 function App() {
+
+
   return (
-    <div className="App">
-     <Navbar/>
-      <div className = "d-flex justify-content-center align-items-center">This is the home page</div>
+    <div className = "App">
+      <Navbar/>
+      <h1>Home Page</h1>
     </div>
   );
 }
