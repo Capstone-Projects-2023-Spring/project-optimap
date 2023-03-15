@@ -1,7 +1,6 @@
 import React from 'react';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 import Navbar from './Navbar';
-import apiKey from '../apiKey';
 
 const MapView = (props) => {
   const mapStyles = {
@@ -23,5 +22,5 @@ const MapView = (props) => {
 };
 
 export default GoogleApiWrapper({
-  apiKey: apiKey
+  apiKey: process.env.REACT_APP_API_KEY
 })(MapView);

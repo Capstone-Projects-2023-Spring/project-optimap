@@ -43,6 +43,7 @@ const NavBar = () => {
               <Nav.Link href="/logout">Logout</Nav.Link>
               <Nav.Link href="/readWrite">ReadWrite</Nav.Link>
               <Nav.Link href="/profile">Profile</Nav.Link>
+              <Nav.Link href="/map">Map</Nav.Link>
             </Nav>)
             :
             (
@@ -50,7 +51,6 @@ const NavBar = () => {
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/login">Login</Nav.Link>
                 <Nav.Link href="/signup">Sign Up</Nav.Link>
-                <Nav.Link href="/map">Map</Nav.Link>
               </Nav>
             )}
 
