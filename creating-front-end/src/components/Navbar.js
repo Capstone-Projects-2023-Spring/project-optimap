@@ -21,6 +21,7 @@ const NavBar = () => {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/login">Login</Nav.Link>
             <Nav.Link href="/signup">Sign Up</Nav.Link>
+            <Nav.Link href="/map">Map</Nav.Link>
           </Nav>
         </div>
       </Navbar.Collapse>
