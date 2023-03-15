@@ -1,0 +1,13 @@
+  /*onValue(ref(db, `users/${uid}/favoriteRoutes`), snapshot => {
+    // trying to get working for only logged in users routes
+    try {
+      const data = snapshot.val()
+      console.dir("Logging...")
+      console.dir(data)
+      Object.values(data).map(route => {
+        setRoutes(oldArray => [...oldArray, route])
+      })
+    } catch (err) {
+      console.log(`error: ${err}`)
+    }
+  })*/
