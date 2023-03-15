@@ -42,7 +42,7 @@ entire trip. This works similar to the maps that Doordash uses.
 
 ## Conceptual Design
 
-his application will be written in React Native. This will allow the app to be deployed 
+This application will be written in React Native. This will allow the app to be deployed 
 on Android, iOS, and web. The backend for user authentication and storage may be created using 
 Google Firebase. This is a free application where login and new account processes can be done 
 using their API, as well as storage of individual records or previous routes that the user has gone 
