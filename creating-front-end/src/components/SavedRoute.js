@@ -20,7 +20,7 @@ const SavedRoute = () => {
 					const data = snapshot.val(); 
 					if (data) {
 						const routesArray = Object.entries(data).map(([key, value]) => [key, value]);
-						setRoutes(routesArray); 
+						setRoutes(routesArray);
 					};
 				});
 			} else { 
