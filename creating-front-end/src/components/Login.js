@@ -25,6 +25,7 @@ const Login = () => {
       // User signed in successfully.
       const user = userCredential.user;
       console.log(user);
+      console.log("user has logged in");
       setIsLoggedIn(true);
     })
       .catch((error) => {

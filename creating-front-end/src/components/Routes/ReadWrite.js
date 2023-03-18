@@ -19,9 +19,9 @@ const ReadWrite = () => {
 
     if (user !== null) {
       setUserId(user.uid)
-      // console.log("user set")
+      console.log("user set")
     } else {
-      // console.log("user not set")
+      // console.log("user not set") 
     }
 
 
