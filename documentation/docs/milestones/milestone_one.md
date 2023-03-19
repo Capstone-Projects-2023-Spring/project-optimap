@@ -37,7 +37,9 @@ R: user can specify time spent at each location
 
 R: user can specify arrival time at each location
 
-F: Algorithm optimization based on time constraints
+F: Optimization Algorithim
+
+R: algorithm can take in list of directions and return them, optimized  
 
 R: update algorithm to account for time constraints
 
