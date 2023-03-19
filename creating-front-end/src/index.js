@@ -13,7 +13,7 @@ import ReadWrite from './components/Routes/ReadWrite';
 import Profile from './components/Profile'
 import SavedRoute from './components/SavedRoute';
 import Directions from './components/Directions'
-import RoutePage from './components/RoutePage';
+import CreateRoutePage from './components/CreateRoutePage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -30,7 +30,7 @@ root.render(
       <Route path = "/profile" element = {<Profile/>}/>
       <Route path = "/savedRoute" element = {<SavedRoute/>}/>
       <Route path = "/directions" element = {<Directions/>}/>
-      <Route path = "/routePage" element = {<RoutePage/>}/>
+      <Route path = "/createRoutePage" element = {<CreateRoutePage/>}/>
     </Routes>
   </Router>
   </React.StrictMode>

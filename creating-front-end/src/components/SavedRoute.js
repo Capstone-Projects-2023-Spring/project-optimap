@@ -15,7 +15,7 @@ const SavedRoute = () => {
 			if (user) { 
 				setUserId(user.uid);  
 				console.log("user id is: " + user.uid); 
-				const routeRef = ref(db, 'users/' + userId + '/favoriteRoutes');
+				const routeRef = ref(db, 'users/' + userId + '/savedRoutes');
 				onValue(routeRef, (snapshot) => { // listens for changes in routeRef and calls callback function
 					const data = snapshot.val(); 
 					if (data) {
