@@ -12,6 +12,7 @@ const CreateRoutePage = () => {
     const [inputValue, setInputValue] = useState('');
     const [locationList, setLocationList] = useState([]);
     const [uid, setUid] = useState(0);
+    const [message, setMessage] = useState("");
 
     const [dateNow, setDateNow] = useState("");
 
@@ -26,6 +27,8 @@ const CreateRoutePage = () => {
     };
 
     function handleSubmit() {
+       
+    try {
         const messagesRef = ref(db, `users/${uid}/savedRoutes`);
 
         // mmDdYyyy();
@@ -41,6 +44,12 @@ const CreateRoutePage = () => {
         });
 
         console.log(`record submitted for UID ${uid}, list: ` + locationList);
+        setMessage("Route saved!")
+    } catch (err){
+        setMessage("Error: " + err);
+    }
+    
+        
     }
 
     // to be implemented next sprint (5)
@@ -87,7 +96,7 @@ const CreateRoutePage = () => {
                     </Col>
 
                     <Button onClick={handleSubmit} style={{ width: '10%', marginTop: '1rem' }}>Save</Button>
-
+                    <div style={{ width: '100%', alignContent: 'center', textAlign: 'center', marginTop: '1rem'}}>{message}</div>
                 </Row>
             </Container>
         </div>
