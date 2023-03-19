@@ -38,11 +38,9 @@ const SavedRoute = () => {
 						<Accordion.Header>{route[0]}</Accordion.Header> 
 						<Accordion.Body>
 							{/* this is not formatted*/}
-							{route[1].address}   
-							{route[1].route} 
-							{route[1].asdf} 
-							{route[1].asdf} 
-							{JSON.stringify(route[1], null, 4)} 
+							{/* {route[1].address}    */}
+							{/* {route[1]}  */}
+							{JSON.stringify(route[1], null, 20)} 
 						</Accordion.Body>
 					</Accordion.Item>
 				))}

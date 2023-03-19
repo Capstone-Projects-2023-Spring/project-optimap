@@ -40,6 +40,8 @@ const NavBar = () => {
               <Nav.Link href="/logout">Logout</Nav.Link>
               <Nav.Link href="/readWrite">ReadWrite</Nav.Link>
               <Nav.Link href="/profile">Profile</Nav.Link>
+              <Nav.Link href="/map">Map</Nav.Link>
+              <Nav.Link href="/directions">Directions</Nav.Link>
             </Nav>)
             :
             (

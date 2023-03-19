@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignore the node_modules folder
+node_modules/
+
+# Ignore the .env file
+.env
+
+# Ignore the build folder
+build/

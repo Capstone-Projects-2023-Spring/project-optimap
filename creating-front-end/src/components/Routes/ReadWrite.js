@@ -1,49 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Navbar';
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import { getAuth } from "firebase/auth";
-import { ref, set, push, onValue, remove } from "firebase/database"
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { ref, set, push, onValue, remove, child } from "firebase/database"
 import { db } from "../../firebase/Firebase"
 
 const ReadWrite = () => {
 
   const [location, setLocation] = useState('');
   const [routes, setRoutes] = useState([]);
-  const [userId, setUserId] = useState("");
+  const [uid, setUid] = useState("");
 
   const auth = getAuth();
   const user = auth.currentUser;
 
+  // ----------
+  // useEffect(() => {
+  //   setUid([]);
+
+  //   if (user !== null) {
+  //     setUid(uid)
+  //     console.log("user set")
+  //   } else {
+  //     // console.log("user not set") 
+  //   }
+
+
+  //   // read records
+  //   onValue(ref(db), snapshot => {
+  //     const data = snapshot.val().users.favoriteRoutes
+  //       Object.values(data).map(route => {
+  //           setRoutes(oldArray => [...oldArray, route])
+  //       })
+  //   })
+  // }, []);
+  // ----------
+
+  // observes auth to udpate uid when initialized
   useEffect(() => {
-    setRoutes([]);
-
-    if (user !== null) {
-      setUserId(user.uid)
-      console.log("user set")
-    } else {
-      // console.log("user not set") 
-    }
-
-
-    // read records
-    onValue(ref(db), snapshot => {
-      const data = snapshot.val().users.favoriteRoutes
-        Object.values(data).map(route => {
-            setRoutes(oldArray => [...oldArray, route])
-        })
-    })
-  }, []);
-
+		onAuthStateChanged(auth, (user) => {
+			if(user) { 
+        setUid(user.uid);  
+				console.log("user id set"); 
+			} 
+		});
+	}, [uid]); 
 
   function handleSubmit() {
-    const messagesRef = ref(db, `users/${userId}/favoriteRoutes`)
-    const newMsgRef = push(messagesRef);
-    const newId = newMsgRef.key;
-    setRoutes([])
-    set(newMsgRef, {
+    const messagesRef = ref(db, `users/${uid}/favoriteRoutes`);
+    // pass route name here 
+    // const childRef = push(child(messagesRef, 'my 6 fav route'));
+    const childRef = child(messagesRef, 'my 7 fav route ');
+    // const childRef = push(child(messagesRef, 'posts'));
+
+    
+    set(childRef, {
       route: location,
       timestamp: Date.now(),
-      route_id: newId
+      route_id: uid
     });
     console.log("record submitted")
   };
