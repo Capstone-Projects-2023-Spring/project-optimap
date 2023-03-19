@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from '../firebase/Firebase';
 
 const Profile = () => {
   const [userEmail, setUserEmail] = useState('');
@@ -19,6 +21,13 @@ const Profile = () => {
     return () => unsubscribe();
   }, []);
 
+  const navigate = useNavigate();
+
+  const routeChange = () => {
+      let path = `/savedRoute`;
+      navigate(path);
+  }
+
   return (
     <div>
       <Navbar />
@@ -30,7 +39,7 @@ const Profile = () => {
               <Image src="https://via.placeholder.com/150" roundedCircle className="mb-3" />
               <h3 className="mb-4">{userEmail}</h3>
               <h6>Click below to check Saved Routes</h6>
-              <Button className="mt-3" variant="primary" type="submit" block>
+              <Button onClick={routeChange} className="mt-3" variant="primary" type="submit" block>
                 Saved Routes ➜
               </Button>
               <p className="text-muted">Contact Us: <span className="badge bg-secondary">test@test.com</span></p>

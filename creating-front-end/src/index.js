@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Logout from './components/Logout';
 import ReadWrite from './components/Routes/ReadWrite';
 import Profile from './components/Profile'
+import SavedRoute from './components/SavedRoute';
 import Directions from './components/Directions'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,6 +27,7 @@ root.render(
       <Route path = "/logout" element = {<Logout/>}/>
       <Route path = "/readWrite" element = {<ReadWrite/>}/>
       <Route path = "/profile" element = {<Profile/>}/>
+      <Route path = "/savedRoute" element = {<SavedRoute/>}/>
       <Route path = "/directions" element = {<Directions/>}/>
     </Routes>
   </Router>

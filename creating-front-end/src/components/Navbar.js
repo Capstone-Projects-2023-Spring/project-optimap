@@ -3,10 +3,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import logo from '../assets/OptiMapLogo.png';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-
-
 const NavBar = () => {
-
   // get the current user & check if they are logged in
   const auth = getAuth();
 
@@ -54,8 +51,6 @@ const NavBar = () => {
                 <Nav.Link href="/signup">Sign Up</Nav.Link>
               </Nav>
             )}
-
-
         </div>
       </Navbar.Collapse>
     </Navbar>
