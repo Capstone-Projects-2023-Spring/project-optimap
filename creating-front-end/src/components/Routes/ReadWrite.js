@@ -14,28 +14,6 @@ const ReadWrite = () => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  // ----------
-  // useEffect(() => {
-  //   setUid([]);
-
-  //   if (user !== null) {
-  //     setUid(uid)
-  //     console.log("user set")
-  //   } else {
-  //     // console.log("user not set") 
-  //   }
-
-
-  //   // read records
-  //   onValue(ref(db), snapshot => {
-  //     const data = snapshot.val().users.favoriteRoutes
-  //       Object.values(data).map(route => {
-  //           setRoutes(oldArray => [...oldArray, route])
-  //       })
-  //   })
-  // }, []);
-  // ----------
-
   // observes auth to udpate uid when initialized
   useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
