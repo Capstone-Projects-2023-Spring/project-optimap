@@ -44,6 +44,7 @@ const NavBar = () => {
               <Nav.Link href="/readWrite">ReadWrite</Nav.Link>
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/map">Map</Nav.Link>
+              <Nav.Link href="/routePage">Routes</Nav.Link>
             </Nav>)
             :
             (
