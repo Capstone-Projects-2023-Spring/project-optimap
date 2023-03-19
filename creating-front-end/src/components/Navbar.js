@@ -42,6 +42,7 @@ const NavBar = () => {
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/map">Map</Nav.Link>
               <Nav.Link href="/directions">Directions</Nav.Link>
+              <Nav.Link href="/routePage">Routes</Nav.Link>
             </Nav>)
             :
             (
