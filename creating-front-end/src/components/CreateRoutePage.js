@@ -74,7 +74,7 @@ const CreateRoutePage = () => {
             set(childRef, {
                 route: locationList,
                 timestamp: dateNow,
-                route_id: uid
+                route_id: Date.now().toString()
             });
 
             console.log(`record submitted for UID ${uid}, list: ` + locationList);
@@ -142,7 +142,6 @@ const CreateRoutePage = () => {
                             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 2 }}>
                                 List of Locations
                             </h1>
-
                             <ListGroup className='mt-3'>
                                 {locationList.map((item, index) => (
                                     <ListGroup.Item key={index}>{item}</ListGroup.Item>
