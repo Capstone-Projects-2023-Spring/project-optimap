@@ -82,7 +82,9 @@ const SavedRoute = () => {
 										</Button>
 									</Accordion.Header>
 									<Accordion.Body>
-										{route[1].route}
+									{route[1].route.map(r => (
+											<p>{r}</p>
+									))}
 
 									</Accordion.Body>
 								</Accordion.Item>

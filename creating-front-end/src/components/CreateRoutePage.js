@@ -18,6 +18,20 @@ const CreateRoutePage = () => {
 
     const [showModal, setShowModal] = useState(false);
 
+    const [arrival, setArrival] = useState(null)
+
+    function handleArrivalChange(val){
+        setArrival(val)
+    }
+
+    const [duration, setDuration] = useState(null)
+
+
+    function handleDurationChange(val){
+        setDuration(val)
+    }
+
+
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -70,7 +84,6 @@ const CreateRoutePage = () => {
             const dateMs = Date.now().toString()
             const childRef = child(messagesRef, dateMs);
             // const childRef = push(child(messagesRef, 'posts'));
-
 
             set(childRef, {
                 route: locationList,
@@ -159,10 +172,30 @@ const CreateRoutePage = () => {
                     <Col md={6} className="text-center">
                         <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>
                             <Form onSubmit={handleFormSubmit}>
-                                <InputGroup className='mb-3'>
-                                    <FormControl type="text" placeholder="Input Location" value={inputValue} onChange={handleInputChange} />
+                                    <Form.Group  as={Row}>
+                                        <Form.Label  column sm="3" className="d-flex align-items-center">Location</Form.Label>
+                                        <Col>
+                                            <FormControl type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
+                                        </Col>
+                                    </Form.Group>
+
+                           {/*         <Form.Group  as={Row}>
+                                        <Form.Label  column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
+                                        <Col>
+                                            <FormControl type="text" placeholder="4:00pm (optional)" value={arrival} onChange={handleArrivalChange} />
+                                        </Col>
+                                    </Form.Group>
+
+                                    <Form.Group  as={Row}>
+                                        <Form.Label  column sm="3" className="d-flex align-items-center">Duration Time</Form.Label>
+                                        <Col>
+                                            <FormControl type="text" placeholder="1hr (optional)" value={duration} onChange={handleDurationChange} />
+                                        </Col>
+                                    </Form.Group>
+
+                                */}
+                                    
                                     <Button type="submit">+</Button>
-                                </InputGroup>
                             </Form>
                         </div>
                     </Col>

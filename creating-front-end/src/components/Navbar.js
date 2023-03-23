@@ -38,12 +38,11 @@ const NavBar = () => {
           {loggedIn ?
             (<Nav>
               <Nav.Link href="/logout">Logout</Nav.Link>
-              <Nav.Link href="/readWrite">ReadWrite</Nav.Link>
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/map">Map</Nav.Link>
               <Nav.Link href="/directions">Directions</Nav.Link>
               <Nav.Link href="/createRoutePage">Create Route</Nav.Link>
-              <Nav.Link href="/savedRoute">View Saved Routes</Nav.Link>
+              <Nav.Link href="/savedRoute">Saved Routes</Nav.Link>
             </Nav>)
             :
             (
