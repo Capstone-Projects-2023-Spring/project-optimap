@@ -39,25 +39,25 @@ const SavedRoute = () => {
 	}, [userId]); // userId dependency will not cause a loop since onAuthStateChanged() will only be called upon login/logout
 
 	// handle remove from firebase
-	  function handleRecentDelete(id) {
-		console.log("deleting "+ id)
+	function handleRecentDelete(id) {
+		console.log("deleting " + id)
 		const delref = ref(db, `users/${userId}/recentRoutes/${id}`);
-  
+
 		setRecentRoutes([])
 
 		remove(delref).then(() => {
-		  console.log("location removed");
+			console.log("location removed");
 		});
 	}
 
 	function handleSavedDelete(id) {
-		console.log("deleting "+ id)
+		console.log("deleting " + id)
 		const delref = ref(db, `users/${userId}/savedRoutes/${id}`);
-  
+
 		setSavedRoutes([])
 
 		remove(delref).then(() => {
-		  console.log("location removed");
+			console.log("location removed");
 		});
 	}
 
@@ -71,30 +71,30 @@ const SavedRoute = () => {
 				</Row>
 
 				{savedRoutes.length > 0 ? (
-				<Row>
-					<Accordion alwaysOpen>
-						{savedRoutes.map(route => (
-							<Accordion.Item key={route[0]} eventKey={route[0]}>
-								<Accordion.Header style={{ display: 'flex', flexDirection: 'row'}}>
-									{route[1].name}
-									<Button style={{position: 'absolute', right: '10%'}} variant="danger" size="sm" className="ml-auto" onClick={()=>handleSavedDelete(route[1].name)}>
-								Delete
-							</Button>
-								</Accordion.Header>
-								<Accordion.Body>
-									{route[1].route}
-									
-								</Accordion.Body>
-							</Accordion.Item>
-						))}
-					</Accordion>
-				</Row>
+					<Row>
+						<Accordion alwaysOpen>
+							{savedRoutes.map(route => (
+								<Accordion.Item key={route[0]} eventKey={route[0]}>
+									<Accordion.Header style={{ display: 'flex', flexDirection: 'row' }}>
+										{route[1].name}
+										<Button style={{ position: 'absolute', right: '10%' }} variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].name)}>
+											Delete
+										</Button>
+									</Accordion.Header>
+									<Accordion.Body>
+										{route[1].route}
+
+									</Accordion.Body>
+								</Accordion.Item>
+							))}
+						</Accordion>
+					</Row>
 				) : (
 					<Row>
-						<h4 style={{marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw'}}>No saved routes</h4>
+						<h4 style={{ marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw' }}>No saved routes</h4>
 					</Row>
 				)}
-				
+
 
 				<Row style={{ marginTop: '1rem' }}>
 					<h2>Recent Routes</h2>
@@ -102,33 +102,33 @@ const SavedRoute = () => {
 
 				{recentRoutes.length > 0 ? (
 					<Row>
-					<Accordion alwaysOpen>
-						{recentRoutes.map(route => (
-							<Accordion.Item key={route[0]} eventKey={route[0]}>
-								<Accordion.Header style={{ display: 'flex', flexDirection: 'row'}}>
-									
-									{route[1].timestamp}
-									
-									<Button style={{position: 'absolute', right: '10%'}} variant="danger" size="sm" className="ml-auto" onClick={()=>handleRecentDelete(route[1].route_id)}>
-								Delete
-							</Button>
-									
+						<Accordion alwaysOpen>
+							{recentRoutes.map(route => (
+								<Accordion.Item key={route[0]} eventKey={route[0]}>
+									<Accordion.Header style={{ display: 'flex', flexDirection: 'row' }}>
+
+										{route[1].timestamp}
+
+										<Button style={{ position: 'absolute', right: '10%' }} variant="danger" size="sm" className="ml-auto" onClick={() => handleRecentDelete(route[1].route_id)}>
+											Delete
+										</Button>
+
 									</Accordion.Header>
-								<Accordion.Body>
-									{route[1].route.map(r => (
-										<p>{r}</p>
-									))}
-								</Accordion.Body>
-							</Accordion.Item>
-						))}
-					</Accordion>
-				</Row>
+									<Accordion.Body>
+										{route[1].route.map(r => (
+											<p>{r}</p>
+										))}
+									</Accordion.Body>
+								</Accordion.Item>
+							))}
+						</Accordion>
+					</Row>
 				) : (
 					<Row>
-						<h4 style={{marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw'}}>No recent routes</h4>
+						<h4 style={{ marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw' }}>No recent routes</h4>
 					</Row>
 				)}
-				
+
 			</Container>
 		</Container>
 	);

@@ -67,14 +67,15 @@ const CreateRoutePage = () => {
 
             setDateNow(mmDdYyyy())
             console.log("setting datenow to " + dateNow);
-            const childRef = child(messagesRef, Date.now().toString());
+            const dateMs = Date.now().toString()
+            const childRef = child(messagesRef, dateMs);
             // const childRef = push(child(messagesRef, 'posts'));
 
 
             set(childRef, {
                 route: locationList,
                 timestamp: dateNow,
-                route_id: Date.now().toString()
+                route_id: dateMs
             });
 
             console.log(`record submitted for UID ${uid}, list: ` + locationList);
