@@ -4,9 +4,13 @@ import Navbar from './Navbar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db, auth } from '../firebase/Firebase';
 import { ref, onValue, onChildChanged, set, push, remove, child } from "firebase/database";
+import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps-react';
+
 
 
 const CreateRoutePage = () => {
+    const [googleInput, setGoogleInput] = useState({});
+
     const [inputValue, setInputValue] = useState('');
     const [locationList, setLocationList] = useState([]);
     const [uid, setUid] = useState(0);
@@ -20,14 +24,14 @@ const CreateRoutePage = () => {
 
     const [arrival, setArrival] = useState(null)
 
-    function handleArrivalChange(val){
+    function handleArrivalChange(val) {
         setArrival(val)
     }
 
     const [duration, setDuration] = useState(null)
 
 
-    function handleDurationChange(val){
+    function handleDurationChange(val) {
         setDuration(val)
     }
 
@@ -39,8 +43,8 @@ const CreateRoutePage = () => {
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        setLocationList([...locationList, inputValue]);
-        setInputValue('');
+        setLocationList([...locationList, googleInput.startLocation]);
+        setGoogleInput({});
     };
 
     const [userId, setUserId] = useState("");
@@ -55,6 +59,20 @@ const CreateRoutePage = () => {
             } else {
                 console.log("user not set");
             };
+        });
+
+        // Create autocomplete instance for start location input field
+        const locationInput = document.getElementById('location-input');
+        const startAutocomplete = new window.google.maps.places.Autocomplete(locationInput);
+        startAutocomplete.addListener('place_changed', () => {
+            const place = startAutocomplete.getPlace();
+            setGoogleInput({
+                startLocation: place.formatted_address,
+                startLocationCoords: {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng(),
+                },
+            });
         });
     }, [userId]); // userId dependency will not cause a loop since onAuthStateChanged() will only be called upon login/logout
 
@@ -172,14 +190,14 @@ const CreateRoutePage = () => {
                     <Col md={6} className="text-center">
                         <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>
                             <Form onSubmit={handleFormSubmit}>
-                                    <Form.Group  as={Row}>
-                                        <Form.Label  column sm="3" className="d-flex align-items-center">Location</Form.Label>
-                                        <Col>
-                                            <FormControl type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
-                                        </Col>
-                                    </Form.Group>
+                                <Form.Group as={Row}>
+                                    <Form.Label column sm="3" className="d-flex align-items-center">Location</Form.Label>
+                                    <Col>
+                                        <FormControl id="location-input" type="text" placeholder="123 Broad St" value={googleInput.startLocation} onChange={handleInputChange} />
+                                    </Col>
+                                </Form.Group>
 
-                           {/*         <Form.Group  as={Row}>
+                                {/*         <Form.Group  as={Row}>
                                         <Form.Label  column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
                                         <Col>
                                             <FormControl type="text" placeholder="4:00pm (optional)" value={arrival} onChange={handleArrivalChange} />
@@ -194,8 +212,8 @@ const CreateRoutePage = () => {
                                     </Form.Group>
 
                                 */}
-                                    
-                                    <Button type="submit">+</Button>
+
+                                <Button type="submit">+</Button>
                             </Form>
                         </div>
                     </Col>
