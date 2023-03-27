@@ -14,6 +14,7 @@ import Profile from './components/Profile'
 import SavedRoute from './components/SavedRoute';
 import Directions from './components/Directions'
 import CreateRoutePage from './components/CreateRoutePage';
+import Settings from './components/Settings'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -31,6 +32,7 @@ root.render(
       <Route path = "/savedRoute" element = {<SavedRoute/>}/>
       <Route path = "/directions" element = {<Directions/>}/>
       <Route path = "/createRoutePage" element = {<CreateRoutePage/>}/>
+      <Route path = "/settings" element = {<Settings/>}/>
     </Routes>
   </Router>
   </React.StrictMode>

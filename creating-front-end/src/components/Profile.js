@@ -3,7 +3,9 @@ import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from '../firebase/Firebase';
+import { IconButton } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+
 
 const Profile = () => {
   const [userEmail, setUserEmail] = useState('');
@@ -14,7 +16,7 @@ const Profile = () => {
       if (user) {
         setUserEmail(user.email);
       } else {
-        // User is not authenticated, do something here
+        setUserEmail(null)
       }
     });
 
@@ -24,8 +26,13 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const routeChange = () => {
-      let path = `/savedRoute`;
-      navigate(path);
+    let path = `/savedRoute`;
+    navigate(path);
+  }
+
+  const settings = () => {
+    let path = `/settings`;
+    navigate(path);
   }
 
   return (
@@ -34,7 +41,7 @@ const Profile = () => {
       <Container fluid>
         <Row className="justify-content-center align-items-center" style={{ height: 'calc(100vh - 56px)' }}>
           <Col md={6} className="text-center">
-            <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>
+            <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3', position: 'relative' }}>
               <h1 className="mb-4">Profile</h1>
               <Image src="https://via.placeholder.com/150" roundedCircle className="mb-3" />
               <h3 className="mb-4">{userEmail}</h3>
@@ -42,6 +49,11 @@ const Profile = () => {
               <Button onClick={routeChange} className="mt-3" variant="primary" type="submit" block>
                 Saved Routes ➜
               </Button>
+              <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+                <IconButton onClick={settings} color="gray" size="large" aria-label="settings" style={{ fontSize: '10rem' }}>
+                  <SettingsIcon />
+                </IconButton>
+              </div>
               <p className="text-muted">Contact Us: <span className="badge bg-secondary">test@test.com</span></p>
             </div>
           </Col>
