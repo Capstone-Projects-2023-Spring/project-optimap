@@ -15,6 +15,7 @@ const SavedRoute = () => {
 			if (user) {
 				setUserId(user.uid);
 				console.log("user id is: " + user.uid);
+				// RECENT ROUTES
 				const recentRouteRef = ref(db, 'users/' + userId + '/recentRoutes');
 				onValue(recentRouteRef, (snapshot) => { // listens for changes in routeRef and calls callback function
 					const data = snapshot.val();
@@ -24,6 +25,7 @@ const SavedRoute = () => {
 					};
 				});
 
+				// SAVED / FAVORITE ROUTES
 				const savedRouteRef = ref(db, 'users/' + userId + '/savedRoutes');
 				onValue(savedRouteRef, (snapshot) => { // listens for changes in routeRef and calls callback function
 					const data = snapshot.val();
@@ -83,7 +85,7 @@ const SavedRoute = () => {
 									</Accordion.Header>
 									<Accordion.Body>
 									{route[1].route.map(r => (
-											<p>{r}</p>
+											<p>{r.street_address}</p>
 									))}
 
 									</Accordion.Body>
@@ -118,7 +120,7 @@ const SavedRoute = () => {
 									</Accordion.Header>
 									<Accordion.Body>
 										{route[1].route.map(r => (
-											<p>{r}</p>
+											<p>{r.street_address}</p>
 										))}
 									</Accordion.Body>
 								</Accordion.Item>

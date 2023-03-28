@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, componentDidMo } from 'react';
 import { Container, Row, Col, Button, Form, FormControl, InputGroup, ListGroup, Modal } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -41,12 +41,6 @@ const CreateRoutePage = () => {
         setInputValue(event.target.value);
     };
 
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        setLocationList([...locationList, googleInput.startLocation]);
-        setGoogleInput({});
-    };
-
     const [userId, setUserId] = useState("");
 
     // ensure mmddyyy is populated before user tries to save
@@ -59,20 +53,6 @@ const CreateRoutePage = () => {
             } else {
                 console.log("user not set");
             };
-        });
-
-        // Create autocomplete instance for start location input field
-        const locationInput = document.getElementById('location-input');
-        const startAutocomplete = new window.google.maps.places.Autocomplete(locationInput);
-        startAutocomplete.addListener('place_changed', () => {
-            const place = startAutocomplete.getPlace();
-            setGoogleInput({
-                startLocation: place.formatted_address,
-                startLocationCoords: {
-                    lat: place.geometry.location.lat(),
-                    lng: place.geometry.location.lng(),
-                },
-            });
         });
     }, [userId]); // userId dependency will not cause a loop since onAuthStateChanged() will only be called upon login/logout
 
@@ -119,6 +99,7 @@ const CreateRoutePage = () => {
     }
 
     function handleSave() {
+        console.log("handling save...")
 
         setShowModal(false);
 
@@ -126,7 +107,7 @@ const CreateRoutePage = () => {
             const messagesRef = ref(db, `users/${uid}/savedRoutes`);
 
             const childRef = child(messagesRef, routeName);
-            console.log("setting route name: " + routeName)
+            console.log("setting route name: " + childRef)
             // const childRef = push(child(messagesRef, 'posts'));
 
 
@@ -161,6 +142,40 @@ const CreateRoutePage = () => {
         });
     }, [uid])
 
+
+    // Create autocomplete instance for location input field
+    const locationInput = document.getElementById('location-input');
+    const startAutocomplete = new window.google.maps.places.Autocomplete(locationInput);
+    startAutocomplete.addListener('place_changed', () => {
+        const place = startAutocomplete.getPlace();
+        setGoogleInput({
+            location: place.formatted_address,
+            coords: {
+                lat: place.geometry.location.lat(),
+                lng: place.geometry.location.lng(),
+            },
+        });
+
+        setInputValue(googleInput.location);
+    });
+
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        console.log("Google input:")
+        console.dir(googleInput)
+        setLocationList([...locationList, {
+            street_address: googleInput.location,
+            coordinates: {
+                lat: googleInput.coords.lat,
+                lng: googleInput.coords.lng
+            }
+        }]);
+
+        setInputValue("");
+        console.log("after")
+        console.dir(googleInput);
+    };
+
     return (
         <div>
             <Navbar />
@@ -176,7 +191,7 @@ const CreateRoutePage = () => {
                             </h1>
                             <ListGroup className='mt-3'>
                                 {locationList.map((item, index) => (
-                                    <ListGroup.Item key={index}>{item}</ListGroup.Item>
+                                    <ListGroup.Item key={index}>{item.street_address}</ListGroup.Item>
                                 ))}
                             </ListGroup>
                         </div>
@@ -193,7 +208,7 @@ const CreateRoutePage = () => {
                                 <Form.Group as={Row}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Location</Form.Label>
                                     <Col>
-                                        <FormControl id="location-input" type="text" placeholder="123 Broad St" value={googleInput.startLocation} onChange={handleInputChange} />
+                                        <FormControl id="location-input" type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
                                     </Col>
                                 </Form.Group>
 
