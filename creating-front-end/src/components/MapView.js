@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps-react';
 import Navbar from './Navbar';
+import greenMarker from '../assets/green-dot.png';
+import flag from '../assets/beachflag.png';
 
-
-<style>
-  
-</style>
 const mapStyles = {
   width: '100%',
   height: '100%',
@@ -23,16 +21,11 @@ class MapView extends Component {
       lat: 0,
       lng: 0,
     },
-    startLocation: '',
-    startLocationCoords: {
-      lat: 0,
-      lng: 0,
-    },
-    endLocation: '',
-    endLocationCoords: {
-      lat: 0,
-      lng: 0,
-    },
+    markers: [],
+    showRoute: false,
+    directions: null,
+    error: null,
+    destinationInput: '',
     activeMarker: {},
     showingInfoWindow: false,
     locationInfo: {},
@@ -59,42 +52,25 @@ class MapView extends Component {
       console.log('Geolocation not supported');
     }
 
-    // Create autocomplete instance for start location input field
-    const startInput = document.getElementById('start-input');
-    const startAutocomplete = new window.google.maps.places.Autocomplete(startInput);
-    startAutocomplete.addListener('place_changed', () => {
-      const place = startAutocomplete.getPlace();
-      this.setState({
-        startLocation: place.formatted_address,
-        startLocationCoords: {
+    //Creates autocomplete suggestions for the destination input field
+    const input = document.getElementById('destination-input');
+    const autocomplete = new this.props.google.maps.places.Autocomplete(input);
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        const location = {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
-        },
-      });
+        };
+        const newMarkers = [...this.state.markers, { position: location }];
+        this.setState({ markers: newMarkers, destinationInput: '' });
+      } else {
+        this.setState({ error: 'Failed to geocode destination.' });
+      }
     });
 
-    // Create autocomplete instance for end location input field
-    const endInput = document.getElementById('end-input');
-    const endAutocomplete = new window.google.maps.places.Autocomplete(endInput);
-    endAutocomplete.addListener('place_changed', () => {
-      const place = endAutocomplete.getPlace();
-      this.setState({
-        endLocation: place.formatted_address,
-        endLocationCoords: {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng(),
-        },
-      });
-    });
+    this.setState({ autocomplete });
   }
-
-  handleStartChange = (event) => {
-    this.setState({ startLocation: event.target.value });
-  };
-
-  handleEndChange = (event) => {
-    this.setState({ endLocation: event.target.value });
-  };
 
   handleSearch = () => {
     const { searchedLocation } = this.state;
@@ -142,124 +118,140 @@ class MapView extends Component {
     });
   };
 
-  handleDirections = () => {
-    const { startLocation, endLocation } = this.state;
-    const geocoder = new window.google.maps.Geocoder();
+  handleDestinationChange = (event) => {
+    this.setState({ destinationInput: event.target.value });
+  };
+
+  //Handles the adding of destinations and markers associated with them
+  handleAddDestination = () => {
+    const { destinationInput, markers } = this.state;
+    const geocoder = new this.props.google.maps.Geocoder();
+    geocoder.geocode({ address: destinationInput }, (results, status) => {
+      if (status === 'OK') {
+        const location = results[0].geometry.location;
+        const newMarkers = [...markers, { position: location }];
+        this.setState({ markers: newMarkers, destinationInput: '' });
+      } else {
+        this.setState({ error: 'Failed to geocode destination.' });
+      }
+    });
+  };
+
+    handleMarkerClick = (props, marker, e) => {
+      this.setState({
+        activeMarker: marker,
+        showingInfoWindow: true,
+        locationInfo: props.locationInfo,
+        photos: [],
+      });
   
-    // geocode the start location
-    geocoder.geocode({ address: startLocation }, (startResults, startStatus) => {
-      if (startStatus === "OK") {
-        const startLocationCoords = startResults[0].geometry.location;
+      const placesService = new window.google.maps.places.PlacesService(document.createElement('div'));
   
-        // geocode the end location
-        geocoder.geocode({ address: endLocation }, (endResults, endStatus) => {
-          if (endStatus === "OK") {
-            const endLocationCoords = endResults[0].geometry.location;
-  
-            // update the state with the start and end locations' coordinates
+      placesService.getDetails(
+        { placeId: props.locationInfo.place_id },
+        (place, status) => {
+          if (status === 'OK') {
             this.setState({
-              startLocationCoords: {
-                lat: startLocationCoords.lat(),
-                lng: startLocationCoords.lng(),
-              },
-              endLocationCoords: {
-                lat: endLocationCoords.lat(),
-                lng: endLocationCoords.lng(),
-              },
+              locationInfo: place,
             });
   
-            // calculate the directions
-            const directionsService = new window.google.maps.DirectionsService();
-            directionsService.route(
-              {
-                origin: startLocationCoords,
-                destination: endLocationCoords,
-                travelMode: "DRIVING",
-              },
-              (result, status) => {
-                if (status === "OK") {
-                  this.setState({
-                    directions: result,
-                  });
-                } else {
-                  console.log(status);
-                }
-              }
-            );
+            if (place.photos) {
+              place.photos.forEach((photo) => {
+                const url = photo.getUrl({ maxWidth: 500, maxHeight: 500 });
+                this.setState((prevState) => ({
+                  photos: [...prevState.photos, url],
+                }));
+              });
+            }
           } else {
-            console.log(endStatus);
+            console.log(status);
+          }
+        }
+      );
+    };
+
+    handleChange = (event) => {
+      this.setState({ searchedLocation: event.target.value });
+    };
+  
+    //Handles destination removal (now invoked when marker is clicked)
+    handleRemoveDestination = (index) => {
+      const { markers } = this.state;
+      if (markers.length === 1) {
+        this.setState({ markers: [], showRoute: false }); // set showRoute to false if last destination is removed
+      } else {
+        const newMarkers = [...markers.slice(0, index), ...markers.slice(index + 1)];
+        this.setState({ markers: newMarkers }, () => {
+          if (newMarkers.length > 0) {
+            this.handleShowRoute();
+          } else {
+            this.setState({ showRoute: false }); // set showRoute to false if all destinations are removed
           }
         });
-      } else {
-        console.log(startStatus);
       }
-    });
-  };
+    };
 
-  handleChange = (event) => {
-    this.setState({ searchedLocation: event.target.value });
-  };
-
-  handleMarkerClick = (props, marker, e) => {
-    this.setState({
-      activeMarker: marker,
-      showingInfoWindow: true,
-      locationInfo: props.locationInfo,
-      photos: [],
-    });
-
-    const placesService = new window.google.maps.places.PlacesService(document.createElement('div'));
-
-    placesService.getDetails(
-      { placeId: props.locationInfo.place_id },
-      (place, status) => {
-        if (status === 'OK') {
-          this.setState({
-            locationInfo: place,
-          });
-
-          if (place.photos) {
-            place.photos.forEach((photo) => {
-              const url = photo.getUrl({ maxWidth: 500, maxHeight: 500 });
-              this.setState((prevState) => ({
-                photos: [...prevState.photos, url],
-              }));
+    //Handles the display of the route
+    handleShowRoute = () => {
+      const { markers, currentLocation } = this.state;
+      const DirectionsService = new this.props.google.maps.DirectionsService();
+      DirectionsService.route(
+        {
+          origin: currentLocation,
+          destination: markers[markers.length - 1].position,
+          waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position })),
+          optimizeWaypoints: true,
+          travelMode: this.props.google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === this.props.google.maps.DirectionsStatus.OK) {
+            this.setState({
+              directions: result,
+              showRoute: true,
             });
+          } else {
+            this.setState({ error: 'Failed to fetch directions.' });
           }
-        } else {
-          console.log(status);
         }
-      }
-    );
-  };
-
-  render() {
+      );
+    };
+    
+    render() {
     const {
-      currentLocation,
-      searchedLocationCoords,
-      startLocationCoords,
-      endLocationCoords,
-      activeMarker,
-      showingInfoWindow,
-      locationInfo,
-      photos,
-      places,
-      directions
+    currentLocation,
+    searchedLocationCoords,
+    markers,
+    showRoute,
+    directions,
+    destinationInput,
+    activeMarker,
+    showingInfoWindow,
+    locationInfo,
+    photos,
+    places,
     } = this.state;
 
     return (
+
       <div>
         <Navbar />
-        <div>
-          <input type="text" onChange={this.handleChange} />
-          <button onClick={this.handleSearch}>Search</button>
-        </div>
-        <div>
-          <input id="start-input" type="text" placeholder="Start location" onChange={this.handleStartChange} />
-          <input id="end-input" type="text" placeholder="End location" onChange={this.handleEndChange} />
-          <button onClick={this.handleDirections}>Show Route</button>
-        </div>
-        <Map
+        <div className="map-container">
+          <div className="search-container">
+            <input id="search" type="text" onChange={this.handleChange} />
+            <button onClick={this.handleSearch}>Search</button>
+            <div className="input-container">
+              <input
+                id="destination-input"
+                type="text"
+                placeholder="Enter a destination"
+                value={destinationInput}
+                onChange={this.handleDestinationChange}
+              />
+              <button onClick={this.handleAddDestination}>Add</button>
+              <button onClick={this.handleShowRoute}>Show Route</button>
+            </div>
+          </div>
+          <Map
           google={this.props.google}
           zoom={14}
           style={mapStyles}
@@ -273,25 +265,16 @@ class MapView extends Component {
               locationInfo={locationInfo}
             />
           )}
-          {startLocationCoords.lat !== 0 && (
-          <Marker
-            position={startLocationCoords}
-            name={locationInfo.name}
-            icon={{
-                url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-            }}
-          />
+          {currentLocation.lat && currentLocation.lng && (
+            <Marker
+              position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
+              icon={flag}/>
           )}
-          {endLocationCoords.lat !== 0 && (
-          <Marker
-            position={endLocationCoords}
-            name={locationInfo.name}
-            icon={{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-            }}
-          />
-          )}
-          {directions && (
+          {markers.map((marker, index) => (
+            <Marker key={index} position={marker.position} onClick={() => this.handleRemoveDestination(index)} icon={greenMarker} />
+          ))}
+          
+          {showRoute && directions && (
           <Polyline
             path={directions.routes[0].overview_path}
             strokeColor="#00d4ff"
@@ -319,11 +302,11 @@ class MapView extends Component {
             </div>
           </InfoWindow>
         </Map>
+        </div>
       </div>
     );
-  }
-}
+    }
+    }
 export default GoogleApiWrapper({
   apiKey: process.env.REACT_APP_API_KEY,
 })(MapView);
-
