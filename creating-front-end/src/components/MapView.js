@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import greenMarker from '../assets/green-dot.png';
 import flag from '../assets/beachflag.png';
 import { useLocation } from "react-router-dom";
-
+import LocationBox from './LocationBox';
 
 const mapStyles = {
   width: '100%',
@@ -12,8 +12,16 @@ const mapStyles = {
   margin: 'auto',
 };
 
+const locationStyles = {
+  width: '50%',
+}
+
 const MapView = () => {
 
+  // accept state variables from CreateRoutePage.js
+  const pageLocation = useLocation();
+
+  const [passedLocations, setPassedLocations] = useState([])
   const [currentLocation, setCurrentLocation] = useState(null);
   const [searchedLocation, setSearchedLocation] = useState('');
   const [searchedLocationCoords, setSearchedLocationCoords] = useState({
@@ -46,6 +54,19 @@ const MapView = () => {
         (error) => console.log(error)
       );
 
+        const passedLocsTemp = [];
+        const passedAddrTemp = [];
+        for(var i = 0; i < pageLocation.state.locations.length; i++){
+          /*console.log("passed: ");
+          console.dir(pageLocation.state.locations[i].coordinates);*/
+          passedLocsTemp[i] = {position: pageLocation.state.locations[i].coordinates, street_address: pageLocation.state.locations[i].street_address};
+        }
+
+        // setPassedLocations(passedLocsTemp)
+
+        console.log("setting markers to ")
+        console.dir(passedLocsTemp)
+        setMarkers(passedLocsTemp)
 
 
     } else {
@@ -67,7 +88,22 @@ const MapView = () => {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
         };
-        const newMarkers = [...markers, { position: location }];
+
+        const num = place.address_components.find(
+          component => component.types.includes('street_number')
+        ).long_name;
+
+        const route = place.address_components.find(
+          component => component.types.includes('route')
+        ).long_name;
+        const neighborhood = place.address_components.find(
+          component => component.types.includes('neighborhood')
+        )?.long_name;
+
+        const street_name = `${route}, ${neighborhood}` || route;
+        const street_address = `${num} ${street_name}`
+
+        const newMarkers = [...markers, { position: location, street_address: street_address }];
         setMarkers(newMarkers);
         console.log(newMarkers);
         setDestinationInput('');
@@ -242,8 +278,9 @@ const MapView = () => {
   return (
     <div>
     <Navbar />
-    
+    <LocationBox locations={markers} style={locationStyles}/>
       <div className="map-container">
+        
         <div className="search-container">
           <input id="search" type="text" onChange={handleChange} />
           <button onClick={handleSearch}>Search</button>
