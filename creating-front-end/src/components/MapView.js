@@ -132,9 +132,6 @@ const MapView = () => {
           const location = results[0].geometry.location;
           const newMarkers = [...markers, { position: location }];
           setMarkers(newMarkers);
-          setMarkers(newMarkers)
-          console.log("markers")
-          console.dir(newMarkers)
           setDestinationInput('');
         } else {
           setError('Failed to geocode destination.');
@@ -178,7 +175,7 @@ const MapView = () => {
 
   const handleRemoveDestination = (index) => {
     if (markers.length === 1) {
-      // setMarkers([]);
+      setMarkers([]);
       setShowRoute(false); // set showRoute to false if last destination is removed
     } else {
       const newMarkers = [...markers.slice(0, index), ...markers.slice(index + 1)];
