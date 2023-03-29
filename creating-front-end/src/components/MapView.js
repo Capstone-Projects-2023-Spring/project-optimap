@@ -31,6 +31,7 @@ class MapView extends Component {
     locationInfo: {},
     photos: [],
     places: [],
+    transitType: 'DRIVING',
   };
 
   componentDidMount() {
@@ -122,6 +123,11 @@ class MapView extends Component {
     this.setState({ destinationInput: event.target.value });
   };
 
+  // Add a new method to handle transit type changes
+  handleTransitTypeChange = (event) => {
+    this.setState({ transitType: event.target.value });
+  };
+
   //Handles the adding of destinations and markers associated with them
   handleAddDestination = () => {
     const { destinationInput, markers } = this.state;
@@ -201,7 +207,7 @@ class MapView extends Component {
           destination: markers[markers.length - 1].position,
           waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position })),
           optimizeWaypoints: true,
-          travelMode: this.props.google.maps.TravelMode.DRIVING,
+          travelMode: this.props.google.maps.TravelMode[this.state.transitType],
         },
         (result, status) => {
           if (status === this.props.google.maps.DirectionsStatus.OK) {
@@ -250,6 +256,18 @@ class MapView extends Component {
               <button onClick={this.handleAddDestination}>Add</button>
               <button onClick={this.handleShowRoute}>Show Route</button>
             </div>
+          </div>
+          <div className="transit-type-container">
+            <label htmlFor="transit-type">Transit Type: </label>
+            <select
+              id="transit-type"
+              value={this.state.transitType}
+              onChange={this.handleTransitTypeChange}
+            >
+              <option value="DRIVING">Driving</option>
+              <option value="WALKING">Walking</option>
+              <option value="BICYCLING">Bicycling</option>
+            </select>
           </div>
           <Map
           google={this.props.google}
