@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/project-optimap/static/css/main.a13ed781.css",
+    "main.js": "/project-optimap/static/js/main.1e0237d3.js",
+    "static/js/787.ce1d8cd2.chunk.js": "/project-optimap/static/js/787.ce1d8cd2.chunk.js",
+    "static/media/optibackground.png": "/project-optimap/static/media/optibackground.94000040b929d2f89ea6.png",
+    "static/media/OptiMapLogo.png": "/project-optimap/static/media/OptiMapLogo.215a1eafe3fd3249d0cf.png",
+    "index.html": "/project-optimap/index.html",
+    "main.a13ed781.css.map": "/project-optimap/static/css/main.a13ed781.css.map",
+    "main.1e0237d3.js.map": "/project-optimap/static/js/main.1e0237d3.js.map",
+    "787.ce1d8cd2.chunk.js.map": "/project-optimap/static/js/787.ce1d8cd2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a13ed781.css",
+    "static/js/main.1e0237d3.js"
+  ]
+}
