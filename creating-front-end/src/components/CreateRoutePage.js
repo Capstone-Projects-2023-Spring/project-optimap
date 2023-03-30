@@ -1,4 +1,5 @@
-import React, { useState, useEffect, componentDidMo } from 'react';
+import React, { useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import { Container, Row, Col, Button, Form, FormControl, InputGroup, ListGroup, Modal } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -9,6 +10,7 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps
 
 
 const CreateRoutePage = () => {
+    const navigate = useNavigate()
     const [googleInput, setGoogleInput] = useState({});
 
     const [inputValue, setInputValue] = useState('');
@@ -95,6 +97,7 @@ const CreateRoutePage = () => {
             setMessage("Error: " + err);
         }
 
+        navigate("/map", {state:{locations: locationList}})
 
     }
 
