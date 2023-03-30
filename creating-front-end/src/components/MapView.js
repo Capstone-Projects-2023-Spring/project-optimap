@@ -43,6 +43,33 @@ const MapView = () => {
   const [places, setPlaces] = useState([]);
   const [transitType, setTransitType] = useState('DRIVING');
 
+    //Handles the display of the route
+    function handleShowRoute() {
+      console.log('show Route called')
+  
+      const DirectionsService = new window.google.maps.DirectionsService();
+      DirectionsService.route(
+        {
+          origin: currentLocation,
+          destination: markers[markers.length - 1].position,
+          waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position})),
+          optimizeWaypoints: true,
+          travelMode: window.google.maps.TravelMode[transitType],
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            setDirections(result)
+            setShowRoute(true);
+          } else {
+            setError('Failed to fetch directions.');
+            console.log("no directions")
+          }
+        }
+      );
+    };
+    
+
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -71,7 +98,6 @@ const MapView = () => {
         console.dir(passedLocsTemp)
         setMarkers(passedLocsTemp)
 
-
     } else {
       console.log('Geolocation not supported');
       setCurrentLocation({
@@ -92,19 +118,7 @@ const MapView = () => {
           lng: place.geometry.location.lng(),
         };
 
-        const num = place.address_components.find(
-          component => component.types.includes('street_number')
-        ).long_name;
-
-        const route = place.address_components.find(
-          component => component.types.includes('route')
-        ).long_name;
-        const neighborhood = place.address_components.find(
-          component => component.types.includes('neighborhood')
-        )?.long_name;
-
-        const street_name = `${route}, ${neighborhood}` || route;
-        const street_address = `${num} ${street_name}`
+        const street_address = place.formatted_address;
 
         const newMarkers = [...markers, { position: location, street_address: street_address }];
         setMarkers(newMarkers);
@@ -116,7 +130,12 @@ const MapView = () => {
     });
 
     // autocompleteRef.current = autocomplete; ?
-  }, [markers, window.google.maps.places.Autocomplete]);
+
+    console.log("len " + markers.length)
+    if(markers.length > 1 && currentLocation){
+      handleShowRoute();
+    }
+  }, [currentLocation, markers, window.google.maps.places.Autocomplete]);
 
 
   const handleSearch = () => {
@@ -249,30 +268,6 @@ const MapView = () => {
   };
 
 
-  //Handles the display of the route
-  const handleShowRoute = () => {
-    console.log('show Route called')
-
-    const DirectionsService = new window.google.maps.DirectionsService();
-    DirectionsService.route(
-      {
-        origin: currentLocation,
-        destination: markers[markers.length - 1].position,
-        waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position})),
-        optimizeWaypoints: true,
-        travelMode: window.google.maps.TravelMode[transitType],
-      },
-      (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
-          setDirections(result)
-          setShowRoute(true);
-        } else {
-          setError('Failed to fetch directions.');
-          console.log("no directions")
-        }
-      }
-    );
-  };
   const handleTransitTypeChange = e => {
     setTransitType(e.target.value );
   };
