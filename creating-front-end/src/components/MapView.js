@@ -28,6 +28,9 @@ const MapView = () => {
     lat: 0,
     lng: 0,
   });
+
+  const [idx, setIdx] = useState(0);
+
   const [markers, setMarkers] = useState([]);
   const [showRoute, setShowRoute] = useState(false);
   const [directions, setDirections] = useState(null);
@@ -210,7 +213,7 @@ const MapView = () => {
     setSearchedLocation(event.target.value);
   };
 
-  const handleRemoveDestination = (index) => {
+  function handleRemoveDestination(index) {
     const newMarkers = [...markers];
     newMarkers.splice(index, 1);
     setMarkers(newMarkers);
@@ -278,7 +281,9 @@ const MapView = () => {
   return (
     <div>
     <Navbar />
-    <LocationBox locations={markers} style={locationStyles}/>
+    {currentLocation ? (
+    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers}/>
+    ):(<></>)}
       <div className="map-container">
         
         <div className="search-container">
