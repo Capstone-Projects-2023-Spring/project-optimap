@@ -86,17 +86,20 @@ const MapView = () => {
 
         const passedLocsTemp = [];
         const passedAddrTemp = [];
-        for(var i = 0; i < pageLocation.state.locations.length; i++){
-          /*console.log("passed: ");
-          console.dir(pageLocation.state.locations[i].coordinates);*/
-          passedLocsTemp[i] = {position: pageLocation.state.locations[i].coordinates, street_address: pageLocation.state.locations[i].street_address};
+        if(pageLocation.state){
+          for(var i = 0; i < pageLocation.state.locations.length; i++){
+            /*console.log("passed: ");
+            console.dir(pageLocation.state.locations[i].coordinates);*/
+            passedLocsTemp[i] = {position: pageLocation.state.locations[i].coordinates, street_address: pageLocation.state.locations[i].street_address};
+          }
+  
+          // setPassedLocations(passedLocsTemp)
+  
+          console.log("setting markers to ")
+          console.dir(passedLocsTemp)
+          setMarkers(passedLocsTemp)
         }
 
-        // setPassedLocations(passedLocsTemp)
-
-        console.log("setting markers to ")
-        console.dir(passedLocsTemp)
-        setMarkers(passedLocsTemp)
 
     } else {
       console.log('Geolocation not supported');
@@ -292,8 +295,8 @@ const MapView = () => {
               value={destinationInput}
               onChange={handleDestinationChange}
             />
-            {/*<button onClick={handleAddDestination}>Add</button>
-            <button onClick={handleShowRoute}>Show Route</button>*/}
+            {/*<button onClick={handleAddDestination}>Add</button>*/}
+            <button onClick={handleShowRoute}>Show Route</button>
           </div>
         </div>
 
