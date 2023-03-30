@@ -292,8 +292,8 @@ const MapView = () => {
               value={destinationInput}
               onChange={handleDestinationChange}
             />
-            <button onClick={handleAddDestination}>Add</button>
-            <button onClick={handleShowRoute}>Show Route</button>
+            {/*<button onClick={handleAddDestination}>Add</button>
+            <button onClick={handleShowRoute}>Show Route</button>*/}
           </div>
         </div>
 
