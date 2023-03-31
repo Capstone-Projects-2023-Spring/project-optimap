@@ -10,11 +10,18 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v3
 
-      - name: install
-        run: cd creating-front-end && npm install
+      - name: Set Node environment
+        uses: actions/setup-node@master
+        with:
+          node-version: '18.x'
+
+      - name: Install dependency
+        working-directory: ./creating-front-end
+        run: npm install
 
       - name: build
-        run: cd creating-front-end && npm run build
+        working-directory: ./creating-front-end
+        run: npm run build
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
