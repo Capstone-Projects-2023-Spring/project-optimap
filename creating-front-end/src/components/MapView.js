@@ -42,6 +42,10 @@ const MapView = () => {
   const [photos, setPhotos] = useState([]);
   const [places, setPlaces] = useState([]);
   const [transitType, setTransitType] = useState('DRIVING');
+  // Fetch settings from local storage and set the corresponding state
+  const [avoidHighways, setAvoidHighways] = useState(localStorage.getItem('avoidHighways') === 'true');
+  const [avoidTolls, setAvoidTolls] = useState(localStorage.getItem('avoidTolls') === 'true');
+  const [avoidFerries, setAvoidFerries] = useState(localStorage.getItem('avoidFerries') === 'true');
 
     //Handles the display of the route
     function handleShowRoute() {
@@ -55,6 +59,11 @@ const MapView = () => {
           waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position})),
           optimizeWaypoints: true,
           travelMode: window.google.maps.TravelMode[transitType],
+          drivingOptions: {
+            avoidFerries: avoidFerries,
+            avoidHighways: avoidHighways,
+            avoidTolls: avoidTolls,
+          },
         },
         (result, status) => {
           if (status === window.google.maps.DirectionsStatus.OK) {
