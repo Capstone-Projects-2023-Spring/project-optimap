@@ -21,7 +21,7 @@ jobs:
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          entryPoint: ./creating-front-end/build
+          entryPoint: ./creating-front-end
           repoToken: '${{ secrets.TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_OPTIMAP_376020 }}'
           channelId: live
