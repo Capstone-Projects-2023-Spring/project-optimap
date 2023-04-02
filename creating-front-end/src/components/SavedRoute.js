@@ -4,8 +4,13 @@ import { ref, onValue, onChildChanged, remove } from "firebase/database";
 import { Container, Row, Accordion, Button } from 'react-bootstrap';
 import NavBar from './Navbar';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import {useNavigate} from 'react-router-dom';
+
 
 const SavedRoute = () => {
+	// navigate to a new page
+	const navigate = useNavigate()
+
 	const [savedRoutes, setSavedRoutes] = useState([]); // routes are stored as an array of key:values
 	const [recentRoutes, setRecentRoutes] = useState([]);
 	const [userId, setUserId] = useState("");
@@ -63,6 +68,13 @@ const SavedRoute = () => {
 		});
 	}
 
+	function handleSavedLoad(route){
+		console.log("loading ")
+		console.dir(route)
+
+		navigate("/map", {state:{locations: route}})
+	}
+
 	return (
 		<Container fluid>
 			<NavBar />
@@ -81,6 +93,9 @@ const SavedRoute = () => {
 										{route[1].name}
 										<Button style={{ position: 'absolute', right: '10%' }} variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].name)}>
 											Delete
+										</Button>
+										<Button style={{ position: 'absolute', right: '25%' }} variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
+											Load
 										</Button>
 									</Accordion.Header>
 									<Accordion.Body>
@@ -115,6 +130,10 @@ const SavedRoute = () => {
 
 										<Button style={{ position: 'absolute', right: '10%' }} variant="danger" size="sm" className="ml-auto" onClick={() => handleRecentDelete(route[1].route_id)}>
 											Delete
+										</Button>
+
+										<Button style={{ position: 'absolute', right: '25%' }} variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
+											Load
 										</Button>
 
 									</Accordion.Header>
