@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar';
 import { Container, Form, Button } from 'react-bootstrap';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { auth, signInWithEmailAndPassword } from "../firebase/Firebase";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -77,10 +81,18 @@ const Login = () => {
                 />
               </Form.Group>
 
-
-              <Button className="mt-3" variant="primary" type="submit" block>
-                Login
+              <ButtonGroup className="me-2" aria-label="First group">
+                <Button className="mt-3" variant="primary" type="submit" block>
+                  Login
               </Button>
+              </ButtonGroup>
+
+              <ButtonGroup className="me-2" aria-label="Second group">
+                <Button onClick={() => navigate('/signup')} className="mt-3" variant="primary" type="submit" block>
+                  Create Account
+              </Button>
+              </ButtonGroup>
+
             </Form>
           )}
         </div>

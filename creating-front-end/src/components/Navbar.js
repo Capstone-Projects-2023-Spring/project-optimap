@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { Navbar, Nav } from 'react-bootstrap';
 import logo from '../assets/OptiMapLogo.png';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   // get the current user & check if they are logged in
   const auth = getAuth();
 
-  const [loggedIn, setLogedIn] = useState(false)
+  const navigate = useNavigate();
 
+  const [loggedIn, setLogedIn] = useState(false)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -37,19 +39,18 @@ const NavBar = () => {
 
           {loggedIn ?
             (<Nav>
-              <Nav.Link href="/logout">Logout</Nav.Link>
-              <Nav.Link href="/profile">Profile</Nav.Link>
-              <Nav.Link href="/map">Map</Nav.Link>
-              <Nav.Link href="/directions">Directions</Nav.Link>
-              <Nav.Link href="/createRoutePage">Create Route</Nav.Link>
-              <Nav.Link href="/savedRoute">Saved Routes</Nav.Link>
+              <Nav.Link onClick={() => navigate('/logout')}>Logout</Nav.Link>
+              <Nav.Link onClick={() => navigate('/profile')}>Profile</Nav.Link>
+              <Nav.Link onClick={() => navigate('/map')}>Map</Nav.Link>
+              <Nav.Link onClick={() => navigate('/directions')}>Directions</Nav.Link>
+              <Nav.Link onClick={() => navigate('/createRoutePage')}>Create Route</Nav.Link>
+              <Nav.Link onClick={() => navigate('/savedRoute')}>Saved Routes</Nav.Link> 
             </Nav>)
             :
             (
               <Nav>
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/signup">Sign Up</Nav.Link>
+                <Nav.Link onClick={() => navigate('/')}>Home</Nav.Link>
+                <Nav.Link onClick={() => navigate('/login')}>Login</Nav.Link>
               </Nav>
             )}
         </div>

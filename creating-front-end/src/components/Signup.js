@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Navbar from './Navbar';
 import { auth, createUserWithEmailAndPassword } from "../firebase/Firebase";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +11,8 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [signedUpEmail, setSignedUpEmail] = useState('');
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -67,9 +71,17 @@ const Signup = () => {
             <Form.Control type="password" placeholder="Confirm Password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
           </Form.Group>
 
-          <Button className="mt-3" variant="primary" type="submit" block>
-            Sign Up
-          </Button>
+          <ButtonGroup className="me-2" aria-label="First group">
+            <Button className="mt-3" variant="primary" type="submit" block>
+              Sign Up
+            </Button>
+          </ButtonGroup>
+
+          <ButtonGroup className="me-2" aria-label="First group">
+            <Button onClick={() => navigate('/login')} className="mt-3" variant="primary" type="submit" block>
+                Login
+            </Button>
+          </ButtonGroup>
         </Form>
       )}
       </div>
