@@ -1,12 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 import Navbar from './Navbar';
+import { db } from '../firebase/Firebase';
+import { ref, onValue, off, set } from 'firebase/database';
 
 const Settings = () => {
-  const [avoidHighways, setAvoidHighways] = useState(localStorage.getItem('avoidHighways') === 'true');
-  const [avoidTolls, setAvoidTolls] = useState(localStorage.getItem('avoidTolls') === 'true');
-  const [avoidFerries, setAvoidFerries] = useState(localStorage.getItem('avoidFerries') === 'true');
+  const [avoidHighways, setAvoidHighways] = useState(false);
+  const [avoidTolls, setAvoidTolls] = useState(false);
+  const [avoidFerries, setAvoidFerries] = useState(false);
   const [settingsSaved, setSettingsSaved] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const settingsRef = ref(db, 'settings/routeOptions');
+      onValue(settingsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setAvoidHighways(data.avoidHighways);
+          setAvoidTolls(data.avoidTolls);
+          setAvoidFerries(data.avoidFerries);
+        }
+      });
+    };
+
+    fetchData();
+    return () => {
+      const settingsRef = ref(db, 'settings/routeOptions');
+      off(settingsRef);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (settingsSaved) {
+      const timer = setTimeout(() => {
+        setSettingsSaved(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [settingsSaved]);
 
   const handleToggleChange = (event) => {
     const { name, checked } = event.target;
@@ -20,10 +52,15 @@ const Settings = () => {
     }
   };
 
-  const handleSettingsSubmit = () => {
-    localStorage.setItem('avoidHighways', avoidHighways);
-    localStorage.setItem('avoidTolls', avoidTolls);
-    localStorage.setItem('avoidFerries', avoidFerries);
+  const handleSettingsSubmit = async (event) => {
+    event.preventDefault();
+
+    const settingsRef = ref(db, 'settings/routeOptions');
+    await set(settingsRef, {
+      avoidHighways: avoidHighways,
+      avoidTolls: avoidTolls,
+      avoidFerries: avoidFerries,
+    });
     setSettingsSaved(true);
   };
 
