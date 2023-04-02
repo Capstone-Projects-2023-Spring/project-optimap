@@ -5,6 +5,8 @@ import greenMarker from '../assets/green-dot.png';
 import flag from '../assets/beachflag.png';
 import { useLocation } from "react-router-dom";
 import LocationBox from './LocationBox';
+import { db } from '../firebase/Firebase';
+import { ref, onValue, off } from 'firebase/database';
 
 const mapStyles = {
   width: '100%',
@@ -43,14 +45,34 @@ const MapView = () => {
   const [places, setPlaces] = useState([]);
   const [transitType, setTransitType] = useState('DRIVING');
   // Fetch settings from local storage and set the corresponding state
-  const [avoidHighways, setAvoidHighways] = useState(localStorage.getItem('avoidHighways') === 'true');
-  const [avoidTolls, setAvoidTolls] = useState(localStorage.getItem('avoidTolls') === 'true');
-  const [avoidFerries, setAvoidFerries] = useState(localStorage.getItem('avoidFerries') === 'true');
+  const [avoidHighways, setAvoidHighways] = useState(false);
+  const [avoidTolls, setAvoidTolls] = useState(false);
+  const [avoidFerries, setAvoidFerries] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const settingsRef = ref(db, 'settings/routeOptions');
+      onValue(settingsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setAvoidHighways(data.avoidHighways);
+          setAvoidTolls(data.avoidTolls);
+          setAvoidFerries(data.avoidFerries);
+        }
+      });
+    };
+
+    fetchData();
+    return () => {
+      const settingsRef = ref(db, 'settings/routeOptions');
+      off(settingsRef);
+    };
+  }, []);
 
     //Handles the display of the route
     function handleShowRoute() {
       console.log('show Route called')
-  
+    
       const DirectionsService = new window.google.maps.DirectionsService();
       DirectionsService.route(
         {
@@ -59,11 +81,9 @@ const MapView = () => {
           waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position})),
           optimizeWaypoints: true,
           travelMode: window.google.maps.TravelMode[transitType],
-          drivingOptions: {
-            avoidFerries: avoidFerries,
-            avoidHighways: avoidHighways,
-            avoidTolls: avoidTolls,
-          },
+          avoidTolls: avoidTolls,
+          avoidHighways: avoidHighways,
+          avoidFerries: avoidFerries,
         },
         (result, status) => {
           if (status === window.google.maps.DirectionsStatus.OK) {
@@ -77,8 +97,6 @@ const MapView = () => {
       );
     };
     
-
-
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
