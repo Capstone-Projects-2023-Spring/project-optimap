@@ -43,6 +43,17 @@ const CreateRoutePage = () => {
         console.log("checked: " + isChecked)
     }
 
+    const [hours, setHours] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+
+    const handleHourChange = (e) => {
+        setHours(e.target.value);
+    };
+
+    const handleMinuteChange = (e) => {
+        setMinutes(e.target.value);
+    };
+
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
@@ -171,6 +182,7 @@ const CreateRoutePage = () => {
         });
 
         TimeOptions();
+        console.log("checked at start: " + isChecked)
     }, [uid])
 
 
@@ -246,20 +258,34 @@ const CreateRoutePage = () => {
                                 <Form.Group as={Row}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
 
-                                    <Col md={3}>
+                                    <Col md={2} style={{
+                                        display: 'flex',
+                                        alignItems: 'left',
+                                        justifyContent: 'left'
+                                    }}>
                                         <input
                                             type="checkbox"
                                             name="arrivalTime"
                                             value="true"
                                             onChange={handleCheckboxChange}
+                                            style={{
+                                                // style it so it fills its parents height and width
+                                                height: '80%',
+                                                width: '80%',
+                                                // style it so it looks like a checkbox
+                                                background: 'white',
+                                                border: '1px solid #ccc',
+                                                borderRadius: '3px',
+
+                                            }}
                                         />
                                     </Col>
 
-                                    <Col md={5}>
+                                    <Col md={3}>
                                         <FormControl
                                             as="select"
                                             onChange={handleTimeChange}
-                                            readOnly={isChecked}
+                                            disabled={!isChecked}
                                         >
                                             {times.map(option => (
                                                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -269,6 +295,61 @@ const CreateRoutePage = () => {
 
                                 </Form.Group>
 
+
+                                <Form.Group as={Row}>
+                                    <Form.Label column sm="3" className="d-flex align-items-center">Time Spent</Form.Label>
+
+                                    <Col md={2} style={{
+                                        display: 'flex',
+                                        alignItems: 'left',
+                                        justifyContent: 'left'
+                                    }}>
+                                        <input
+                                            type="checkbox"
+                                            name="arrivalTime"
+                                            value="true"
+                                            onChange={handleCheckboxChange}
+                                            style={{
+                                                // style it so it fills its parents height and width
+                                                height: '80%',
+                                                width: '80%',
+                                                // style it so it looks like a checkbox
+                                                background: 'white',
+                                                border: '1px solid #ccc',
+                                                borderRadius: '3px',
+
+                                            }}
+                                        />
+                                    </Col>
+
+                                    <Col md={3}>
+                                        <FormControl
+                                            as="select"
+                                            value={hours}
+                                            onChange={handleHourChange}
+                                        >
+                                            {[...Array(12).keys()].map((hour) => (
+                                                <option key={hour} value={hour + 1}>
+                                                    {hour + 1}
+                                                </option>
+                                            ))}
+                                        </FormControl>
+                                        <Form.Label>MIN</Form.Label>
+                                        <FormControl
+                                            as="select"
+                                            value={minutes}
+                                            onChange={handleMinuteChange}
+                                        >
+                                            {[...Array(60).keys()].map((minute) => (
+                                                <option key={minute} value={minute}>
+                                                    {minute < 10 ? `0${minute}` : minute}
+                                                </option>
+                                            ))}
+                                        </FormControl>
+
+                                    </Col>
+
+                                </Form.Group>
 
 
 
