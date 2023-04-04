@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Form, FormControl, InputGroup, ListGroup, Modal } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -24,11 +24,8 @@ const CreateRoutePage = () => {
 
     const [showModal, setShowModal] = useState(false);
 
-    const [arrival, setArrival] = useState(null)
+    const [arrivalTime, setArrivalTime] = useState(null)
 
-    function handleArrivalChange(val) {
-        setArrival(val)
-    }
 
     const [duration, setDuration] = useState(null)
 
@@ -39,11 +36,40 @@ const CreateRoutePage = () => {
 
 
 
+    const [isChecked, setIsChecked] = useState(false);
+
+    function handleCheckboxChange() {
+        setIsChecked(!isChecked);
+        console.log("checked: " + isChecked)
+    }
+
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
+    const handleTimeChange = (event) => {
+        setArrivalTime(event.target.value);
+    };
+
     const [userId, setUserId] = useState("");
+
+    const [times, setTimes] = useState([])
+
+    function TimeOptions() {
+        const timeOptions = [];
+        for (let i = 0; i < 24; i++) {
+            let hour = i % 12 || 12;
+            let ampm = i < 12 ? "AM" : "PM";
+            let timeValue = ("0" + i).slice(-2) + ":00";
+            let timeLabel = hour + ":00 " + ampm;
+            timeOptions.push({ value: timeValue, label: timeLabel });
+            timeValue = ("0" + i).slice(-2) + ":30";
+            timeLabel = hour + ":30 " + ampm;
+            timeOptions.push({ value: timeValue, label: timeLabel });
+
+            setTimes(timeOptions)
+        }
+    }
 
     // ensure mmddyyy is populated before user tries to save
     useEffect(() => {
@@ -97,7 +123,7 @@ const CreateRoutePage = () => {
             setMessage("Error: " + err);
         }
 
-        navigate("/map", {state:{locations: locationList}})
+        navigate("/map", { state: { locations: locationList } })
 
     }
 
@@ -143,6 +169,8 @@ const CreateRoutePage = () => {
                 console.log("user id set");
             }
         });
+
+        TimeOptions();
     }, [uid])
 
 
@@ -215,21 +243,35 @@ const CreateRoutePage = () => {
                                     </Col>
                                 </Form.Group>
 
-                                {/*         <Form.Group  as={Row}>
-                                        <Form.Label  column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
-                                        <Col>
-                                            <FormControl type="text" placeholder="4:00pm (optional)" value={arrival} onChange={handleArrivalChange} />
-                                        </Col>
-                                    </Form.Group>
+                                <Form.Group as={Row}>
+                                    <Form.Label column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
 
-                                    <Form.Group  as={Row}>
-                                        <Form.Label  column sm="3" className="d-flex align-items-center">Duration Time</Form.Label>
-                                        <Col>
-                                            <FormControl type="text" placeholder="1hr (optional)" value={duration} onChange={handleDurationChange} />
-                                        </Col>
-                                    </Form.Group>
+                                    <Col md={3}>
+                                        <input
+                                            type="checkbox"
+                                            name="arrivalTime"
+                                            value="true"
+                                            onChange={handleCheckboxChange}
+                                        />
+                                    </Col>
 
-                                */}
+                                    <Col md={5}>
+                                        <FormControl
+                                            as="select"
+                                            onChange={handleTimeChange}
+                                            readOnly={isChecked}
+                                        >
+                                            {times.map(option => (
+                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                            ))}
+                                        </FormControl>
+                                    </Col>
+
+                                </Form.Group>
+
+
+
+
 
                                 <Button type="submit">+</Button>
                             </Form>
