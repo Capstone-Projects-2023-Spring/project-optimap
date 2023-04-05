@@ -1,0 +1,47 @@
+.locationList {
+    height: 100%;
+    margin-top: 1rem;
+}
+
+.locationCol {
+    height: 100vh;
+    max-height: 50vh; 
+    overflow-y: auto;
+}
+
+.checkbxCol .checkbx {
+        height: '100%';
+        width: '100%';
+        background: 'white';
+        border: '3px solid red';
+        border-radius: '3px';
+}
+
+.checkbxCol {
+    height: 50px;
+    display: 'flex';
+    align-items: 'center';
+    justify-content: 'center';
+}
+
+@media (max-width: 768px) {
+    .locationList {
+        height: 20vh;
+        margin-bottom: 5rem;
+    }
+    
+    .locationCol {
+        height: 30vh;
+    }
+
+    .checkbx {
+        width: 100%;
+        height: 100%;
+        color: red;
+    }
+
+    .checkbxCol {
+        height: 50px;
+    }
+
+}

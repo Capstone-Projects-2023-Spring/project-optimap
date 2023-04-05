@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Form, FormControl, InputGroup, ListGroup, Modal } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -7,6 +7,7 @@ import { db, auth } from '../firebase/Firebase';
 import { ref, onValue, onChildChanged, set, push, remove, child } from "firebase/database";
 import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps-react';
 
+import './createRoutePage.css';
 
 
 const CreateRoutePage = () => {
@@ -24,11 +25,8 @@ const CreateRoutePage = () => {
 
     const [showModal, setShowModal] = useState(false);
 
-    const [arrival, setArrival] = useState(null)
+    const [arrivalTime, setArrivalTime] = useState(null)
 
-    function handleArrivalChange(val) {
-        setArrival(val)
-    }
 
     const [duration, setDuration] = useState(null)
 
@@ -39,11 +37,56 @@ const CreateRoutePage = () => {
 
 
 
+    const [arrivalIsChecked, setArrivalIsChecked] = useState(false);
+
+    function handleArrivalBoxChange() {
+        setArrivalIsChecked(!arrivalIsChecked);
+    }
+
+    const [spentIsChecked, setSpentIsChecked] = useState(false);
+
+    function handleSpentBoxChange() {
+        setSpentIsChecked(!spentIsChecked);
+    }
+
+    const [hours, setHours] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+
+    const handleHourChange = (e) => {
+        setHours(e.target.value);
+    };
+
+    const handleMinuteChange = (e) => {
+        setMinutes(e.target.value);
+    };
+
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
 
+    const handleTimeChange = (event) => {
+        setArrivalTime(event.target.value);
+    };
+
     const [userId, setUserId] = useState("");
+
+    const [times, setTimes] = useState([])
+
+    function TimeOptions() {
+        const timeOptions = [];
+        for (let i = 0; i < 24; i++) {
+            let hour = i % 12 || 12;
+            let ampm = i < 12 ? "AM" : "PM";
+            let timeValue = ("0" + i).slice(-2) + ":00";
+            let timeLabel = hour + ":00 " + ampm;
+            timeOptions.push({ value: timeValue, label: timeLabel });
+            timeValue = ("0" + i).slice(-2) + ":30";
+            timeLabel = hour + ":30 " + ampm;
+            timeOptions.push({ value: timeValue, label: timeLabel });
+
+            setTimes(timeOptions)
+        }
+    }
 
     // ensure mmddyyy is populated before user tries to save
     useEffect(() => {
@@ -97,7 +140,7 @@ const CreateRoutePage = () => {
             setMessage("Error: " + err);
         }
 
-        navigate("/map", {state:{locations: locationList}})
+        navigate("/map", { state: { locations: locationList } })
 
     }
 
@@ -143,6 +186,8 @@ const CreateRoutePage = () => {
                 console.log("user id set");
             }
         });
+
+        TimeOptions();
     }, [uid])
 
 
@@ -183,11 +228,11 @@ const CreateRoutePage = () => {
         <div>
             <Navbar />
             <Container fluid>
-                <Row className="justify-content-center align-items-center" style={{ height: '100%', marginTop: '1rem' }}>
+                <Row className="justify-content-center align-items-center locationList">
                     <Col md={4}>
                     </Col>
 
-                    <Col md={4} style={{ height: '100vh', maxHeight: '50vh', overflowY: 'auto' }}>
+                    <Col md={4} className="locationCol">
                         <div className="border p-10 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3', minHeight: '100%' }}>
                             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 2 }}>
                                 List of Locations
@@ -204,41 +249,112 @@ const CreateRoutePage = () => {
                     </Col>
                 </Row>
 
-                <Row className="justify-content-center align-items-center" style={{ height: '25vh' }}>
+                <Row className="justify-content-center align-items-center" style={{marginTop: '1rem'}}>
                     <Col md={6} className="text-center">
                         <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>
                             <Form onSubmit={handleFormSubmit}>
-                                <Form.Group as={Row}>
+                                <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Location</Form.Label>
                                     <Col>
                                         <FormControl id="location-input" type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
                                     </Col>
                                 </Form.Group>
 
-                                {/*         <Form.Group  as={Row}>
-                                        <Form.Label  column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
-                                        <Col>
-                                            <FormControl type="text" placeholder="4:00pm (optional)" value={arrival} onChange={handleArrivalChange} />
-                                        </Col>
-                                    </Form.Group>
+                                <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
+                                    <Form.Label column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
 
-                                    <Form.Group  as={Row}>
-                                        <Form.Label  column sm="3" className="d-flex align-items-center">Duration Time</Form.Label>
-                                        <Col>
-                                            <FormControl type="text" placeholder="1hr (optional)" value={duration} onChange={handleDurationChange} />
-                                        </Col>
-                                    </Form.Group>
+                                    <Col md={2} style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="exampleCheckbox"
+                                            style={{ flex: 1 }}
+                                            onChange={handleArrivalBoxChange}
+                                        />
+                                    </Col>
 
-                                */}
+                                    <Col md={3}>
+                                        <FormControl
+                                            as="select"
+                                            onChange={handleTimeChange}
+                                            disabled={!arrivalIsChecked}
+                                        >
+                                            {times.map(option => (
+                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                            ))}
+                                        </FormControl>
+                                    </Col>
+
+                                </Form.Group>
+
+
+                                <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
+                                    <Form.Label column sm="3" className="d-flex align-items-center">Time Spent</Form.Label>
+
+                                    <Col md={2} style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="exampleCheckbox"
+                                            style={{ flex: 1 }}
+                                            onChange={handleSpentBoxChange}
+                                        />
+                                    </Col>
+
+                                    <Col md={3}>
+                                        <Form.Label>HR</Form.Label>
+                                        <FormControl
+                                            as="select"
+                                            value={hours}
+                                            onChange={handleHourChange}
+                                            disabled={!spentIsChecked}
+                                        >
+                                            {[...Array(12).keys()].map((hour) => (
+                                                <option key={hour} value={hour + 1}>
+                                                    {hour + 1}
+                                                </option>
+                                            ))}
+                                        </FormControl>
+                                    </Col>
+
+                                    <Col md={3}>
+                                        <Form.Label>MIN</Form.Label>
+                                        <FormControl
+                                            as="select"
+                                            value={minutes}
+                                            onChange={handleMinuteChange}
+                                            disabled={!spentIsChecked}
+                                        >
+                                            {[...Array(60).keys()].map((minute) => (
+                                                <option key={minute} value={minute}>
+                                                    {minute < 10 ? `0${minute}` : minute}
+                                                </option>
+                                            ))}
+                                        </FormControl>
+                                    </Col>
+
+                                </Form.Group>
+
+                                
+                                
+
 
                                 <Button type="submit">+</Button>
+
+                                <div style={{marginTop: '1rem'}}>{message}</div>
                             </Form>
                         </div>
                     </Col>
 
                 </Row>
 
-                <Row >
+                <Row className="justify-content-center align-items-center buttons" >
                     <Col md={4}>
                     </Col>
                     <Col md={2} className="text-center">
@@ -246,7 +362,6 @@ const CreateRoutePage = () => {
                     </Col>
                     <Col md={2} className="text-center">
                         <Button onClick={handleRun} style={{ marginTop: '1rem' }}>Run</Button>
-                        <div style={{ width: '100vw', alignContent: 'center', textAlign: 'center', marginTop: '1rem' }}>{message}</div>
                     </Col>
                     <Col md={4}>
                     </Col>
