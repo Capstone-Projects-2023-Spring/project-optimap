@@ -7,6 +7,7 @@ import { db, auth } from '../firebase/Firebase';
 import { ref, onValue, onChildChanged, set, push, remove, child } from "firebase/database";
 import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps-react';
 
+import './createRoutePage.css';
 
 
 const CreateRoutePage = () => {
@@ -36,11 +37,16 @@ const CreateRoutePage = () => {
 
 
 
-    const [isChecked, setIsChecked] = useState(false);
+    const [arrivalIsChecked, setArrivalIsChecked] = useState(false);
 
-    function handleCheckboxChange() {
-        setIsChecked(!isChecked);
-        console.log("checked: " + isChecked)
+    function handleArrivalBoxChange() {
+        setArrivalIsChecked(!arrivalIsChecked);
+    }
+
+    const [spentIsChecked, setSpentIsChecked] = useState(false);
+
+    function handleSpentBoxChange() {
+        setSpentIsChecked(!spentIsChecked);
     }
 
     const [hours, setHours] = useState(0);
@@ -182,7 +188,6 @@ const CreateRoutePage = () => {
         });
 
         TimeOptions();
-        console.log("checked at start: " + isChecked)
     }, [uid])
 
 
@@ -223,11 +228,11 @@ const CreateRoutePage = () => {
         <div>
             <Navbar />
             <Container fluid>
-                <Row className="justify-content-center align-items-center" style={{ height: '100%', marginTop: '1rem' }}>
+                <Row className="justify-content-center align-items-center locationList">
                     <Col md={4}>
                     </Col>
 
-                    <Col md={4} style={{ height: '100vh', maxHeight: '50vh', overflowY: 'auto' }}>
+                    <Col md={4} className="locationCol">
                         <div className="border p-10 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3', minHeight: '100%' }}>
                             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 2 }}>
                                 List of Locations
@@ -244,40 +249,30 @@ const CreateRoutePage = () => {
                     </Col>
                 </Row>
 
-                <Row className="justify-content-center align-items-center" style={{ height: '25vh' }}>
+                <Row className="justify-content-center align-items-center" style={{marginTop: '1rem'}}>
                     <Col md={6} className="text-center">
                         <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>
                             <Form onSubmit={handleFormSubmit}>
-                                <Form.Group as={Row}>
+                                <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Location</Form.Label>
                                     <Col>
                                         <FormControl id="location-input" type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
                                     </Col>
                                 </Form.Group>
 
-                                <Form.Group as={Row}>
+                                <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Arrival Time</Form.Label>
 
                                     <Col md={2} style={{
                                         display: 'flex',
-                                        alignItems: 'left',
-                                        justifyContent: 'left'
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
                                     }}>
-                                        <input
+                                        <Form.Check
                                             type="checkbox"
-                                            name="arrivalTime"
-                                            value="true"
-                                            onChange={handleCheckboxChange}
-                                            style={{
-                                                // style it so it fills its parents height and width
-                                                height: '80%',
-                                                width: '80%',
-                                                // style it so it looks like a checkbox
-                                                background: 'white',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '3px',
-
-                                            }}
+                                            id="exampleCheckbox"
+                                            style={{ flex: 1 }}
+                                            onChange={handleArrivalBoxChange}
                                         />
                                     </Col>
 
@@ -285,7 +280,7 @@ const CreateRoutePage = () => {
                                         <FormControl
                                             as="select"
                                             onChange={handleTimeChange}
-                                            disabled={!isChecked}
+                                            disabled={!arrivalIsChecked}
                                         >
                                             {times.map(option => (
                                                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -296,37 +291,29 @@ const CreateRoutePage = () => {
                                 </Form.Group>
 
 
-                                <Form.Group as={Row}>
+                                <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Time Spent</Form.Label>
 
                                     <Col md={2} style={{
                                         display: 'flex',
-                                        alignItems: 'left',
-                                        justifyContent: 'left'
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
                                     }}>
-                                        <input
+                                        <Form.Check
                                             type="checkbox"
-                                            name="arrivalTime"
-                                            value="true"
-                                            onChange={handleCheckboxChange}
-                                            style={{
-                                                // style it so it fills its parents height and width
-                                                height: '80%',
-                                                width: '80%',
-                                                // style it so it looks like a checkbox
-                                                background: 'white',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '3px',
-
-                                            }}
+                                            id="exampleCheckbox"
+                                            style={{ flex: 1 }}
+                                            onChange={handleSpentBoxChange}
                                         />
                                     </Col>
 
                                     <Col md={3}>
+                                        <Form.Label>HR</Form.Label>
                                         <FormControl
                                             as="select"
                                             value={hours}
                                             onChange={handleHourChange}
+                                            disabled={!spentIsChecked}
                                         >
                                             {[...Array(12).keys()].map((hour) => (
                                                 <option key={hour} value={hour + 1}>
@@ -334,11 +321,15 @@ const CreateRoutePage = () => {
                                                 </option>
                                             ))}
                                         </FormControl>
+                                    </Col>
+
+                                    <Col md={3}>
                                         <Form.Label>MIN</Form.Label>
                                         <FormControl
                                             as="select"
                                             value={minutes}
                                             onChange={handleMinuteChange}
+                                            disabled={!spentIsChecked}
                                         >
                                             {[...Array(60).keys()].map((minute) => (
                                                 <option key={minute} value={minute}>
@@ -346,22 +337,24 @@ const CreateRoutePage = () => {
                                                 </option>
                                             ))}
                                         </FormControl>
-
                                     </Col>
 
                                 </Form.Group>
 
-
+                                
+                                
 
 
                                 <Button type="submit">+</Button>
+
+                                <div style={{marginTop: '1rem'}}>{message}</div>
                             </Form>
                         </div>
                     </Col>
 
                 </Row>
 
-                <Row >
+                <Row className="justify-content-center align-items-center buttons" >
                     <Col md={4}>
                     </Col>
                     <Col md={2} className="text-center">
@@ -369,7 +362,6 @@ const CreateRoutePage = () => {
                     </Col>
                     <Col md={2} className="text-center">
                         <Button onClick={handleRun} style={{ marginTop: '1rem' }}>Run</Button>
-                        <div style={{ width: '100vw', alignContent: 'center', textAlign: 'center', marginTop: '1rem' }}>{message}</div>
                     </Col>
                     <Col md={4}>
                     </Col>
