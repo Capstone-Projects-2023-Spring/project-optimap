@@ -2,8 +2,8 @@
   "name": "creating-front-end",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://stpaeX.github.io/OptiMap",
   "dependencies": {
-    "homepage": "https://stpaeX.github.io/OptiMap",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
