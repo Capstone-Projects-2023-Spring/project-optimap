@@ -3,38 +3,41 @@ sidebar_position: 1
 ---
 # Design
 
-## Front-end Class Diagram
+## System high-level description
+The user will open OptiMap and be presented the front-end pages. The user can log-in sign-up which will all be handled by the front-end and the functions and variables involved are described in figure 1.0. The users information will be stored in a database which will keep the data safe and encrypted. After authentication, the user will be presented with the map view where they can search for locations they want to travel to. They will have an option to create a route and save that route. The saved routes will also be stored in the the database and the user can refer to them at any time they want and run the saved routes. The user can put restirctions on his routes on their settings page. For example, if the user wants to avoid highways optimap will adjust the route accordingly. 
 
-[![](https://mermaid.ink/img/pako:eNqVU8FOwzAM_ZUqJxDrD_SAhNgBpA2hFXFAvZjG66w1dpU6Q2jav9N1QyvQbtQXR36W33Nsb00uFk1i8hLqekpQeHAZR421kWgmBXGae0SOtgdgbzce2aK_uk6ijZA9AfEK2JaYhndHOgjfN67An_Au4y7xgzgczzvFEhWHeUvK12dp51C9En6M4XwTccOCPBRnCRcSFB-5CjqG887ameSgJDyYs0AnG7yY9kLuP_N4EqUlHWo9SxWqi3J_FUhRlbiox7TZahOu1QOx1mdldjc1jm87C3TAOwu1h4-D7sVOM-mF_3xFb9Z3v2ZiHHoHZJsza3vPjK7QYWaS5mnBrzOT8a7Jg6CSfnJuEvUBJyZUFhSPV2mSJZR1E0VLKn5-vNu9230BVw4s4Q?type=png)](https://mermaid.live/edit#pako:eNqVU8FOwzAM_ZUqJxDrD_SAhNgBpA2hFXFAvZjG66w1dpU6Q2jav9N1QyvQbtQXR36W33Nsb00uFk1i8hLqekpQeHAZR421kWgmBXGae0SOtgdgbzce2aK_uk6ijZA9AfEK2JaYhndHOgjfN67An_Au4y7xgzgczzvFEhWHeUvK12dp51C9En6M4XwTccOCPBRnCRcSFB-5CjqG887ameSgJDyYs0AnG7yY9kLuP_N4EqUlHWo9SxWqi3J_FUhRlbiox7TZahOu1QOx1mdldjc1jm87C3TAOwu1h4-D7sVOM-mF_3xFb9Z3v2ZiHHoHZJsza3vPjK7QYWaS5mnBrzOT8a7Jg6CSfnJuEvUBJyZUFhSPV2mSJZR1E0VLKn5-vNu9230BVw4s4Q)
+
+## Front-end Class Diagram
 
 The LoginScreen class handles user's login credentials. The HomeScreen class shows the users the routes they have taken before and saved, along with directions. It then links to other classes such as MapView, RouteInput, NotificationPopup, and Settings. The MapView class shows the user the map of their route and allows them to interact with it, such as zooming in and out. The RouteInput class is where the user enters the locations they want to visit, and the time they plan to spend at each location. The NotifcationPopup class will allow the user to know if their planned route is not possible due to certain constraints such as traffic or time. The Settings class lets the user specify the time they plan to finish the route or other factors that would affect the route optimization. 
 
-## Back-end Class Diagram
 
-[![](https://mermaid.ink/img/pako:eNp9VE1PwzAM_StRTiDoH9gBaQwhkPgSjFsvJvFGWJtMrjs0pv13kqxN163bpaqfnfeeXTcbqZxGOZJZluWWDRc4EregFhlaLSYFVJW4MzAnKHMba1TAEvRZIYksuxHvrmbMrRCvSzal-TsPTwlmM6PGb4_HuRfHxueAjbMfSCujIsEAHMuDg5C_A4YvqM6AyUsPPSHXq0kGjzL9RuJsorjYhFiIrPaBhRKbcOkLfh3pJqRg6cFU7GjdVhCujKv9iAlVMFU1iQpWqGMPLaIPSnbPq8LNjb247CJ_JoWKEBgjTcIC8x6yDY-unZhJ_RRuN6rWgx8MjvmpQXs-QOsWT1Jz5GnvxKBktxCb1OrPomKCPdWJN-ERY7n14vgb6R6Un2Z_IjNjdeSE4nSf3adMqryDwhfv8YUuutQg29C6NrRXNuTWYU0Gj6YFS80f6od9wU7aI4RMBld74FZeyxKpBKP97x2pcukH5FdRjvyrBlrkMrehDmp2H2ur5IipxmtZL70kNj95C6I2XvZ5d13EW2P7Dx0xZEI?type=png)](https://mermaid.live/edit#pako:eNp9VE1PwzAM_StRTiDoH9gBaQwhkPgSjFsvJvFGWJtMrjs0pv13kqxN163bpaqfnfeeXTcbqZxGOZJZluWWDRc4EregFhlaLSYFVJW4MzAnKHMba1TAEvRZIYksuxHvrmbMrRCvSzal-TsPTwlmM6PGb4_HuRfHxueAjbMfSCujIsEAHMuDg5C_A4YvqM6AyUsPPSHXq0kGjzL9RuJsorjYhFiIrPaBhRKbcOkLfh3pJqRg6cFU7GjdVhCujKv9iAlVMFU1iQpWqGMPLaIPSnbPq8LNjb247CJ_JoWKEBgjTcIC8x6yDY-unZhJ_RRuN6rWgx8MjvmpQXs-QOsWT1Jz5GnvxKBktxCb1OrPomKCPdWJN-ERY7n14vgb6R6Un2Z_IjNjdeSE4nSf3adMqryDwhfv8YUuutQg29C6NrRXNuTWYU0Gj6YFS80f6od9wU7aI4RMBld74FZeyxKpBKP97x2pcukH5FdRjvyrBlrkMrehDmp2H2ur5IipxmtZL70kNj95C6I2XvZ5d13EW2P7Dx0xZEI)
-
-The database class stores and retrieves data for other classes, such as, including user data, route data, notification service data, optimizer data, and traffic API data. TrafficAPI class handles traffic data which will then be sent to the optimizer class to optimize the route based on real-time traffic conditions.  Route class contains information regarding a specific route, such as the locations and time expected to spend at each location. The optimizer class handles finding the optimal route for the user's inputted location, time constraints, and any other factors. It uses Dijkstra's algorithm and references the TrafficAPI to get traffic data for better optimization. NotificationServices class is responsible to notify the user if their planned route is not possible or if their are any other issues such as traffic or road blockage. The User class contains user information such as, login credentials, saved routes, route history, and directions. It has methods for
-
-
+[![](https://mermaid.ink/img/pako:eNqVU8FOwzAM_ZUqJxDrD_SAhNgBpA2hFXFAvZjG66w1dpU6Q2jav9N1QyvQbtQXR36W33Nsb00uFk1i8hLqekpQeHAZR421kWgmBXGae0SOtgdgbzce2aK_uk6ijZA9AfEK2JaYhndHOgjfN67An_Au4y7xgzgczzvFEhWHeUvK12dp51C9En6M4XwTccOCPBRnCRcSFB-5CjqG887ameSgJDyYs0AnG7yY9kLuP_N4EqUlHWo9SxWqi3J_FUhRlbiox7TZahOu1QOx1mdldjc1jm87C3TAOwu1h4-D7sVOM-mF_3xFb9Z3v2ZiHHoHZJsza3vPjK7QYWaS5mnBrzOT8a7Jg6CSfnJuEvUBJyZUFhSPV2mSJZR1E0VLKn5-vNu9230BVw4s4Q?type=png)](https://mermaid.live/edit#pako:eNqVU8FOwzAM_ZUqJxDrD_SAhNgBpA2hFXFAvZjG66w1dpU6Q2jav9N1QyvQbtQXR36W33Nsb00uFk1i8hLqekpQeHAZR421kWgmBXGae0SOtgdgbzce2aK_uk6ijZA9AfEK2JaYhndHOgjfN67An_Au4y7xgzgczzvFEhWHeUvK12dp51C9En6M4XwTccOCPBRnCRcSFB-5CjqG887ameSgJDyYs0AnG7yY9kLuP_N4EqUlHWo9SxWqi3J_FUhRlbiox7TZahOu1QOx1mdldjc1jm87C3TAOwu1h4-D7sVOM-mF_3xFb9Z3v2ZiHHoHZJsza3vPjK7QYWaS5mnBrzOT8a7Jg6CSfnJuEvUBJyZUFhSPV2mSJZR1E0VLKn5-vNu9230BVw4s4Q)
 ** Figure 1.0, *Front-end class Diagram* **
 
 The LoginScreen class handles user's login credentials. The HomeScreen class shows the users the routes they have taken before and saved, along with directions. It then links to other classes such as MapView, RouteInput, NotificationPopup, and Settings. The MapView class shows the user the map of their route and allows them to interact with it, such as zooming in and out. The RouteInput class is where the user enters the locations they want to visit, and the time they plan to spend at each location. The NotifcationPopup class will allow the user to know if their planned route is not possible due to certain constraints such as traffic or time. The Settings class lets the user specify the time they plan to finish the route or other factors that would affect the route optimization. 
 
 ## Back-end Class Diagram
-
+** Figure 1.1, *Back-end class Diagram* **
 [![](https://mermaid.ink/img/pako:eNp9VE1PwzAM_StRTiDoH9gBaQwhkPgSjFsvJvFGWJtMrjs0pv13kqxN163bpaqfnfeeXTcbqZxGOZJZluWWDRc4EregFhlaLSYFVJW4MzAnKHMba1TAEvRZIYksuxHvrmbMrRCvSzal-TsPTwlmM6PGb4_HuRfHxueAjbMfSCujIsEAHMuDg5C_A4YvqM6AyUsPPSHXq0kGjzL9RuJsorjYhFiIrPaBhRKbcOkLfh3pJqRg6cFU7GjdVhCujKv9iAlVMFU1iQpWqGMPLaIPSnbPq8LNjb247CJ_JoWKEBgjTcIC8x6yDY-unZhJ_RRuN6rWgx8MjvmpQXs-QOsWT1Jz5GnvxKBktxCb1OrPomKCPdWJN-ERY7n14vgb6R6Un2Z_IjNjdeSE4nSf3adMqryDwhfv8YUuutQg29C6NrRXNuTWYU0Gj6YFS80f6od9wU7aI4RMBld74FZeyxKpBKP97x2pcukH5FdRjvyrBlrkMrehDmp2H2ur5IipxmtZL70kNj95C6I2XvZ5d13EW2P7Dx0xZEI?type=png)](https://mermaid.live/edit#pako:eNp9VE1PwzAM_StRTiDoH9gBaQwhkPgSjFsvJvFGWJtMrjs0pv13kqxN163bpaqfnfeeXTcbqZxGOZJZluWWDRc4EregFhlaLSYFVJW4MzAnKHMba1TAEvRZIYksuxHvrmbMrRCvSzal-TsPTwlmM6PGb4_HuRfHxueAjbMfSCujIsEAHMuDg5C_A4YvqM6AyUsPPSHXq0kGjzL9RuJsorjYhFiIrPaBhRKbcOkLfh3pJqRg6cFU7GjdVhCujKv9iAlVMFU1iQpWqGMPLaIPSnbPq8LNjb247CJ_JoWKEBgjTcIC8x6yDY-unZhJ_RRuN6rWgx8MjvmpQXs-QOsWT1Jz5GnvxKBktxCb1OrPomKCPdWJN-ERY7n14vgb6R6Un2Z_IjNjdeSE4nSf3adMqryDwhfv8YUuutQg29C6NrRXNuTWYU0Gj6YFS80f6od9wU7aI4RMBld74FZeyxKpBKP97x2pcukH5FdRjvyrBlrkMrehDmp2H2ur5IipxmtZL70kNj95C6I2XvZ5d13EW2P7Dx0xZEI)
 
-** Figure 1.1, *Back-end class Diagram* **
-
 The database class stores and retrieves data for other classes, such as, including user data, route data, notification service data, optimizer data, and traffic API data. TrafficAPI class handles traffic data which will then be sent to the optimizer class to optimize the route based on real-time traffic conditions.  Route class contains information regarding a specific route, such as the locations and time expected to spend at each location. The optimizer class handles finding the optimal route for the user's inputted location, time constraints, and any other factors. It uses Dijkstra's algorithm and references the TrafficAPI to get traffic data for better optimization. NotificationServices class is responsible to notify the user if their planned route is not possible or if their are any other issues such as traffic or road blockage. The User class contains user information such as, login credentials, saved routes, route history, and directions. It has methods for
+
+## Database Diagram
+
+![](https://cdn.discordapp.com/attachments/1067883947100491848/1093205171074514944/image.png)
+
+** Figure 1.2, *Database diagram* **
+
+**Figure 1.2** above shows the database design diagram of Optimap. We can see the table **Users** which will contain the userid the username and password. The UserId will be used as a primary key that will be used when accessing the favorite routes, recent routes and saved routes. The **Favorite routes** table contains the userid column which will have the id of the user it belongs to and the favrouteId which will be used as a primary key to connect the Route table. The **Recent routes** and **Saved routes** tables work in the same way. The **Route** table contains the routeid, locationid, timestamp and the ids of the favorite routes,recent routes, and saved routes id if it belongs to any. Every route has multiple locations and we use the primary key locationid. ALl of these could change depending whether the database is SQL or noSQL. 
 
 ## Entity-relation Diagram
 
 ![](/img/ER.png)
 
-** Figure 1.2, *Entity-relation Diagram* **
+** Figure 1.3, *Entity-relation Diagram* **
 
-**Figure 1.2** above shows the Entity-relation diagram of the database. We can see that for the **USER** table, the database will store *User_id*, *Username*, *Home_address*, and *Transportation_mode* values of a user. This table then uses another table called **ROUTE**, which will store *Route_id*, *Route_name*, *Location* and a foreign key from **USER** being the *User_id* value.
+**Figure 1.3** above shows the database diagram of the database. We can see that for the **USER** table, the database will store *User_id*, *Username*, *Home_address*, and *Transportation_mode* values of a user. This table then uses another table called **ROUTE**, which will store *Route_id*, *Route_name*, *Location* and a foreign key from **USER** being the *User_id* value.
 
 ## Sequence Diagrams
 ### Sequence Diagram 1 (Use Case #1)
@@ -79,7 +82,7 @@ sequenceDiagram
     deactivate DijkstrasAlgo
     CreateRouteScreen->>MapView: startRoute()
 ```
-**Figure 1.3, *Use Case #1 Sequence Diagram: As a user, I would like to be able to add as many destinations as I want to my route* **
+**Figure 1.4, *Use Case #1 Sequence Diagram: As a user, I would like to be able to add as many destinations as I want to my route* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -112,7 +115,7 @@ sequenceDiagram
     OptiMap-->>User: Redirects to the selected saved route
 
 ```
-**Figure 1.4, *Use Case #2 Sequence Diagram: As a user, I would like to be able to access previous routes that I have saved* **
+**Figure 1.5, *Use Case #2 Sequence Diagram: As a user, I would like to be able to access previous routes that I have saved* **
 
 1. The User opens the OptiMap app
 2. The User selects "Recent Trips"
@@ -137,7 +140,7 @@ sequenceDiagram
     C ->> T: chooses to change transportation mode
     T -->> C: changed to bicycle
 ```
-**Figure 1.5, *Use Case #3 Sequence Diagram: As a user, I would like to be able to change the mode of transportation to further optimize my route* **
+**Figure 1.6, *Use Case #3 Sequence Diagram: As a user, I would like to be able to change the mode of transportation to further optimize my route* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -148,7 +151,7 @@ sequenceDiagram
 
 ![](/img/setArrival.png)
 
-**Figure 1.6, *Use Case #4 Sequence Diagram: As a user, I would like to be able to set arrival times to each destination to further optimize my route* **
+**Figure 1.7, *Use Case #4 Sequence Diagram: As a user, I would like to be able to set arrival times to each destination to further optimize my route* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -190,7 +193,7 @@ sequenceDiagram
     DijkstrasAlgo -->>ExceptionHandler:Optimized Route
     ExceptionHandler ->>MapView: Update Route
 ```
-**Figure 1.7, *Use Case #5 Sequence Diagram: As a user, I would like for my route to be rerouted on the basis of various road and traffic conditions* **
+**Figure 1.8, *Use Case #5 Sequence Diagram: As a user, I would like for my route to be rerouted on the basis of various road and traffic conditions* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -227,8 +230,8 @@ stateDiagram-v2
     UpdateRoute --> ShowRoute: Real-Time Update
 
 ```
-**Figure 1.8, *State Diagram* **
+**Figure 1.9, *State Diagram* **
 
 ## Algorithm Description
 
-The algorithm that will be used is Dijsktra's algorithm to help find the shortest distance between each location inputted by the user. Dijkstra's algorithm will be used in the Optimizer class to help achieve that function. The Optimizer class allows for user input in the form of a list of locations and then Dijsktra's algorithm will help assign weights to each location to help find the shortest path. The weights allow for the algorithm to keep track of the currently known shortest distance from node to node and updates if a shorter path is found. This process continues until all nodes are added from the user inputted list. Once that is complete, the list of locations will be reordered into the fastest path and then displayed to the user.
+The application will only use one algorithm and it is Dijsktra's algorithm to help find the shortest distance between each location inputted by the user. Dijkstra's algorithm will be used in the Optimizer class to help achieve that function. The Optimizer class allows for user input in the form of a list of locations and then Dijsktra's algorithm will help assign weights to each location to help find the shortest path. The weights allow for the algorithm to keep track of the currently known shortest distance from node to node and updates if a shorter path is found. This process continues until all nodes are added from the user inputted list. Once that is complete, the list of locations will be reordered into the fastest path and then displayed to the user. Running dijkstras algorithm on our own  machine may not be feasable due to the large amounts of computations needed, to mitigate this issue our group will try to look for different APIs such as the google maps API or any other maps API that will allow us to utilize dijkstras algorithm with our weights on their servers. Real-time factors such as traffic and road closures can impact the optimal route. The weight used to resort in that scenario would be time. As the real time factors are constantly changing, we will also update our database to reflect this. Every time there is a call to the optimization algorithm (or to the re-order function), we will make a database call that write to the given ID of the route that we are currently using and overwrite it with the new locations. 
