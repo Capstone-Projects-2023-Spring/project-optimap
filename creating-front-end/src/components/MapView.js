@@ -73,34 +73,57 @@ const MapView = () => {
     };
   }, []);
 
-    //Handles the display of the route
-    function handleShowRoute() {
-      console.log('show Route called')
-    
-      const DirectionsService = new window.google.maps.DirectionsService();
-      DirectionsService.route(
-        {
-          origin: currentLocation,
-          destination: markers[markers.length - 1].position,
-          waypoints: markers.slice(0, markers.length - 1).map((marker) => ({ location: marker.position})),
-          optimizeWaypoints: true,
-          travelMode: window.google.maps.TravelMode[transitType],
-          avoidTolls: avoidTolls,
-          avoidHighways: avoidHighways,
-          avoidFerries: avoidFerries,
-        },
-        (result, status) => {
-          if (status === window.google.maps.DirectionsStatus.OK) {
-            setDirections(result)
-            setShowRoute(true);
-          } else {
-            setError('Failed to fetch directions.');
-            console.log("no directions")
-          }
+  function calculateDistance(coord1, coord2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = toRadians(coord2.lat - coord1.lat);
+    const dLon = toRadians(coord2.lng - coord1.lng);
+    const lat1 = toRadians(coord1.lat);
+    const lat2 = toRadians(coord2.lat);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c;
+    return d;
+  }
+  
+  function toRadians(deg) {
+    return deg * Math.PI / 180;
+  }
+  
+  //Handles the display of the route
+  function handleShowRoute() {
+    const DirectionsService = new window.google.maps.DirectionsService();
+  
+    // Sort the markers array based on their distance from the current location
+    const sortedMarkers = markers.sort((a, b) => {
+      const distA = calculateDistance(currentLocation, a.position);
+      const distB = calculateDistance(currentLocation, b.position);
+      return distA - distB;
+    });
+  
+    DirectionsService.route(
+      {
+        origin: currentLocation,
+        destination: sortedMarkers[sortedMarkers.length - 1].position,
+        waypoints: sortedMarkers.slice(0, sortedMarkers.length - 1).map((marker) => ({ location: marker.position })),
+        optimizeWaypoints: false,
+        travelMode: window.google.maps.TravelMode[transitType],
+        avoidTolls: avoidTolls,
+        avoidHighways: avoidHighways,
+        avoidFerries: avoidFerries,
+      },
+      (result, status) => {
+        if (status === window.google.maps.DirectionsStatus.OK) {
+          setDirections(result);
+          setShowRoute(true);
+        } else {
+          setError('Failed to fetch directions.');
+          console.log("no directions")
         }
-      );
-    };
-    
+      }
+    );
+  };
+        
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -286,7 +309,7 @@ const MapView = () => {
           origin: currentLocation,
           destination: newMarkers[newMarkers.length - 1].position,
           waypoints,
-          optimizeWaypoints: true,
+          optimizeWaypoints: false,
           travelMode: transitType,
         },
         (result, status) => {
@@ -340,7 +363,7 @@ const MapView = () => {
               onChange={handleDestinationChange}
             />
             {/*<button onClick={handleAddDestination}>Add</button>*/}
-            <button onClick={handleShowRoute}>Show Route</button>
+            <button onClick={handleShowRoute}>Update Route</button>
           </div>
         </div>
 
