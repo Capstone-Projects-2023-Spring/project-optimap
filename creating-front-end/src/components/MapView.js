@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps-react';
 import Navbar from './Navbar';
-import greenMarker from '../assets/green-dot.png';
-import flag from '../assets/beachflag.png';
 import { useLocation } from "react-router-dom";
 import LocationBox from './LocationBox';
 import { db } from '../firebase/Firebase';
 import { ref, onValue, off } from 'firebase/database';
+import car from '../assets/car.png';
+import bike from '../assets/bike.png';
+import person from '../assets/walking.png';
+import greenMarker from '../assets/green-marker.png';
+import finishFlag from '../assets/finishFlag.png';
+import './styles/marker.css';
 
 const mapStyles = {
   width: '100%',
@@ -302,6 +306,19 @@ const MapView = () => {
     setTransitType(e.target.value );
   };
 
+  //Changes marker icon for current location based on transit type
+  const getMarkerIcon = () => {
+    switch (transitType) {
+      case 'DRIVING':
+        return car;
+      case 'WALKING':
+        return person;
+      case 'BICYCLING':
+        return bike;
+      default:
+        return greenMarker;
+    }
+  };
 
   return (
     <div>
@@ -356,17 +373,29 @@ const MapView = () => {
           )}
           {currentLocation.lat && currentLocation.lng && (
             <Marker
-              position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
-              icon={flag} />
+            position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
+            icon={{
+              url: getMarkerIcon()}} />
           )}
           {markers.map((marker, index) => (
-            <Marker key={index} position={marker.position} onClick={() => handleRemoveDestination(index)} icon={greenMarker} />
+            <Marker 
+            key={index} 
+            position={marker.position} 
+            onClick={() => handleRemoveDestination(index)} 
+            icon={index === markers.length - 1
+                  ? { url: finishFlag}
+                  : { url: greenMarker }}
+            label={{
+              text: (index === markers.length - 1) ? " " : (index + 1).toString(),
+              className: "marker-label"
+            }}
+            />
           ))}
 
           {showRoute && directions && (
             <Polyline
               path={directions.routes[0].overview_path}
-              strokeColor="#00d4ff"
+              strokeColor="#006eff"
               strokeOpacity={0.8}
               strokeWeight={4}
             />

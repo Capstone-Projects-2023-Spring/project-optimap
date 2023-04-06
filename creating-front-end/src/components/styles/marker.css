@@ -1,0 +1,4 @@
+.marker-label {
+    font-weight: bold;
+     transform: translateY(-5px); /* adjust the y value as needed */
+}
