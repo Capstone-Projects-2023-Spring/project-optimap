@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Navbar from './Navbar';
@@ -11,6 +11,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [signedUpEmail, setSignedUpEmail] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
   const navigate = useNavigate();
 
@@ -28,6 +29,11 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    //Check if passwords match
+    if (!passwordsMatch) {
+      return;
+    }
     // Handle sign-up logic here
 
     createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
@@ -45,6 +51,11 @@ const Signup = () => {
       });
   };
 
+  //Actively check if passwords are matching. If not, set passwordsMatch to false
+  useEffect(() => {
+    setPasswordsMatch(password === confirmPassword);
+  }, [password, confirmPassword]);
+
   return (
     <Container fluid>
     <Navbar/>
@@ -56,6 +67,7 @@ const Signup = () => {
         ) : (
 
         <Form onSubmit={handleSubmit}>
+        {confirmPassword && !passwordsMatch && <div className="text-danger">Passwords do not match</div>}
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control type="email" placeholder="Enter email" value={email} onChange={handleEmailChange} />
