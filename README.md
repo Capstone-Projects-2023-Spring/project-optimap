@@ -128,7 +128,6 @@ wrong turns and reroute promptly.
             <sub><b>Endri Pellumbi</b></sub>
         </a>
     </td>
-    </td>
     <td align="center">
         <a href="https://github.com/kvphan7">
             <img src="https://avatars.githubusercontent.com/u/89526986?v=4" width="100;" alt="KennyPhan"/>
