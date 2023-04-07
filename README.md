@@ -80,19 +80,63 @@ wrong turns and reroute promptly.
 <table>
 <tr>
     <td align="center">
-        <a href="https://github.com/ApplebaumIan">
-            <img src="https://avatars.githubusercontent.com/u/9451941?v=4" width="100;" alt="ApplebaumIan"/>
+        <a href="https://github.com/benjaminrittenhouse">
+            <img src="https://avatars.githubusercontent.com/u/67079818?v=4" width="100;" alt="BenjaminRittenhouse"/>
             <br />
-            <sub><b>Ian Tyler Applebaum</b></sub>
+            <sub><b>Benjamin Rittenhouse</b></sub>
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/leighflagg">
-            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="leighflagg"/>
+        <a href="https://github.com/rickwu135">
+            <img src="https://avatars.githubusercontent.com/u/67079818?v=4" width="100;" alt="RickyWu"/>
             <br />
-            <sub><b>Null</b></sub>
+            <sub><b>Ricky Wu</b></sub>
         </a>
-    </td></tr>
+    </td>
+    <td align="center">
+        <a href="https://github.com/stpaeX">
+            <img src="https://avatars.githubusercontent.com/u/97627069?v=4" width="100;" alt="StevenLin"/>
+            <br />
+            <sub><b>Steven Lin</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/AlexHarvey63">
+            <img src="https://avatars.githubusercontent.com/u/89492718?v=4" width="100;" alt="AlexHarvey"/>
+            <br />
+            <sub><b>Alex Harvey</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/PandaSwaqq">
+            <img src="https://avatars.githubusercontent.com/u/33043105?v=4" width="100;" alt="StevenLin"/>
+            <br />
+            <sub><b>Steven Lin</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/DatNguyen0512">
+            <img src="https://avatars.githubusercontent.com/u/97911087?v=4" width="100;" alt="DatNguyen"/>
+            <br />
+            <sub><b>Dat Nguyen</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/Endri2001">
+            <img src="https://avatars.githubusercontent.com/u/57300637?v=4" width="100;" alt="EndriPellumbi"/>
+            <br />
+            <sub><b>Endri Pellumbi</b></sub>
+        </a>
+    </td>
+    </td>
+    <td align="center">
+        <a href="https://github.com/kvphan7">
+            <img src="https://avatars.githubusercontent.com/u/89526986?v=4" width="100;" alt="KennyPhan"/>
+            <br />
+            <sub><b>Kenny Phan</b></sub>
+        </a>
+    </td>
+</tr>
 </table>
 
 [//]: # ( readme: collaborators -end )
