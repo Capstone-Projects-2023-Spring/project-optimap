@@ -30,7 +30,7 @@ const Profile = () => {
   const handleAddFriend = (event) => {
 	event.preventDefault();
 	console.log(friendEmail);
-   //  TODO: Firebase adding a friend logic
+   // **TODO** Firebase adding a friend logic
 
 	setFriendEmail(''); // clears email input after submit
   };
@@ -89,7 +89,7 @@ const Profile = () => {
                       type="email"
                       placeholder="Enter Email"
                       onChange={handleFriendEmailChange}
-							 value={friendEmail} // clears email input after submit
+							 value={friendEmail}
                     />
                     <Button variant="primary" id="button-addon2" type="submit">
                       Add Friend
