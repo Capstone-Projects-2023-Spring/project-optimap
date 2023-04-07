@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Modal, ListGroup, Card } from 'react-bootstrap';
+import { FaTimes } from 'react-icons/fa';
 
 function LocationBox({handleRemoveDestination, locations }) {
     const [showModal, setShowModal] = useState(false);
@@ -27,7 +28,10 @@ function LocationBox({handleRemoveDestination, locations }) {
                 <Card.Body >
                     <ListGroup>
                         {locations.map((location, index) => (
-                            <ListGroup.Item onClick={()=>handleRemoveDestination(index)}style={{ fontSize: '2vh' }} key={index}>{location.street_address}</ListGroup.Item>
+                            <ListGroup.Item key={index}>
+                            {location.street_address}
+                            <FaTimes onClick={() => handleRemoveDestination(index)} style={{ float: "right", color: "red", cursor: "pointer" }} />
+                            </ListGroup.Item>
                         ))}
                     </ListGroup>
                 </Card.Body>

@@ -36,6 +36,8 @@ const MapView = () => {
   });
 
   const [idx, setIdx] = useState(0);
+  const [routeDirections, setRouteDirections] = useState(null);
+
 
   const [markers, setMarkers] = useState([]);
   const [showRoute, setShowRoute] = useState(false);
@@ -114,8 +116,24 @@ const MapView = () => {
       },
       (result, status) => {
         if (status === window.google.maps.DirectionsStatus.OK) {
+          const routeArray = [];
+          const legs = result.routes[0].legs;
+          for (let i = 0; i < legs.length; i++) {
+            const steps = legs[i].steps;
+            for (let j = 0; j < steps.length; j++) {
+              const step = steps[j];
+              const stepData = {
+                instructions: step.instructions,
+                distance: step.distance.value,
+                duration: step.duration.value
+              };
+              routeArray.push(stepData);
+            }
+          }
+  
           setDirections(result);
           setShowRoute(true);
+          setRouteDirections(routeArray);
         } else {
           setError('Failed to fetch directions.');
           console.log("no directions")
@@ -123,6 +141,7 @@ const MapView = () => {
       }
     );
   };
+  
         
   useEffect(() => {
     if (navigator.geolocation) {
@@ -347,7 +366,7 @@ const MapView = () => {
     <div>
     <Navbar />
     {currentLocation ? (
-    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers}/>
+    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} setRouteDirections = {setDirections} />
     ):(<></>)}
       <div className="map-container">
         
