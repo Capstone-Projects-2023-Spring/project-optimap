@@ -100,28 +100,28 @@ wrong turns and reroute promptly.
             <sub><b>Steven Lin</b></sub>
         </a>
     </td>
-        <td align="center">
+    <td align="center">
         <a href="https://github.com/AlexHarvey63">
             <img src="https://avatars.githubusercontent.com/u/89492718?v=4" width="100;" alt="AlexHarvey"/>
             <br />
             <sub><b>Alex Harvey</b></sub>
         </a>
     </td>
-        <td align="center">
+    <td align="center">
         <a href="https://github.com/PandaSwaqq">
             <img src="https://avatars.githubusercontent.com/u/33043105?v=4" width="100;" alt="StevenLin"/>
             <br />
             <sub><b>Steven Lin</b></sub>
         </a>
     </td>
-        <td align="center">
+    <td align="center">
         <a href="https://github.com/DatNguyen0512">
             <img src="https://avatars.githubusercontent.com/u/97911087?v=4" width="100;" alt="DatNguyen"/>
             <br />
             <sub><b>Dat Nguyen</b></sub>
         </a>
     </td>
-        <td align="center">
+    <td align="center">
         <a href="https://github.com/Endri2001">
             <img src="https://avatars.githubusercontent.com/u/57300637?v=4" width="100;" alt="EndriPellumbi"/>
             <br />
@@ -129,7 +129,7 @@ wrong turns and reroute promptly.
         </a>
     </td>
     </td>
-        <td align="center">
+    <td align="center">
         <a href="https://github.com/kvphan7">
             <img src="https://avatars.githubusercontent.com/u/89526986?v=4" width="100;" alt="KennyPhan"/>
             <br />
