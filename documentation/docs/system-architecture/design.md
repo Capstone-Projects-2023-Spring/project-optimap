@@ -31,13 +31,6 @@ The database class stores and retrieves data for other classes, such as, includi
 
 **Figure 1.2** above shows the database design diagram of Optimap. We can see the table **Users** which will contain the userid the username and password. The UserId will be used as a primary key that will be used when accessing the favorite routes, recent routes and saved routes. The **Favorite routes** table contains the userid column which will have the id of the user it belongs to and the favrouteId which will be used as a primary key to connect the Route table. The **Recent routes** and **Saved routes** tables work in the same way. The **Route** table contains the routeid, locationid, timestamp and the ids of the favorite routes,recent routes, and saved routes id if it belongs to any. Every route has multiple locations and we use the primary key locationid. ALl of these could change depending whether the database is SQL or noSQL. 
 
-## Entity-relation Diagram
-
-![](/img/ER.png)
-
-** Figure 1.3, *Entity-relation Diagram* **
-
-**Figure 1.3** above shows the database diagram of the database. We can see that for the **USER** table, the database will store *User_id*, *Username*, *Home_address*, and *Transportation_mode* values of a user. This table then uses another table called **ROUTE**, which will store *Route_id*, *Route_name*, *Location* and a foreign key from **USER** being the *User_id* value.
 
 ## Sequence Diagrams
 ### Sequence Diagram 1 (Use Case #1)
@@ -82,7 +75,7 @@ sequenceDiagram
     deactivate DijkstrasAlgo
     CreateRouteScreen->>MapView: startRoute()
 ```
-**Figure 1.4, *Use Case #1 Sequence Diagram: As a user, I would like to be able to add as many destinations as I want to my route* **
+**Figure 1.3, *Use Case #1 Sequence Diagram: As a user, I would like to be able to add as many destinations as I want to my route* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -115,7 +108,7 @@ sequenceDiagram
     OptiMap-->>User: Redirects to the selected saved route
 
 ```
-**Figure 1.5, *Use Case #2 Sequence Diagram: As a user, I would like to be able to access previous routes that I have saved* **
+**Figure 1.4, *Use Case #2 Sequence Diagram: As a user, I would like to be able to access previous routes that I have saved* **
 
 1. The User opens the OptiMap app
 2. The User selects "Recent Trips"
@@ -140,7 +133,7 @@ sequenceDiagram
     C ->> T: chooses to change transportation mode
     T -->> C: changed to bicycle
 ```
-**Figure 1.6, *Use Case #3 Sequence Diagram: As a user, I would like to be able to change the mode of transportation to further optimize my route* **
+**Figure 1.5, *Use Case #3 Sequence Diagram: As a user, I would like to be able to change the mode of transportation to further optimize my route* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -151,7 +144,7 @@ sequenceDiagram
 
 ![](/img/setArrival.png)
 
-**Figure 1.7, *Use Case #4 Sequence Diagram: As a user, I would like to be able to set arrival times to each destination to further optimize my route* **
+**Figure 1.6, *Use Case #4 Sequence Diagram: As a user, I would like to be able to set arrival times to each destination to further optimize my route* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -193,7 +186,7 @@ sequenceDiagram
     DijkstrasAlgo -->>ExceptionHandler:Optimized Route
     ExceptionHandler ->>MapView: Update Route
 ```
-**Figure 1.8, *Use Case #5 Sequence Diagram: As a user, I would like for my route to be rerouted on the basis of various road and traffic conditions* **
+**Figure 1.7, *Use Case #5 Sequence Diagram: As a user, I would like for my route to be rerouted on the basis of various road and traffic conditions* **
 
 1. The User opens the OptiMap app
 2. The User selects "Create Route"
@@ -230,7 +223,7 @@ stateDiagram-v2
     UpdateRoute --> ShowRoute: Real-Time Update
 
 ```
-**Figure 1.9, *State Diagram* **
+**Figure 1.8, *State Diagram* **
 
 ## Algorithm Description
 
