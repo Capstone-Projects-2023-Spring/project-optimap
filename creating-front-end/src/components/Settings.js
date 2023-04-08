@@ -3,6 +3,7 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 import Navbar from './Navbar';
 import { db } from '../firebase/Firebase';
 import { ref, onValue, off, set } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 
 const Settings = () => {
   const [avoidHighways, setAvoidHighways] = useState(false);
@@ -12,7 +13,10 @@ const Settings = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const settingsRef = ref(db, 'settings/routeOptions');
+      const auth = getAuth();
+      const userId = auth.currentUser.uid;
+
+      const settingsRef = ref(db, `users/${userId}/settings/routeOptions`);
       onValue(settingsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -25,7 +29,10 @@ const Settings = () => {
 
     fetchData();
     return () => {
-      const settingsRef = ref(db, 'settings/routeOptions');
+      const auth = getAuth();
+      const userId = auth.currentUser.uid;
+
+      const settingsRef = ref(db, `users/${userId}/settings/routeOptions`);
       off(settingsRef);
     };
   }, []);
@@ -55,7 +62,10 @@ const Settings = () => {
   const handleSettingsSubmit = async (event) => {
     event.preventDefault();
 
-    const settingsRef = ref(db, 'settings/routeOptions');
+    const auth = getAuth();
+    const userId = auth.currentUser.uid;
+
+    const settingsRef = ref(db, `users/${userId}/settings/routeOptions`);
     await set(settingsRef, {
       avoidHighways: avoidHighways,
       avoidTolls: avoidTolls,
