@@ -27,8 +27,11 @@ function LocationBox({handleRemoveDestination, locations }) {
                 <Card.Body >
                     <ListGroup>
                         {locations.map((location, index) => (
-                            <ListGroup.Item onClick={()=>handleRemoveDestination(index)}style={{ fontSize: '2vh' }} key={index}>{location.street_address}</ListGroup.Item>
-                        ))}
+                            <ListGroup.Item style={{ fontSize: '2vh', display: 'flex', justifyContent: 'space-between'}} key={index}>
+                            <span>{location.street_address}</span>
+                            <button onClick={() => handleRemoveDestination(index)}>X</button>
+                        </ListGroup.Item>
+                     ))}
                     </ListGroup>
                 </Card.Body>
             </Card>
