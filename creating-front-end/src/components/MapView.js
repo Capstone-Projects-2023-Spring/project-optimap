@@ -36,8 +36,7 @@ const MapView = () => {
   });
 
   const [idx, setIdx] = useState(0);
-  const [routeDirections, setRouteDirections] = useState(null);
-
+  const [routeDirections, setRouteDirections] = useState([]);
 
   const [markers, setMarkers] = useState([]);
   const [showRoute, setShowRoute] = useState(false);
@@ -116,24 +115,17 @@ const MapView = () => {
       },
       (result, status) => {
         if (status === window.google.maps.DirectionsStatus.OK) {
-          const routeArray = [];
-          const legs = result.routes[0].legs;
-          for (let i = 0; i < legs.length; i++) {
-            const steps = legs[i].steps;
-            for (let j = 0; j < steps.length; j++) {
-              const step = steps[j];
-              const stepData = {
-                instructions: step.instructions,
-                distance: step.distance.value,
-                duration: step.duration.value
-              };
-              routeArray.push(stepData);
-            }
-          }
-  
           setDirections(result);
           setShowRoute(true);
-          setRouteDirections(routeArray);
+          const steps = result.routes[0].legs[0].steps.map((step) => {
+            const distance = step.distance.text;
+            const direction = step.maneuver;
+            const instruction = step.instructions ? step.instructions.replace(/(<([^>]+)>)/gi, "") : "";
+            const name = step.name ? step.name : "";
+            const streetName = step.intersections && step.intersections[0].streetName ? step.intersections[0].streetName : "";
+            return { instruction, distance, direction, name, streetName };
+          });
+          setRouteDirections(steps);
         } else {
           setError('Failed to fetch directions.');
           console.log("no directions")
@@ -141,8 +133,7 @@ const MapView = () => {
       }
     );
   };
-  
-        
+    
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -366,7 +357,7 @@ const MapView = () => {
     <div>
     <Navbar />
     {currentLocation ? (
-    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} setRouteDirections = {setDirections} />
+    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} routeDirections={setRouteDirections}/>
     ):(<></>)}
       <div className="map-container">
         

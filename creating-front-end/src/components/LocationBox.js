@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Modal, ListGroup, Card } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 
-function LocationBox({handleRemoveDestination, locations }) {
+function LocationBox({handleRemoveDestination, locations, routeDirections }) {
     const [showModal, setShowModal] = useState(false);
 
     const handleShowModal = () => setShowModal(true);
@@ -47,6 +47,11 @@ function LocationBox({handleRemoveDestination, locations }) {
                     <ListGroup>
                         {locations.map((location, index) => (
                             <ListGroup.Item key={index}>{location.position.lat}, {location.position.lng}</ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                    <ListGroup className="mt-3">
+                        {routeDirections.map((direction, index) => (
+                            <ListGroup.Item key={index}>{direction}</ListGroup.Item>
                         ))}
                     </ListGroup>
                 </Modal.Body>
