@@ -119,14 +119,18 @@ const MapView = () => {
         if (status === window.google.maps.DirectionsStatus.OK) {
           setDirections(result);
           setShowRoute(true);
-          const steps = result.routes[0].legs[0].steps.map((step) => {
-            const distance = step.distance.text;
-            const direction = step.maneuver;
-            const instruction = step.instructions ? step.instructions.replace(/(<([^>]+)>)/gi, "") : "";
-            const name = step.name ? step.name : "";
-            const streetName = step.intersections && step.intersections[0].streetName ? step.intersections[0].streetName : "";
-            return { instruction, distance, direction, name, streetName };
-          });
+          const steps = [];
+          for (let i = 0; i < result.routes[0].legs.length; i++) {
+            const leg = result.routes[0].legs[i];
+            steps.push(...leg.steps.map((step) => {
+              const distance = step.distance.text;
+              const direction = step.maneuver;
+              const instruction = step.instructions ? step.instructions.replace(/(<([^>]+)>)/gi, "") : "";
+              const name = step.name ? step.name : "";
+              const streetName = step.intersections && step.intersections[0].streetName ? step.intersections[0].streetName : "";
+              return { instruction, distance, direction, name, streetName };
+            }));
+          }
           getDirections(steps);
         } else {
           setError('Failed to fetch directions.');
@@ -201,9 +205,6 @@ const MapView = () => {
     // autocompleteRef.current = autocomplete; ?
 
     console.log("len " + markers.length)
-    if(markers.length > 1 && currentLocation){
-      handleShowRoute();
-    }
   }, [currentLocation, markers, window.google.maps.places.Autocomplete]);
 
 
@@ -355,6 +356,8 @@ const MapView = () => {
     }
   };
 
+  
+
   return (
     <div>
     <Navbar />
@@ -392,12 +395,12 @@ const MapView = () => {
             </select>
           </div>
 
-          <div className="routes-panel">// add route direction
+          <div className="routes-panel">
             <label htmlFor="routes-dropdown">Route Directions:</label>
             {routes ? (
               <select id="routes-dropdown">
-                {routes.map((route, idx) => (
-                  <option key={idx}>{route.instruction}</option>
+                {routes.map((route, idy) => (
+                  <option key={idy}>{route.instruction}</option>
                 ))}
               </select>
             ) : (
