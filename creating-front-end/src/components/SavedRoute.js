@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase/Firebase';
 import { ref, onValue, onChildChanged, remove } from "firebase/database";
-import { Container, Row, Accordion, Button } from 'react-bootstrap';
+import { Container, Row, Accordion, Button, ListGroup } from 'react-bootstrap';
 import NavBar from './Navbar';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import {useNavigate} from 'react-router-dom';
@@ -99,9 +99,27 @@ const SavedRoute = () => {
 										</Button>
 									</Accordion.Header>
 									<Accordion.Body>
-									{route[1].route.map(r => (
-											<p>{r.street_address}</p>
-									))}
+									
+									{route[1].route.map((item, index) => {
+										/* conditional rendering based on whether arrival time and/or hours spent are available */
+										if (item.arrival_time && item.hours_spent) {
+											return (
+												<ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}</ListGroup.Item>
+											);
+										} else if (item.arrival_time) {
+											return (
+												<ListGroup.Item key={index}>{item.street_address} {"("}{item.arrival_time}{")"}</ListGroup.Item>
+											);
+										} else if (item.hours_spent) {
+											return (
+												<ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}</ListGroup.Item>
+											);
+										} else {
+											return (
+												<ListGroup.Item key={index}>{item.street_address}</ListGroup.Item>
+											);
+										}
+									})}
 
 									</Accordion.Body>
 								</Accordion.Item>
@@ -138,9 +156,26 @@ const SavedRoute = () => {
 
 									</Accordion.Header>
 									<Accordion.Body>
-										{route[1].route.map(r => (
-											<p>{r.street_address}</p>
-										))}
+									{route[1].route.map((item, index) => {
+										/* conditional rendering based on whether arrival time and/or hours spent are available */
+										if (item.arrival_time && item.hours_spent) {
+											return (
+												<ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}</ListGroup.Item>
+											);
+										} else if (item.arrival_time) {
+											return (
+												<ListGroup.Item key={index}>{item.street_address} {"("}{item.arrival_time}{")"}</ListGroup.Item>
+											);
+										} else if (item.hours_spent) {
+											return (
+												<ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}</ListGroup.Item>
+											);
+										} else {
+											return (
+												<ListGroup.Item key={index}>{item.street_address}</ListGroup.Item>
+											);
+										}
+									})}
 									</Accordion.Body>
 								</Accordion.Item>
 							))}

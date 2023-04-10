@@ -16,6 +16,7 @@ const CreateRoutePage = () => {
 
     const [inputValue, setInputValue] = useState('');
     const [locationList, setLocationList] = useState([]);
+    
     const [uid, setUid] = useState(0);
     const [message, setMessage] = useState("");
 
@@ -25,7 +26,7 @@ const CreateRoutePage = () => {
 
     const [showModal, setShowModal] = useState(false);
 
-    const [arrivalTime, setArrivalTime] = useState(null)
+    const [arrivalTime, setArrivalTime] = useState("")
 
 
     const [duration, setDuration] = useState(null)
@@ -65,6 +66,8 @@ const CreateRoutePage = () => {
     };
 
     const handleTimeChange = (event) => {
+        console.log("EVENT:")
+        console.dir(event.target.value)
         setArrivalTime(event.target.value);
     };
 
@@ -77,7 +80,7 @@ const CreateRoutePage = () => {
         for (let i = 0; i < 24; i++) {
             let hour = i % 12 || 12;
             let ampm = i < 12 ? "AM" : "PM";
-            let timeValue = ("0" + i).slice(-2) + ":00";
+            let timeValue = ("0" + i).slice(-2) + ":00 " + ampm;
             let timeLabel = hour + ":00 " + ampm;
             timeOptions.push({ value: timeValue, label: timeLabel });
             timeValue = ("0" + i).slice(-2) + ":30";
@@ -211,13 +214,30 @@ const CreateRoutePage = () => {
         event.preventDefault();
         console.log("Google input:")
         console.dir(googleInput)
-        setLocationList([...locationList, {
+
+        // location object to be added to firebase
+        var locationObj = {
             street_address: googleInput.location,
             coordinates: {
                 lat: googleInput.coords.lat,
                 lng: googleInput.coords.lng
             }
-        }]);
+        }
+
+        // only if user is setting arrival time
+        if(arrivalIsChecked){
+            locationObj.arrival_time = arrivalTime;
+        }
+
+        // only if user is setting time spent
+        if(spentIsChecked){
+            locationObj.hours_spent = ((Number(hours)));
+            locationObj.minutes_spent = (Number(minutes));
+        }
+
+        setLocationList([...locationList, locationObj]);
+
+        // setLocationListMapped(locationList); BROKEN - Ben
 
         setInputValue("");
         console.log("after")
@@ -238,9 +258,27 @@ const CreateRoutePage = () => {
                                 List of Locations
                             </h1>
                             <ListGroup className='mt-3'>
-                                {locationList.map((item, index) => (
-                                    <ListGroup.Item key={index}>{item.street_address}</ListGroup.Item>
-                                ))}
+                                {locationList.map((item, index) => {
+                                    /* conditional rendering with commas and stuff depending on if arrival time and/or time spent is set */
+                                    if (item.arrival_time && item.hours_spent) {
+                                        return (
+                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}</ListGroup.Item>
+                                        );
+                                    } else if (item.arrival_time) {
+                                        return (
+                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.arrival_time}{")"}</ListGroup.Item>
+                                        );
+                                    } else if (item.hours_spent) {
+                                        return (
+                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}</ListGroup.Item>
+                                        );
+                                    } else {
+                                        return (
+                                            <ListGroup.Item key={index}>{item.street_address}</ListGroup.Item>
+                                        );
+                                    }
+                                })}
+
                             </ListGroup>
                         </div>
                     </Col>
@@ -315,9 +353,9 @@ const CreateRoutePage = () => {
                                             onChange={handleHourChange}
                                             disabled={!spentIsChecked}
                                         >
-                                            {[...Array(12).keys()].map((hour) => (
-                                                <option key={hour} value={hour + 1}>
-                                                    {hour + 1}
+                                            {[...Array(13).keys()].map((hour) => (
+                                                <option key={hour} value={hour}>
+                                                    {hour}
                                                 </option>
                                             ))}
                                         </FormControl>
