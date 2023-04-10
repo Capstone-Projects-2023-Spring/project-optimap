@@ -14,9 +14,9 @@ const CreateRoutePage = () => {
     const navigate = useNavigate()
     const [googleInput, setGoogleInput] = useState({});
 
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState("");
     const [locationList, setLocationList] = useState([]);
-    
+
     const [uid, setUid] = useState(0);
     const [message, setMessage] = useState("");
 
@@ -207,7 +207,7 @@ const CreateRoutePage = () => {
             },
         });
 
-        setInputValue(googleInput.location);
+        setInputValue(place.formatted_address);
     });
 
     const handleFormSubmit = (event) => {
@@ -225,12 +225,12 @@ const CreateRoutePage = () => {
         }
 
         // only if user is setting arrival time
-        if(arrivalIsChecked){
+        if (arrivalIsChecked) {
             locationObj.arrival_time = arrivalTime;
         }
 
         // only if user is setting time spent
-        if(spentIsChecked){
+        if (spentIsChecked) {
             locationObj.hours_spent = ((Number(hours)));
             locationObj.minutes_spent = (Number(minutes));
         }
@@ -239,7 +239,10 @@ const CreateRoutePage = () => {
 
         // setLocationListMapped(locationList); BROKEN - Ben
 
+        // reset input value
         setInputValue("");
+        // reset google input (object)
+        setGoogleInput({});
         console.log("after")
         console.dir(googleInput);
     };
@@ -287,7 +290,7 @@ const CreateRoutePage = () => {
                     </Col>
                 </Row>
 
-                <Row className="justify-content-center align-items-center" style={{marginTop: '1rem'}}>
+                <Row className="justify-content-center align-items-center" style={{ marginTop: '1rem' }}>
                     <Col md={6} className="text-center">
                         <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>
                             <Form onSubmit={handleFormSubmit}>
@@ -379,13 +382,13 @@ const CreateRoutePage = () => {
 
                                 </Form.Group>
 
-                                
-                                
+
+
 
 
                                 <Button type="submit">+</Button>
 
-                                <div style={{marginTop: '1rem'}}>{message}</div>
+                                <div style={{ marginTop: '1rem' }}>{message}</div>
                             </Form>
                         </div>
                     </Col>
