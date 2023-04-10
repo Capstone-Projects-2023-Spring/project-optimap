@@ -37,6 +37,9 @@ const MapView = () => {
 
   const [idx, setIdx] = useState(0);
 
+
+  const [routes, getDirections] = useState("");
+
   const [markers, setMarkers] = useState([]);
   const [showRoute, setShowRoute] = useState(false);
   const [directions, setDirections] = useState(null);
@@ -116,6 +119,19 @@ const MapView = () => {
         if (status === window.google.maps.DirectionsStatus.OK) {
           setDirections(result);
           setShowRoute(true);
+          const steps = [];
+          for (let i = 0; i < result.routes[0].legs.length; i++) {
+            const leg = result.routes[0].legs[i];
+            steps.push(...leg.steps.map((step) => {
+              const distance = step.distance.text;
+              const direction = step.maneuver;
+              const instruction = step.instructions ? step.instructions.replace(/(<([^>]+)>)/gi, "") : "";
+              const name = step.name ? step.name : "";
+              const streetName = step.intersections && step.intersections[0].streetName ? step.intersections[0].streetName : "";
+              return { instruction, distance, direction, name, streetName };
+            }));
+          }
+          getDirections(steps);
         } else {
           setError('Failed to fetch directions.');
           console.log("no directions")
@@ -189,9 +205,6 @@ const MapView = () => {
     // autocompleteRef.current = autocomplete; ?
 
     console.log("len " + markers.length)
-    if(markers.length > 1 && currentLocation){
-      handleShowRoute();
-    }
   }, [currentLocation, markers, window.google.maps.places.Autocomplete]);
 
 
@@ -343,6 +356,8 @@ const MapView = () => {
     }
   };
 
+  
+
   return (
     <div>
     <Navbar />
@@ -379,6 +394,20 @@ const MapView = () => {
               <option value="BICYCLING">Bicycling</option>
             </select>
           </div>
+
+          <div className="routes-panel">
+            <label htmlFor="routes-dropdown">Route Directions:</label>
+            {routes ? (
+              <select id="routes-dropdown">
+                {routes.map((route, idy) => (
+                  <option key={idy}>{route.instruction}</option>
+                ))}
+              </select>
+            ) : (
+              <p>No directions to display.</p>
+            )}
+        </div>
+
         {currentLocation ? (
         <Map
           google={window.google}
