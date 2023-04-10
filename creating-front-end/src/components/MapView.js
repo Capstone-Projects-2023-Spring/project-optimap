@@ -203,7 +203,10 @@ const MapView = () => {
     });
 
     // autocompleteRef.current = autocomplete; ?
-
+    console.log("len " + markers.length)
+    if(markers.length > 1 && currentLocation){
+      handleShowRoute();
+    }
     console.log("len " + markers.length)
   }, [currentLocation, markers, window.google.maps.places.Autocomplete]);
 
