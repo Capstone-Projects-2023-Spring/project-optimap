@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -15,6 +16,7 @@ import SavedRoute from './components/SavedRoute';
 import Directions from './components/Directions'
 import CreateRoutePage from './components/CreateRoutePage';
 import Settings from './components/Settings'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

@@ -29,15 +29,15 @@ function LocationBox({ handleRemoveDestination, locations }) {
                 <Card.Body >
                     <ListGroup>
                         {locations.map((location, index) => {
-                                return (
-                                    <ListGroup.Item style={{ fontSize: '2vh', display: 'flex', justifyContent: 'space-between' }} key={index}>
-                                        <div className="ms-2 me-auto">
-                                            <div className="fw-bold">{location.street_address}</div>
-                                            {location.formatted_time}
-                                        </div>
-                                        <Button variant="danger" onClick={() => handleRemoveDestination(index)} size="sm">X</Button>
-                                    </ListGroup.Item>
-                                )
+                            return (
+                                <ListGroup.Item style={{ fontSize: '2vh', display: 'flex', justifyContent: 'space-between' }} key={index}>
+                                    <div className="ms-2 me-auto">
+                                        <div className="fw-bold">{location.street_address}</div>
+                                        {location.formatted_time}
+                                    </div>
+                                    <Button variant="danger" onClick={() => handleRemoveDestination(index)} size="sm">X</Button>
+                                </ListGroup.Item>
+                            )
                         })}
                     </ListGroup>
                 </Card.Body>
@@ -45,15 +45,23 @@ function LocationBox({ handleRemoveDestination, locations }) {
             <Button variant="primary" className="d-md-none" onClick={handleShowModal}>
                 Locations
             </Button>
-            <Modal show={showModal} onHide={handleCloseModal} className="d-md-none">
+            <Modal show={showModal} onHide={handleCloseModal} className="d-md-none" style={{maxWidth: '65%'}}>
                 <Modal.Header closeButton>
                     <Modal.Title>Locations</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ListGroup>
-                        {locations.map((location, index) => (
-                            <ListGroup.Item key={index}>{location.position.lat}, {location.position.lng}</ListGroup.Item>
-                        ))}
+                        {locations.map((location, index) => {
+                            return (
+                                <ListGroup.Item style={{ fontSize: '2vh', display: 'flex', justifyContent: 'space-between' }} key={index}>
+                                    <div className="ms-2 me-auto">
+                                        <div className="fw-bold">{location.street_address}</div>
+                                        {location.formatted_time}
+                                    </div>
+                                    <Button variant="danger" onClick={() => handleRemoveDestination(index)} size="sm">X</Button>
+                                </ListGroup.Item>
+                            )
+                        })}
                     </ListGroup>
                 </Modal.Body>
                 <Modal.Footer>
