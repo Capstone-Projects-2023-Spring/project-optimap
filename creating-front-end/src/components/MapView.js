@@ -158,9 +158,29 @@ const MapView = () => {
         const passedAddrTemp = [];
         if(pageLocation.state){
           for(var i = 0; i < pageLocation.state.locations.length; i++){
-            /*console.log("passed: ");
-            console.dir(pageLocation.state.locations[i].coordinates);*/
-            passedLocsTemp[i] = {position: pageLocation.state.locations[i].coordinates, street_address: pageLocation.state.locations[i].street_address};
+
+            // format the time to show in map view (nicer, conditional rendering)
+            var formattedTime = "";
+            const h = pageLocation.state.locations[i].hours_spent;
+            const a = pageLocation.state.locations[i].arrival_time;
+            const m = pageLocation.state.locations[i].minutes_spent;
+
+            if(h && a){
+               formattedTime = a + ", " + h + "hr " + m + "m";
+            } else if (h) {
+               formattedTime = h + "hr " + m + "m"
+            } else if (a) {
+                formattedTime = a;
+            }
+
+            passedLocsTemp[i] = {
+              position: pageLocation.state.locations[i].coordinates, 
+              street_address: pageLocation.state.locations[i].street_address,
+              arrival_time: pageLocation.state.locations[i].arrival_time,
+              hours_spent: pageLocation.state.locations[i].hours_spent,
+              minutes_spent: pageLocation.state.locations[i].minutes_spent,
+              formatted_time: formattedTime,
+            };
           }
   
           // setPassedLocations(passedLocsTemp)
