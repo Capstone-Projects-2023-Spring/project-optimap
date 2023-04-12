@@ -4,6 +4,8 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Navbar from './Navbar';
 import { auth, createUserWithEmailAndPassword } from "../firebase/Firebase";
 import { useNavigate } from "react-router-dom";
+import { ref, set } from 'firebase/database';
+import { db } from "../firebase/Firebase";
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -27,31 +29,37 @@ const Signup = () => {
     setConfirmPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //Check if passwords match
+    // Check if passwords match
     if (!passwordsMatch) {
       return;
     }
     // Handle sign-up logic here
 
-    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-        // Signed up successfully
-        const user = userCredential.user;
-        console.log(user);
-        setIsSignedUp(true);
-        setSignedUpEmail(email); // set state variable to the entered email
-      })
-      .catch((error) => {
-        // Handle errors
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log(user);
+      setIsSignedUp(true);
+      setSignedUpEmail(email); // set state variable to the entered email
+
+      // Save the user's email address in the database
+      const userRef = ref(db, `users/${user.uid}`);
+      await set(userRef, {
+        email: user.email
       });
+
+    } catch (error) {
+      // Handle errors
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    }
   };
 
-  //Actively check if passwords are matching. If not, set passwordsMatch to false
+  // Actively check if passwords are matching. If not, set passwordsMatch to false
   useEffect(() => {
     setPasswordsMatch(password === confirmPassword);
   }, [password, confirmPassword]);
