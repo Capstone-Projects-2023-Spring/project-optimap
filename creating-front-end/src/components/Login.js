@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Navbar from './Navbar';
 import { Container, Form, Button } from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { auth, signInWithEmailAndPassword } from "../firebase/Firebase";
+import { auth, signInWithEmailAndPassword, update } from "../firebase/Firebase";
 import { useNavigate } from "react-router-dom";
-import { ref, set } from 'firebase/database';
+import { ref, } from 'firebase/database';
 import { db } from "../firebase/Firebase";
 
 const Login = () => {
@@ -26,20 +26,20 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Add login logic here
-
+  
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log(user);
       console.log("user has logged in");
       setIsLoggedIn(true);
-
-      // Save the user's email address in the database
+  
+      // Update the user's email address in the database without overwriting other fields
       const userRef = ref(db, `users/${user.uid}`);
-      await set(userRef, {
+      await update(userRef, {
         email: user.email
       });
-
+  
     } catch (error) {
       // Handle Errors here.
       const errorCode = error.code;
