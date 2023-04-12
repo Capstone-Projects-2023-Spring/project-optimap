@@ -4,6 +4,8 @@ import { Container, Form, Button } from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { auth, signInWithEmailAndPassword } from "../firebase/Firebase";
 import { useNavigate } from "react-router-dom";
+import { ref, set } from 'firebase/database';
+import { db } from "../firebase/Firebase";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,32 +23,38 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Add login logic here
 
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-      // User signed in successfully.
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log(user);
       console.log("user has logged in");
       setIsLoggedIn(true);
-    })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
-        if (errorCode === 'auth/wrong-password') {
-          setLoginError('Incorrect password. Please try again.'); // set password error message
-        }
-        else if (errorCode === 'auth/user-not-found') {
-          setLoginError('Email does not exist. Please try again'); // set email error message
-        }
-        else {
-          setLoginError(errorMessage); // set (other) error message
-        }
+
+      // Save the user's email address in the database
+      const userRef = ref(db, `users/${user.uid}`);
+      await set(userRef, {
+        email: user.email
       });
+
+    } catch (error) {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
+      if (errorCode === 'auth/wrong-password') {
+        setLoginError('Incorrect password. Please try again.'); // set password error message
+      }
+      else if (errorCode === 'auth/user-not-found') {
+        setLoginError('Email does not exist. Please try again'); // set email error message
+      }
+      else {
+        setLoginError(errorMessage); // set (other) error message
+      }
+    }
   };
 
   return (
