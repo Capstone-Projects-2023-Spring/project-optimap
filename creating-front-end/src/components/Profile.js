@@ -16,6 +16,9 @@ const Profile = () => {
   const userId = auth.currentUser?.uid;
   const [friendRequests, setFriendRequests] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [requestMessage, setRequestMessage] = useState("");
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -91,12 +94,40 @@ const Profile = () => {
   const handleAddFriend = async (event) => {
     event.preventDefault();
     console.log(friendEmail);
-
+  
+    if (friendEmail.toLowerCase() === userEmail.toLowerCase()) {
+      setErrorMessage("You can't add yourself as a friend.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return;
+    } else {
+      setErrorMessage("");
+    }
+  
+    const alreadyRequested = await pendingFriendRequestExists(userEmail, friendEmail);
+    if (alreadyRequested) {
+      setErrorMessage("You have already sent a friend request to this person.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return;
+    }
+  
     const responderId = await findUserIdByEmail(friendEmail);
     if (responderId) {
       await sendFriendRequest(userEmail, friendEmail, responderId);
-      setFriendEmail(''); // clears email input after submit
+      setFriendEmail(""); // clears email input after submit
+      console.log("Friend request sent");
+      setRequestMessage("Friend Request Sent"); // set the request message
+      setTimeout(() => {
+        setRequestMessage("");
+      }, 3000);
     } else {
+      setErrorMessage("Account not found. Please enter a valid email.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
       console.error("Responder not found");
     }
   };
@@ -113,18 +144,17 @@ const Profile = () => {
     // Add friend to the current user's Friends list
     const userFriendsRef = ref(db, `users/${userId}/Friends`);
     const newFriendRef = push(userFriendsRef);
-    await set(newFriendRef, {
-      email: requesterEmail,
-    });
+    await set(newFriendRef, requesterEmail);
 
     // Add current user to the friend's Friends list
     const friendId = await findUserIdByEmail(requesterEmail);
     if (friendId) {
       const friendFriendsRef = ref(db, `users/${friendId}/Friends`);
       const newFriendOfFriendRef = push(friendFriendsRef);
-      await set(newFriendOfFriendRef, {
-        email: responderEmail,
-      });
+      await set(newFriendOfFriendRef, responderEmail);
+      console.log("Friend request approved");
+    } else {
+      console.error("Friend ID not found");
     }
   };
 
@@ -145,8 +175,9 @@ const Profile = () => {
     const userFriendsData = userFriendsSnapshot.val();
 
     for (const friendKey in userFriendsData) {
-      if (userFriendsData[friendKey].email === friendEmail) {
+      if (userFriendsData[friendKey] === friendEmail) {
         await remove(ref(db, `users/${userId}/Friends/${friendKey}`));
+        console.log("Friend deleted");
         break;
       }
     }
@@ -159,12 +190,31 @@ const Profile = () => {
       const friendFriendsData = friendFriendsSnapshot.val();
 
       for (const friendKey in friendFriendsData) {
-        if (friendFriendsData[friendKey].email === userEmail) {
+        if (friendFriendsData[friendKey] === userEmail) {
           await remove(ref(db, `users/${friendId}/Friends/${friendKey}`));
           break;
         }
       }
     }
+  };
+
+  const pendingFriendRequestExists = async (requesterEmail, responderEmail) => {
+    const responderId = await findUserIdByEmail(responderEmail);
+    if (!responderId) return false;
+  
+    const friendRequestsRef = ref(db, `users/${responderId}/FriendRequests`);
+    const friendRequestsSnapshot = await get(friendRequestsRef);
+    const friendRequestsData = friendRequestsSnapshot.val();
+  
+    for (const requestId in friendRequestsData) {
+      if (
+        friendRequestsData[requestId].Requester === requesterEmail &&
+        friendRequestsData[requestId].Status === "pending"
+      ) {
+        return true;
+      }
+    }
+    return false;
   };
 
   const handleApproveRequest = (requesterId, requesterEmail, responderEmail) => {
@@ -181,6 +231,7 @@ const Profile = () => {
 
   // Helper function to find a user's ID by their email
   const findUserIdByEmail = async (email) => {
+    if (!email) return null;
     const usersRef = ref(db, "users");
     const usersSnapshot = await get(usersRef);
     const usersData = usersSnapshot.val();
@@ -189,7 +240,7 @@ const Profile = () => {
     console.log("searching for email:", email);
 
     for (const userId in usersData) {
-      if (usersData[userId].email === email) {
+      if (usersData[userId].email && usersData[userId].email.toLowerCase() === email.toLowerCase()) {
         return userId;
       }
     }
@@ -259,6 +310,8 @@ const Profile = () => {
                       Add Friend
                     </Button>
                   </InputGroup>
+                  {errorMessage && <div className="mt-2 text-danger">{errorMessage}</div>}
+                  {requestMessage && <div className="mt-2 text-success">{requestMessage}</div>}
                 </Form.Group>
               </Form>
 
@@ -278,7 +331,9 @@ const Profile = () => {
                   {friends.map((friend) => (
                     <div key={friend.id}>
                       <span>{friend.email}</span>
-                      <Button onClick={() => handleDeleteFriend(userEmail, friend.email)}>Delete Friend</Button>
+                      <Button onClick={() => handleDeleteFriend(userEmail, friend.email)}>
+                        Delete Friend
+                      </Button>
                     </div>
                   ))}
                 </Tab>
