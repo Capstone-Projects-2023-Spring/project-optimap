@@ -91,12 +91,14 @@ const SavedRoute = () => {
 								<Accordion.Item key={route[0]} eventKey={route[0]}>
 									<Accordion.Header style={{ display: 'flex', flexDirection: 'row' }}>
 										{route[1].name}
-										<Button style={{ position: 'absolute', right: '10%' }} variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].name)}>
+										<div style={{textAlign: 'right', width: "100%"}}>
+										<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].name)}>
 											Delete
 										</Button>
-										<Button style={{ position: 'absolute', right: '25%' }} variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
+										<Button  variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
 											Load
 										</Button>
+										</div>
 									</Accordion.Header>
 									<Accordion.Body>
 									
@@ -146,13 +148,15 @@ const SavedRoute = () => {
 
 										{route[1].timestamp}
 
-										<Button style={{ position: 'absolute', right: '10%' }} variant="danger" size="sm" className="ml-auto" onClick={() => handleRecentDelete(route[1].route_id)}>
+										<div style={{textAlign: 'right', width: "100%"}}>
+										<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleRecentDelete(route[1].route_id)}>
 											Delete
 										</Button>
 
-										<Button style={{ position: 'absolute', right: '25%' }} variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
+										<Button variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
 											Load
 										</Button>
+										</div>
 
 									</Accordion.Header>
 									<Accordion.Body>
