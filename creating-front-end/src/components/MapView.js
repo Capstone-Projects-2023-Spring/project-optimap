@@ -11,6 +11,7 @@ import person from '../assets/walking.png';
 import greenMarker from '../assets/green-marker.png';
 import finishFlag from '../assets/finishFlag.png';
 import './styles/marker.css';
+import './styles/MapView.css';
 
 const mapStyles = {
   width: '100%',
@@ -39,6 +40,7 @@ const MapView = () => {
 
 
   const [routes, getDirections] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [markers, setMarkers] = useState([]);
   const [showRoute, setShowRoute] = useState(false);
@@ -388,49 +390,49 @@ const MapView = () => {
     <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers}/>
     ):(<></>)}
       <div className="map-container">
-        
-        <div className="search-container">
-          <input id="search" type="text" onChange={handleChange} />
-          <button onClick={handleSearch}>Search</button>
-          <div className="input-container">
-            <input
-              id="destination-input"
-              type="text"
-              placeholder="Enter a destination"
-              value={destinationInput}
-              onChange={handleDestinationChange}
-            />
-            {/*<button onClick={handleAddDestination}>Add</button>*/}
-            <button onClick={handleShowRoute}>Update Route</button>
-          </div>
-        </div>
+          <div className={`main ${isDropdownOpen ? 'open' : 'closed'}`}>
+            <label onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Main</label>
+            
+            <div className="search-container">
+              <input id="search" type="text" onChange={handleChange} />
+              <button onClick={handleSearch}>Search</button>
+              <div className="input-container">
+                <input
+                  id="destination-input"
+                  type="text"
+                  placeholder="Enter a destination"
+                  value={destinationInput}
+                  onChange={handleDestinationChange}
+                />
+                <button onClick={handleShowRoute}>Update Route</button>
+              </div>
+            </div>
 
-        <div className="transit-type-container">
-            <label htmlFor="transit-type">Transit Type: </label>
-            <select
-              id="transit-type"
-              value={transitType}
-              onChange={handleTransitTypeChange}
-            >
-              <option value="DRIVING">Driving</option>
-              <option value="WALKING">Walking</option>
-              <option value="BICYCLING">Bicycling</option>
-            </select>
-          </div>
-
-          <div className="routes-panel">
-            <label htmlFor="routes-dropdown">Route Directions:</label>
-            {routes ? (
-              <select id="routes-dropdown">
-                {routes.map((route, idy) => (
-                  <option key={idy}>{route.instruction}</option>
-                ))}
+            <div className="transit-type-container">
+              <label htmlFor="transit-type">Transit Type: </label>
+              <select
+                id="transit-type"
+                value={transitType}
+                onChange={handleTransitTypeChange}
+              >
+                <option value="DRIVING">Driving</option>
+                <option value="WALKING">Walking</option>
+                <option value="BICYCLING">Bicycling</option>
               </select>
-            ) : (
-              <p>No directions to display.</p>
-            )}
-        </div>
+            </div>
 
+            <div className="routes-panel">
+              {routes ? (
+                <select id="routes-dropdown" >
+                  {routes.map((route, idy) => (
+                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}</option>
+                  ))}
+                </select>
+              ) : (
+                <p>No Directions Display</p>
+              )}
+            </div>
+          </div>
         {currentLocation ? (
         <Map
           google={window.google}

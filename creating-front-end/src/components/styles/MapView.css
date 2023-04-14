@@ -1,0 +1,17 @@
+.main .search-container,
+.main .transit-type-container,
+.main .routes-panel {
+  display: none;
+}
+
+.open .search-container,
+.open .transit-type-container,
+.open .routes-panel {
+  display: block;
+}
+.main {
+  background-color: blue;
+  text-align: left;
+  color: white;
+}
+
