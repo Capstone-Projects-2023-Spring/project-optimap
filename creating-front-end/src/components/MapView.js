@@ -128,33 +128,41 @@ const MapView = () => {
         // calculate the distance and duration to reach the marker
         const dist = calculateDistance(currentLocation, marker.position);
         const duration = await calculateTime(currentLocation, marker.position, marker.timeWindow.start);
+        console.log('Marker:', marker.title, 'Dist:', dist, 'Duration:', duration, 'Start time:', marker.timeWindow.start);
         // calculate the end time based on the duration of stay
         const endTime = new Date(marker.timeWindow.start.getTime() + marker.timeWindow.end * 60 * 1000);
         return { marker, dist, duration, endTime };
       })
     ).then((markerDistDurations) =>
-      markerDistDurations.sort((a, b) => {
-        // sort by start time, distance, and duration
-        if (a.marker.timeWindow.start < b.marker.timeWindow.start) {
-          return -1;
-        }
-        if (a.marker.timeWindow.start > b.marker.timeWindow.start) {
-          return 1;
-        }
-        if (a.dist < b.dist) {
-          return -1;
-        }
-        if (a.dist > b.dist) {
-          return 1;
-        }
-        if (a.duration < b.duration) {
-          return -1;
-        }
-        if (a.duration > b.duration) {
-          return 1;
-        }
-        return 0;
-      })
+    markerDistDurations.sort((a, b) => {
+      // sort by start time, distance, and duration
+      console.log('Sorting:', a.marker.title, b.marker.title);
+      if (a.marker.timeWindow.start < b.marker.timeWindow.start) {
+        console.log('Sorted by start time:', a.marker.title, b.marker.title);
+        return -1;
+      }
+      if (a.marker.timeWindow.start > b.marker.timeWindow.start) {
+        console.log('Sorted by start time:', b.marker.title, a.marker.title);
+        return 1;
+      }
+      if (a.dist < b.dist) {
+        console.log('Sorted by distance:', a.marker.title, b.marker.title);
+        return -1;
+      }
+      if (a.dist > b.dist) {
+        console.log('Sorted by distance:', b.marker.title, a.marker.title);
+        return 1;
+      }
+      if (a.duration < b.duration) {
+        console.log('Sorted by duration:', a.marker.title, b.marker.title);
+        return -1;
+      }
+      if (a.duration > b.duration) {
+        console.log('Sorted by duration:', b.marker.title, a.marker.title);
+        return 1;
+      }
+      return 0;
+    })
     );
 
     const DirectionsService = new window.google.maps.DirectionsService();
