@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { Button, Modal, ListGroup, Card } from 'react-bootstrap';
+import { useEffect } from 'react';
+import './MapView.js'
 
 function LocationBox({ handleRemoveDestination, locations }) {
     const [showModal, setShowModal] = useState(false);
+    const [startLocation, setStartLocation] = useState(null);
+    const [endLocation, setEndLocation] = useState(null);
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
@@ -20,11 +24,28 @@ function LocationBox({ handleRemoveDestination, locations }) {
         overflowY: 'scroll'
     }
 
+    useEffect(() => {
+        if (locations.length > 0) {
+          setStartLocation(locations[0]);
+          setEndLocation(locations[locations.length - 1]);
+        }
+      }, [locations]);
+    
+      const handleStart = () => {
+        if (startLocation && endLocation) {
+          const origin = startLocation.street_address;
+          const destination = endLocation.street_address;
+          const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
+          window.open(url, '_blank');
+        }
+      };
+
     return (
         <>
             <Card className="d-none d-md-block" style={styles}>
                 <div style={{ position: "sticky", zIndex: 1000 }}>
                     <Card.Header>Locations</Card.Header>
+                    <Button variant="success" className="mt-3" onClick={handleStart}>Start</Button>
                 </div>
                 <Card.Body >
                     <ListGroup>
@@ -71,6 +92,7 @@ function LocationBox({ handleRemoveDestination, locations }) {
                 </Modal.Footer>
             </Modal>
         </>
+        
     );
 }
 
