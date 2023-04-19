@@ -425,7 +425,7 @@ const MapView = () => {
               {routes ? (
                 <select id="routes-dropdown" >
                   {routes.map((route, idy) => (
-                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}</option>
+                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}({route.distance})</option>
                   ))}
                 </select>
               ) : (

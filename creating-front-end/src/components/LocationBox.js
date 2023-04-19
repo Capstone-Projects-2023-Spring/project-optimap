@@ -5,7 +5,6 @@ import './MapView.js'
 
 function LocationBox({ handleRemoveDestination, locations }) {
     const [showModal, setShowModal] = useState(false);
-    const [startLocation, setStartLocation] = useState(null);
     const [endLocation, setEndLocation] = useState(null);
 
     const handleShowModal = () => setShowModal(true);
@@ -26,19 +25,28 @@ function LocationBox({ handleRemoveDestination, locations }) {
 
     useEffect(() => {
         if (locations.length > 0) {
-          setStartLocation(locations[0]);
-          setEndLocation(locations[locations.length - 1]);
+          setEndLocation(locations[0]);
         }
       }, [locations]);
     
       const handleStart = () => {
-        if (startLocation && endLocation) {
-          const origin = startLocation.street_address;
-          const destination = endLocation.street_address;
-          const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
-          window.open(url, '_blank');
+        if (endLocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const origin = `${position.coords.latitude},${position.coords.longitude}`;
+            const destination = endLocation.street_address;
+            const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
+            window.open(url, '_blank');
+            const currentLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            if (endLocation.lat === currentLocation.lat && endLocation.lng === currentLocation.lng) {
+                handleRemoveDestination(0);
+            }
+          });
         }
       };
+      
 
     return (
         <>
