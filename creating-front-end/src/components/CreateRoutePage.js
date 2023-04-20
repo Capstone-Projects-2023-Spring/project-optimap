@@ -75,6 +75,12 @@ const CreateRoutePage = () => {
 
     const [times, setTimes] = useState([])
 
+    const handleDelete = (index) => {
+        const newLocationList = [...locationList];
+        newLocationList.splice(index, 1);
+        setLocationList(newLocationList);
+    };
+
     function TimeOptions() {
         const timeOptions = [];
         for (let i = 0; i < 24; i++) {
@@ -176,8 +182,14 @@ const CreateRoutePage = () => {
 
     }
 
+    
+
     function clickSave() {
         setShowModal(true);
+    }
+
+    function clearRoutes() {
+        setLocationList([]);
     }
 
 
@@ -265,23 +277,31 @@ const CreateRoutePage = () => {
                                     /* conditional rendering with commas and stuff depending on if arrival time and/or time spent is set */
                                     if (item.arrival_time && item.hours_spent) {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}</ListGroup.Item>
+                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}
+                                            <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
+                                            </ListGroup.Item>
+                                            
                                         );
                                     } else if (item.arrival_time) {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.arrival_time}{")"}</ListGroup.Item>
+                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.arrival_time}{")"}
+                                            <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
+                                            </ListGroup.Item>
                                         );
                                     } else if (item.hours_spent) {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}</ListGroup.Item>
+                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}
+                                            <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
+                                            </ListGroup.Item>
                                         );
                                     } else {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address}</ListGroup.Item>
+                                            <ListGroup.Item key={index}>{item.street_address}
+                                            <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
+                                            </ListGroup.Item>
                                         );
                                     }
                                 })}
-
                             </ListGroup>
                         </div>
                     </Col>
@@ -381,11 +401,6 @@ const CreateRoutePage = () => {
                                     </Col>
 
                                 </Form.Group>
-
-
-
-
-
                                 <Button type="submit">+</Button>
 
                                 <div style={{ marginTop: '1rem' }}>{message}</div>
@@ -398,10 +413,13 @@ const CreateRoutePage = () => {
                 <Row className="justify-content-center align-items-center buttons" >
                     <Col md={4}>
                     </Col>
-                    <Col md={2} className="text-center">
+                    <Col md={0} className="text-center">
                         <Button onClick={clickSave} style={{ marginTop: '1rem' }}>Save</Button>
                     </Col>
-                    <Col md={2} className="text-center">
+                    <Col md={0} className="text-center">
+                        <Button onClick={clearRoutes} style={{ marginTop: '1rem' }}>Clear</Button>
+                    </Col>
+                    <Col md={0} className="text-center">
                         <Button onClick={handleRun} style={{ marginTop: '1rem' }}>Run</Button>
                     </Col>
                     <Col md={4}>
