@@ -297,7 +297,7 @@ const Profile = () => {
                   <Form.Label className="mt-3">
                     Send a Friend Request
                   </Form.Label>
-                  <InputGroup className="mx-auto" style={{ width: "425px" }}>
+                  <InputGroup className="mx-auto">
                     <Form.Control
                       type="email"
                       placeholder="Enter Email"
