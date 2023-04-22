@@ -92,7 +92,7 @@ const Signup = () => {
           </Form.Group>
 
           <ButtonGroup className="me-2" aria-label="First group">
-            <Button className="mt-3" variant="primary" type="submit" block>
+            <Button className="mt-3" variant="primary" type="submit" block data-testid="signup button">
               Sign Up
             </Button>
           </ButtonGroup>
