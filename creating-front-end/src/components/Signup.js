@@ -14,6 +14,7 @@ const Signup = () => {
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [signedUpEmail, setSignedUpEmail] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [signupError, setSignupError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -56,6 +57,16 @@ const Signup = () => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
+
+      if (errorCode === 'auth/email-already-in-use') {
+        setSignupError('Email is already taken. Please try again.'); // set password error message
+      }
+      else if (errorCode === 'auth/invalid-email') {
+        setSignupError('Please enter a valid email address.'); // set email error message
+      }
+      else {
+        setSignupError(errorMessage); // set (other) error message
+      }
     }
   };
 
@@ -70,6 +81,10 @@ const Signup = () => {
     <Container className="d-flex justify-content-center align-items-center h-100">
       <div className="border p-5 rounded-lg shadow-sm" style={{ marginTop: '20vh', backgroundColor: '#dbd3d3' }}>
         <h2 className="text-center mb-4">Sign Up</h2>
+
+        {signupError && ( // conditionally render error message
+            <p style={{ color: 'red' }}>{signupError}</p>
+          )}
         {isSignedUp ? (
         <p>You have successfully signed up with email: {signedUpEmail}!</p> // display entered email
         ) : (
@@ -92,7 +107,7 @@ const Signup = () => {
           </Form.Group>
 
           <ButtonGroup className="me-2" aria-label="First group">
-            <Button className="mt-3" variant="primary" type="submit" block data-testid="signup button">
+            <Button className="mt-3" variant="primary" type="submit" block  data-testid="signup button">
               Sign Up
             </Button>
           </ButtonGroup>
