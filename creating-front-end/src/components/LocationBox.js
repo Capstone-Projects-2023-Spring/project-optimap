@@ -3,9 +3,10 @@ import { Button, Modal, ListGroup, Card } from 'react-bootstrap';
 import { useEffect } from 'react';
 import './MapView.js'
 
-function LocationBox({ handleRemoveDestination, locations }) {
+function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHighways, avoidFerries, transitType }) {
     const [showModal, setShowModal] = useState(false);
     const [endLocation, setEndLocation] = useState(null);
+    const transitTypes = transitType.toString().toUpperCase();
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
@@ -32,13 +33,16 @@ function LocationBox({ handleRemoveDestination, locations }) {
             {
                 origins: [origin],
                 destinations: [destination],
-                travelMode: 'DRIVING',
+                travelMode: transitTypes,
+                avoidTolls: avoidTolls,
+                avoidHighways: avoidHighways,
+                avoidFerries: avoidFerries,
             },
             (response, status) => {
                 if (status === 'OK') {
                     const distance = response.rows[0].elements[0].distance.value;
                     const duration = response.rows[0].elements[0].duration.value;
-                    handleShowRoute(origin, destination, distance, duration);
+                    handleSendRoute(origin, destination);
                 } else {
                     console.log('Error:', status);
                 }
@@ -46,10 +50,22 @@ function LocationBox({ handleRemoveDestination, locations }) {
         );
     };
 
-    const handleShowRoute = (origin, destination, distance, duration) => {
-        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+    const handleSendRoute = (origin, destination, transitTypes, avoidTolls, avoidHighways, avoidFerries )=> {
+        transitTypes = transitType.toString().toLowerCase();
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${transitTypes}`;
+        if (avoidTolls) {
+            url += '&avoid=tolls';
+        }
+        if (avoidHighways) {
+            url += '&avoid=highways';
+        }
+        if (avoidFerries) {
+            url += '&avoid=ferries';
+        }
         window.open(url, '_blank');
+        console.log(url);
     };
+    
 
     const handleStart = () => {
         if (endLocation) {
