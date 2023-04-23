@@ -9,9 +9,6 @@ function LocationBox({ handleRemoveDestination, locations }) {
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
-
-
-
     const styles = {
         width: '28vw',
         position: 'absolute',
@@ -27,25 +24,43 @@ function LocationBox({ handleRemoveDestination, locations }) {
         if (locations.length > 0) {
           setEndLocation(locations[0]);
         }
-      }, [locations]);
-    
-      const handleStart = () => {
-        if (endLocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const origin = `${position.coords.latitude},${position.coords.longitude}`;
-            const destination = endLocation.street_address;
-            const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
-            window.open(url, '_blank');
-            const currentLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            if (endLocation.lat === currentLocation.lat && endLocation.lng === currentLocation.lng) {
-                handleRemoveDestination(0);
+    }, [locations]);
+
+    const calculateDistance = (origin, destination) => {
+        const service = new window.google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+            {
+                origins: [origin],
+                destinations: [destination],
+                travelMode: 'DRIVING',
+            },
+            (response, status) => {
+                if (status === 'OK') {
+                    const distance = response.rows[0].elements[0].distance.value;
+                    const duration = response.rows[0].elements[0].duration.value;
+                    handleShowRoute(origin, destination, distance, duration);
+                } else {
+                    console.log('Error:', status);
+                }
             }
-          });
+        );
+    };
+
+    const handleShowRoute = (origin, destination, distance, duration) => {
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+        window.open(url, '_blank');
+    };
+
+    const handleStart = () => {
+        if (endLocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const origin = `${position.coords.latitude},${position.coords.longitude}`;
+                const destination = endLocation.street_address;
+                calculateDistance(origin, destination);
+                handleRemoveDestination(0);
+            });
         }
-      };
+    };
       
 
     return (
