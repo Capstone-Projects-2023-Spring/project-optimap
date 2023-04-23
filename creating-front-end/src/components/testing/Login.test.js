@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-import Login from './Login';
+import Login from '../Login';
 import { MemoryRouter } from 'react-router-dom';
-import { auth } from '../firebase/Firebase';
+import { auth } from '../../firebase/Firebase';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({

@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-import Signup from './Signup';
+import Signup from '../Signup';
 import { MemoryRouter } from 'react-router-dom';
-import { auth } from '../firebase/Firebase';
+import { auth } from '../../firebase/Firebase';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -11,6 +11,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('Signup', () => {
+  //Verify if the Signup form renders
   it('should render the Signup form', () => {
     render(<MemoryRouter><Signup /></MemoryRouter>);
     const emailInput = screen.getByLabelText('Email address');
