@@ -71,7 +71,7 @@ it('should display an error message if login fails with null entry', async () =>
     const mockSignInWithEmailAndPassword = jest.fn(() => {
         throw new Error('auth/invalid-email');
     });
-    jest.mock('../firebase/Firebase', () => ({
+    jest.mock('../../firebase/Firebase', () => ({
         signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
     }));
 
@@ -93,7 +93,7 @@ it('should display an error message if login fails with null entry', async () =>
     const mockSignInWithEmailAndPassword = jest.fn(() => {
       throw new Error('auth/wrong-password');
     });
-    jest.mock('../firebase/Firebase', () => ({
+    jest.mock('../../firebase/Firebase', () => ({
       signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
     }));
 
@@ -102,7 +102,7 @@ it('should display an error message if login fails with null entry', async () =>
     const passwordInput = screen.getByLabelText('Password');
     const loginButton = screen.getByTestId('login button');
 
-    fireEvent.change(emailInput, { target: { value: 'b@b.com' } });
+    fireEvent.change(emailInput, { target: { value: 'te@email.com' } });
     fireEvent.change(passwordInput, { target: { value: 'te1vwsed23' } }); // wrong password
     fireEvent.click(loginButton);
 
@@ -115,7 +115,7 @@ it('should display an error message if login fails with null entry', async () =>
     const mockSignInWithEmailAndPassword = jest.fn(() => {
       throw new Error('auth/wrong-email');
     });
-    jest.mock('../firebase/Firebase', () => ({
+    jest.mock('../../firebase/Firebase', () => ({
       signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
     }));
 
