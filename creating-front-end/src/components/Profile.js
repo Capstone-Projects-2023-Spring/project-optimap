@@ -23,9 +23,9 @@ const Profile = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setDisplayName(user.displayName);
+        setUserEmail(user.email);
       } else {
-        setDisplayName("Not Logged In");
+        setUserEmail("Not Logged In");
       }
     });
   
