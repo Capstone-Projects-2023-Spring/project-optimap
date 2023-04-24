@@ -134,6 +134,8 @@ const MapView = () => {
             }));
           }
           getDirections(steps);
+          console.log('transyt' + transitType)
+          console.log('avoidHighways' + avoidHighways)
         } else {
           setError('Failed to fetch directions.');
           console.log("no directions")
@@ -387,7 +389,7 @@ const MapView = () => {
     <div>
     <Navbar />
     {currentLocation ? (
-    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers}/>
+    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} avoidTolls ={avoidTolls} avoidFerries= {avoidFerries} avoidHighways = {avoidHighways} transitType={transitType}/>
     ):(<></>)}
       <div className="map-container">
           <div className={`main ${isDropdownOpen ? 'open' : 'closed'}`}>
@@ -425,7 +427,7 @@ const MapView = () => {
               {routes ? (
                 <select id="routes-dropdown" >
                   {routes.map((route, idy) => (
-                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}</option>
+                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}({route.distance})</option>
                   ))}
                 </select>
               ) : (
