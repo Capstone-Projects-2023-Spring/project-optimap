@@ -9,7 +9,7 @@ sidebar_position: 4
 - Babel
 
 ## Languages and Frameworks
-- React Native
+- React JS
 - Google Firebase
 - Google Maps API
 - Javascript
