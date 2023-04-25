@@ -2,17 +2,150 @@
 sidebar_position: 3
 ---
 
-## Acceptance Test 
+# Acceptance Test 
 
-| Project Name| OptiMap | Block/Skip(B) | 0 | |
-| :---: | :---: | :---: | :---: | :---: |
-| **Q/A technical support lead** | **TBD** | **Pass(P)** | **0** |  |
-| **Q/A round** | **1** | **Fail(F)** | **0** |  |
-| **Platform** |  |  |  |  |
-| **Tester Name** |  | **% Complete** | **0%** | **Notes if failed** |
-| Test ID | **Action/Steps**| **Notes/Expected Result** |  |  |
-| 1 | **Sign up to the app** Open the website and click on the sign up button and enter your credentials | You should be signed up and redirected to the log in page |  |  |
-| 2 | **Log in to the app** Open the website and click on the Log in button and enter your credentials | If the credentials match you should be redirected to your user page |  |  |
-| 3 | **Add a destination** Log in to your account and go in the create route page and add a destination| You should see a route from your current location to the destination and the estimated time |  |  |
-| 4 | **Access previous trips** Log in to your account and open the route history page.  | The app should now give you a list of the most recent routes. |  |  |
-| 5 | **Start a previous trip** Log in to your account and view the route history page. Select one of the trips on the list and click "begin route."| The app should now display directions based on the selected trip. | |  |
+## UserAuthentication
+```describe('login', () => {
+  it('user should be able to log in', () => {
+    cy.visit('https://stpaex.github.io/OptiMap')
+
+    //cy.wait(5000) // Wait for 5 seconds
+    // open the login modal
+    cy.get('a').contains('Login').click();
+    cy.get('button').contains('Create Account').click();
+
+
+    // generate random email and password
+    const email = `test${Math.floor(Math.random() * 100000)}@test.com`;
+    const password = Math.random().toString(36).substring(2);
+
+    // fill in the form
+    cy.get('input[type="email"]').type(email);
+    cy.get('#formBasicPassword').type(password);
+    cy.get('#formBasicConfirmPassword').type(password);
+
+
+    // submit the form 
+    cy.get('button[type="submit"]').contains('Sign Up').click();
+    cy.wait(1000);
+    cy.contains('a', 'Logout').should('be.visible').click();
+  })
+})
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6LXJPvh143s" frameborder="0" allowfullscreen="true"></iframe>
+
+## CreateRoute
+
+```describe('login', () => {
+    it('user should be able to log in', () => {
+        cy.visit('https://stpaex.github.io/OptiMap')
+
+        //cy.wait(5000) // Wait for 5 seconds
+        // open the login modal
+        cy.get('a').contains('Login').click();
+
+        // fill in the form
+        cy.get('input[type="email"]').type('test@test.com')
+        cy.get('input[type="password"]').type('test123')
+
+        // submit the form 
+        cy.get('button').contains('Login').click()
+
+        //open the create route page
+        cy.get('a').contains('Create Route').click();
+
+        //Input list of locations
+        cy.get('#location-input')
+            .type('Temple University')
+            .wait(1000)
+            .type('{downarrow}')
+            .type('{enter}')
+            .wait(1000);
+
+        // Ignore "Cannot read properties of undefined" error
+        cy.on('uncaught:exception', (err) => {
+            if (err.message.includes('Cannot read properties of undefined')) {
+                return false
+            }
+        })
+        cy.get('button[type="submit"]').click();
+        cy.wait(1000)
+
+
+        //Repeating
+        cy.get('#location-input')
+            .clear()
+            .type('Drexel Univsersity')
+            .wait(1000) // Wait for 1 seconds
+            .type('{downarrow}')
+            .type('{enter}')
+            .wait(1000);
+
+        cy.on('uncaught:exception', (err) => {
+            if (err.message.includes('Cannot read properties of undefined')) {
+                return false
+            }
+        })
+        cy.get('button[type="submit"]').click();
+        cy.wait(1000)
+
+        //Repeating
+        cy.get('#location-input')
+            .clear()
+            .type('Villanova Univsersity')
+            .wait(1000) // Wait for 1 seconds
+            .type('{downarrow}')
+            .type('{enter}')
+            .wait(1000);
+
+        cy.on('uncaught:exception', (err) => {
+            if (err.message.includes('Cannot read properties of undefined')) {
+                return false
+            }
+        })
+        cy.get('button[type="submit"]').click();
+        cy.wait(1000)
+
+        cy.get('button').contains('Save').click();
+        cy.get('#routeName').type('Route 1')
+        cy.get('button.btn-primary').contains('Save Changes').click();
+
+
+        cy.get('button[type="button"]').contains('Run').click();
+    })
+})
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sqfPr7zxhng" frameborder="0" allowfullscreen="true"></iframe>
+
+## PreviousRoute
+
+```
+describe('login', () => {
+    it('user should be able to log in', () => {
+        cy.visit('https://stpaex.github.io/OptiMap')
+
+        // open the login modal
+        cy.get('a').contains('Login').click();
+
+        // fill in the form
+        cy.get('input[type="email"]').type('test@test.com')
+        cy.get('input[type="password"]').type('test123')
+
+        // submit the form 
+        cy.get('button').contains('Login').click()
+
+        //open the Saved Routes page
+        cy.get('a').contains('Saved Routes').click();
+
+
+        cy.wait(2000)
+        //Click on the Saved Route
+        cy.get('button.ml-auto.btn.btn-success.btn-sm').eq(0).click()
+
+    })
+})
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5J67YzGIgtA" frameborder="0" allowfullscreen="true"></iframe>

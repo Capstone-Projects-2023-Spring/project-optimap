@@ -22,7 +22,7 @@ describe('login', () => {
             .wait(1000)
             .type('{downarrow}')
             .type('{enter}')
-            .wait(500);
+            .wait(1000);
 
         // Ignore "Cannot read properties of undefined" error
         cy.on('uncaught:exception', (err) => {
@@ -41,7 +41,7 @@ describe('login', () => {
             .wait(1000) // Wait for 1 seconds
             .type('{downarrow}')
             .type('{enter}')
-            .wait(500);
+            .wait(1000);
 
         cy.on('uncaught:exception', (err) => {
             if (err.message.includes('Cannot read properties of undefined')) {
@@ -58,7 +58,7 @@ describe('login', () => {
             .wait(1000) // Wait for 1 seconds
             .type('{downarrow}')
             .type('{enter}')
-            .wait(500);
+            .wait(1000);
 
         cy.on('uncaught:exception', (err) => {
             if (err.message.includes('Cannot read properties of undefined')) {
@@ -66,6 +66,12 @@ describe('login', () => {
             }
         })
         cy.get('button[type="submit"]').click();
+        cy.wait(1000)
+
+        cy.get('button').contains('Save').click();
+        cy.get('#routeName').type('Route 1')
+        cy.get('button.btn-primary').contains('Save Changes').click();
+
 
         cy.get('button[type="button"]').contains('Run').click();
     })
