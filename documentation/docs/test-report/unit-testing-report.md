@@ -183,41 +183,9 @@ it('should display an error message if login fails with null entry', async () =>
     expect(errorMessage).toBeInTheDocument();
   });
 
-// Verify if successful login displays navbar options
-  it('should display navbar options after successful login', async () => {
-    const mockUser = {
-      uid: '1234',
-      displayName: 'testuser',
-      email: 'te@email.com'
-    };
-    const mockOnAuthStateChanged = jest.fn((callback) => {
-      callback(mockUser);
-    });
-    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
-
-    render( <MemoryRouter><Login /></MemoryRouter>);
-    const emailInput = screen.getByLabelText('Email address');
-    const passwordInput = screen.getByLabelText('Password');
-    const loginButton = screen.getByTestId('login button');
-
-    fireEvent.change(emailInput, { target: { value: 'te@email.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'test123' } });
-    fireEvent.click(loginButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Logout')).toBeInTheDocument();
-      expect(screen.getByText('Profile')).toBeInTheDocument();
-      expect(screen.getByText('Map')).toBeInTheDocument();
-      expect(screen.getByText('Directions')).toBeInTheDocument();
-      expect(screen.getByText('Create Route')).toBeInTheDocument();
-      expect(screen.getByText('Saved Routes')).toBeInTheDocument();
-    });
-  });
-
 ```
 #### Login.js Test Results
-![](https://cdn.discordapp.com/attachments/1059991342266204242/1099866206216929370/image.png)
-![](https://cdn.discordapp.com/attachments/1059991342266204242/1099866046002909184/image.png)
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474927884275722/image.png)
 
 ### Signup.js
 ```diff
@@ -340,43 +308,9 @@ it('should display an error message if email is null', async () => {
     const errorMessage = await screen.findByText('Passwords do not match');
     expect(errorMessage).toBeInTheDocument();
   });
-
-// Verify if navbar options are displayed after successful signup
-  it('should display navbar options after successful signup', async () => {
-    const mockUser = {
-      uid: '1234',
-      displayName: 'testuser',
-      email: 'tea@email.com'
-    };
-    const mockOnAuthStateChanged = jest.fn((callback) => {
-      callback(mockUser);
-    });
-    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
-
-    render( <MemoryRouter><Signup /></MemoryRouter>);
-    const emailInput = screen.getByLabelText('Email address');
-    const passwordInput = screen.getByLabelText('Password');
-    const confirmInput = screen.getByLabelText('Confirm Password');
-    const signupButton = screen.getByTestId('signup button');
-
-    fireEvent.change(emailInput, { target: { value: 'tea@email.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'test123' } });
-    fireEvent.change(confirmInput, { target: { value: 'test123' } });
-    fireEvent.click(signupButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Logout')).toBeInTheDocument();
-      expect(screen.getByText('Profile')).toBeInTheDocument();
-      expect(screen.getByText('Map')).toBeInTheDocument();
-      expect(screen.getByText('Directions')).toBeInTheDocument();
-      expect(screen.getByText('Create Route')).toBeInTheDocument();
-      expect(screen.getByText('Saved Routes')).toBeInTheDocument();
-    });
-  });
 ```
 #### Signup.js Test Results
-![](https://cdn.discordapp.com/attachments/1059991342266204242/1099866523935445012/image.png)
-![](https://cdn.discordapp.com/attachments/1059991342266204242/1099866632760852620/image.png)
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474928240787516/image.png)
 
 ### Navbar.js
 ```diff
