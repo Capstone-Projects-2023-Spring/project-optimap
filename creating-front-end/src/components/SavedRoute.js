@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase/Firebase';
-import { ref, onValue, onChildChanged, remove } from "firebase/database";
-import { Container, Row, Accordion, Button, ListGroup } from 'react-bootstrap';
+import { ref, onValue, onChildChanged, get, set, push, remove, child } from "firebase/database";
+import 'firebase/auth'
+import { Container, Row, Accordion, Button, ListGroup , Modal } from 'react-bootstrap';
 import NavBar from './Navbar';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import {useNavigate} from 'react-router-dom';
+import FriendList from './FriendList'
 
 
 const SavedRoute = () => {
@@ -14,6 +16,20 @@ const SavedRoute = () => {
 	const [savedRoutes, setSavedRoutes] = useState([]); // routes are stored as an array of key:values
 	const [recentRoutes, setRecentRoutes] = useState([]);
 	const [userId, setUserId] = useState("");
+
+	const [friends, setFriends] = useState([])
+	
+	// etnioaebfopasbfuivsaiduf
+	const [showFriendList, setShowFriendList] = useState(false);
+
+	const handleShareClick = () => {
+		setShowFriendList(true);
+	};
+
+	const handleCancelClick = () => {
+		setShowFriendList(false);
+	};
+	// saeblugibrsluibgsdiubgldsuirg
 
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
@@ -37,12 +53,29 @@ const SavedRoute = () => {
 					if (data) {
 						const routesArray = Object.entries(data).map(([key, value]) => [key, value]);
 						setSavedRoutes(routesArray);
+						
 					};
+				});
+
+				const friendsRef = ref(db, `users/` + userId + `/Friends`);
+				onValue(friendsRef, (snapshot) => {
+					const data = snapshot.val();
+					const friendsArray = [];
+					if (data) {
+						for (const key in data) {
+							friendsArray.push({
+								id: key,
+								email: data[key],
+							});
+						}
+					}
+					setFriends(friendsArray);
 				});
 			} else {
 				console.log("user not set");
 			};
 		});
+		console.log(friends);
 	}, [userId]); // userId dependency will not cause a loop since onAuthStateChanged() will only be called upon login/logout
 
 	// handle remove from firebase
@@ -74,6 +107,33 @@ const SavedRoute = () => {
 
 		navigate("/map", {state:{locations: route}})
 	}
+	
+	function handleShareRoute(friendId, routeId) {
+		const sharedRoutesRef = ref(db, 'sharedRoutes');
+		const sharedRouteRef = push(sharedRoutesRef);
+
+		const friendUserID = friendId;
+		const sharedRouteId = sharedRouteRef.key;
+		
+		const routeRef = ref(db, `users/${userId}/savedRoutes/${routeId}`);
+		get(routeRef).then((snapshot) => {
+			const routeData = snapshot.val();
+
+			const sharedRouteData = {
+				owner: userId,
+				friend: friendUserID,
+				route: routeData,
+			};
+		
+			set(sharedRouteRef, sharedRouteData);
+			
+			const ownerSharedRouteRef = ref(db, `users/${userId}/sharedRoutes`);
+			push(ownerSharedRouteRef, sharedRouteId);
+
+			const friendSharedRouteRef = ref(db, `users/${friendId}/sharedRoutes`);
+			push(friendSharedRouteRef, sharedRouteId);
+		});
+	}
 
 	return (
 		<Container fluid>
@@ -92,12 +152,16 @@ const SavedRoute = () => {
 									<Accordion.Header style={{ display: 'flex', flexDirection: 'row' }}>
 										{route[1].name}
 										<div style={{textAlign: 'right', width: "100%"}}>
-										<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].name)}>
-											Delete
-										</Button>
-										<Button  variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
-											Load
-										</Button>
+											<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].name)}>
+												Delete
+											</Button>
+											<Button  variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
+												Load
+											</Button>
+											<Button variant="primary" size="sm" className="ml-auto" onClick={handleShareClick}>
+												Share
+											</Button>
+											
 										</div>
 									</Accordion.Header>
 									<Accordion.Body>
@@ -126,6 +190,7 @@ const SavedRoute = () => {
 									</Accordion.Body>
 								</Accordion.Item>
 							))}
+							{showFriendList && <FriendList FriendList={friends} onCancel={handleCancelClick} />}
 						</Accordion>
 					</Row>
 				) : (
@@ -155,6 +220,10 @@ const SavedRoute = () => {
 
 										<Button variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route)}>
 											Load
+										</Button>
+
+										<Button variant ="primary" size="sm" classname="ml-auto">
+											Share
 										</Button>
 										</div>
 
@@ -190,6 +259,10 @@ const SavedRoute = () => {
 						<h4 style={{ marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw' }}>No recent routes</h4>
 					</Row>
 				)}
+
+				<Row style={{ marginTop: '1rem' }}>
+					<h2>Shared Routes</h2>
+				</Row>
 
 			</Container>
 		</Container>
