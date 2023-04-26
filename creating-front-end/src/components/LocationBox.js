@@ -131,7 +131,7 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                     </ListGroup>
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="success" onClick={handleStart}>Start</Button>
+                    <Button variant="success" onClick={handleStart}>Start</Button>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
                     </Button>
@@ -143,3 +143,4 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
 }
 
 export default LocationBox
+// Path: src\components\MapView.js
