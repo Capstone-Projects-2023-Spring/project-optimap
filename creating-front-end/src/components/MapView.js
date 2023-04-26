@@ -135,7 +135,7 @@ const MapView = () => {
           }
           getDirections(steps);
           console.log('transyt' + transitType)
-          console.log('avoidHighways' + avoidHighways)
+          console.log('durantion' + avoidHighways)
         } else {
           setError('Failed to fetch directions.');
           console.log("no directions")
@@ -425,9 +425,9 @@ const MapView = () => {
 
             <div className="routes-panel">
               {routes ? (
-                <select id="routes-dropdown" >
+                <select id="routes-dropdown" style={{ width: '100%' }}>
                   {routes.map((route, idy) => (
-                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}({route.distance})</option>
+                    <option key={idy} style={{ width: '100%', display: 'flex' }}>{route.instruction}({route.distance})</option>
                   ))}
                 </select>
               ) : (

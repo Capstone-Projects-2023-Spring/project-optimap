@@ -42,17 +42,19 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                 if (status === 'OK') {
                     const distance = response.rows[0].elements[0].distance.value;
                     const duration = response.rows[0].elements[0].duration.value;
-                    handleSendRoute(origin, destination);
+                    console.log("distance: ", distance, "duration: ", duration);
+                    handleSendRoute(origin, destination, transitTypes, avoidTolls, avoidHighways, avoidFerries, duration, distance);
                 } else {
                     console.log('Error:', status);
                 }
             }
         );
-    };
+      };
+      
 
-    const handleSendRoute = (origin, destination, transitTypes, avoidTolls, avoidHighways, avoidFerries )=> {
+    const handleSendRoute = (origin, destination, transitTypes, avoidTolls, avoidHighways, avoidFerries, duration, distance) => {
         transitTypes = transitType.toString().toLowerCase();
-        const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${transitTypes}`;
+        let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=${transitTypes}`;
         if (avoidTolls) {
             url += '&avoid=tolls';
         }
@@ -62,9 +64,11 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
         if (avoidFerries) {
             url += '&avoid=ferries';
         }
+        url += `&duration=${duration}&distance=${distance}`;
         window.open(url, '_blank');
         console.log(url);
-    };
+      };
+      
     
 
     const handleStart = () => {
@@ -84,7 +88,6 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
             <Card className="d-none d-md-block" style={styles}>
                 <div style={{ position: "sticky", zIndex: 1000 }}>
                     <Card.Header>Locations</Card.Header>
-                    <Button variant="success" className="mt-3" onClick={handleStart}>Start</Button>
                 </div>
                 <Card.Body >
                     <ListGroup>
@@ -101,11 +104,14 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                         })}
                     </ListGroup>
                 </Card.Body>
+                <Card.Footer>
+                    <Button variant="success" onClick={handleStart}>Start</Button>
+                </Card.Footer>
             </Card>
             <Button variant="primary" className="d-md-none" onClick={handleShowModal}>
                 Locations
             </Button>
-            <Modal show={showModal} onHide={handleCloseModal} className="d-md-none" style={{maxWidth: '65%'}}>
+            <Modal show={showModal} onHide={handleCloseModal} className="d-md-none" style={{maxWidth: '100%'}}>
                 <Modal.Header closeButton>
                     <Modal.Title>Locations</Modal.Title>
                 </Modal.Header>
@@ -125,6 +131,7 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                     </ListGroup>
                 </Modal.Body>
                 <Modal.Footer>
+                <Button variant="success" onClick={handleStart}>Start</Button>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
                     </Button>
