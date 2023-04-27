@@ -393,10 +393,10 @@ const MapView = () => {
 
   return (
     <div>
-    <Navbar />
-    {currentLocation ? (
-    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} avoidTolls ={avoidTolls} avoidFerries= {avoidFerries} avoidHighways = {avoidHighways} transitType={transitType}/>
-    ):(<></>)}
+      <Navbar />
+      {currentLocation ? (
+        <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} avoidTolls={avoidTolls} avoidFerries={avoidFerries} avoidHighways={avoidHighways} transitType={transitType} />
+      ) : (<></>)}
       <div className="map-container">
         <div className={`main ${isDropdownOpen ? 'open' : 'closed'}`}>
           <label onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Main</label>
@@ -428,89 +428,87 @@ const MapView = () => {
               <option value="BICYCLING">Bicycling</option>
             </select>
           </div>
-            <div className="routes-panel">
-              {routes ? (
-                <select id="routes-dropdown" style={{ width: '100%' }}>
-                  {routes.map((route, idy) => (
-                    <option key={idy} style={{ width: '100%', display: 'flex' }}>{route.instruction}({route.distance})</option>
-                  ))}
-                </select>
-              ) : (
-                <p>No Directions Display</p>
-              )}
-            </div>
+          <div className="routes-panel">
+            {routes ? (
+              <select id="routes-dropdown" style={{ width: '100%' }}>
+                {routes.map((route, idy) => (
+                  <option key={idy} style={{ width: '100%', display: 'flex' }}>{route.instruction}({route.distance})</option>
+                ))}
+              </select>
+            ) : (
+              <p>No Directions Display</p>
+            )}
           </div>
         </div>
-        {currentLocation ? (
-          <Map
-            google={window.google}
-            zoom={14}
-            style={mapStyles}
-            initialCenter={currentLocation}
-          // center={searchedLocationCoords}
-          >
-            {searchedLocationCoords.lat !== 0 && (
-              <Marker
-                onClick={handleMarkerClick}
-                position={searchedLocationCoords}
-                locationInfo={locationInfo}
-              />
-            )}
-            {currentLocation.lat && currentLocation.lng && (
-              <Marker
-                position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
-                icon={{
-                  url: getMarkerIcon()
-                }} />
-            )}
-            {markers.map((marker, index) => (
-              <Marker
-                key={index}
-                position={marker.position}
-                onClick={() => handleRemoveDestination(index)}
-                icon={index === markers.length - 1
-                  ? { url: finishFlag }
-                  : { url: greenMarker }}
-                label={{
-                  text: (index === markers.length - 1) ? " " : (index + 1).toString(),
-                  className: "marker-label"
-                }}
-              />
-            ))}
-
-            {showRoute && directions && (
-              <Polyline
-                path={directions.routes[0].overview_path}
-                strokeColor="#006eff"
-                strokeOpacity={0.8}
-                strokeWeight={4}
-              />
-            )}
-            <InfoWindow
-              marker={activeMarker}
-              visible={showingInfoWindow}
-            >
-              <div>
-                <div>
-                  <img src={photos[0]} alt="photo_0" />
-                </div>
-                <div>{locationInfo.formatted_phone_number}</div>
-                <div>{locationInfo.rating} / 5.0</div>
-                <div>
-                  {places.map((place, index) => (
-                    <div key={index}>
-                      {place.name} - {place.formatted_address}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </InfoWindow>
-          </Map>) : (
-
-          <div>Loading...</div>
-        )}
       </div>
+      {currentLocation ? (
+        <Map
+          google={window.google}
+          zoom={14}
+          style={mapStyles}
+          initialCenter={currentLocation}
+        // center={searchedLocationCoords}
+        >
+          {searchedLocationCoords.lat !== 0 && (
+            <Marker
+              onClick={handleMarkerClick}
+              position={searchedLocationCoords}
+              locationInfo={locationInfo}
+            />
+          )}
+          {currentLocation.lat && currentLocation.lng && (
+            <Marker
+              position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
+              icon={{
+                url: getMarkerIcon()
+              }} />
+          )}
+          {markers.map((marker, index) => (
+            <Marker
+              key={index}
+              position={marker.position}
+              onClick={() => handleRemoveDestination(index)}
+              icon={index === markers.length - 1
+                ? { url: finishFlag }
+                : { url: greenMarker }}
+              label={{
+                text: (index === markers.length - 1) ? " " : (index + 1).toString(),
+                className: "marker-label"
+              }}
+            />
+          ))}
 
+          {showRoute && directions && (
+            <Polyline
+              path={directions.routes[0].overview_path}
+              strokeColor="#006eff"
+              strokeOpacity={0.8}
+              strokeWeight={4}
+            />
+          )}
+          <InfoWindow
+            marker={activeMarker}
+            visible={showingInfoWindow}
+          >
+            <div>
+              <div>
+                <img src={photos[0]} alt="photo_0" />
+              </div>
+              <div>{locationInfo.formatted_phone_number}</div>
+              <div>{locationInfo.rating} / 5.0</div>
+              <div>
+                {places.map((place, index) => (
+                  <div key={index}>
+                    {place.name} - {place.formatted_address}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </InfoWindow>
+        </Map>) : (
+
+        <div>Loading...</div>
+      )}
     </div>
   );
 }
