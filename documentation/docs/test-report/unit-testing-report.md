@@ -2,36 +2,65 @@
 sidebar_position: 1
 ---
 # Unit tests
-Unit tests will be written using the Jest framework to test our React js application
+Unit tests are written using the Jest framework as well as Enzyme to test our React js application
 
 ## Front-end
-- <b>index.js</b>
+### index.js
 ```diff
-testRenderSite() 
-    - Test: Verify site renders  
-    - Result: Pass if site renders successfully correctly
-```
+describe('index', () => {
+  //Verify that the index renders without throwing an error
+  it('should render without crashing', () => {
+    const div = document.createElement('div');
+    createRoot(div).render(
+      <Router>
+        <Routes>
+          <Route path = '/' element = {<App/>}/>
+          <Route path = "/login" element = {<Login/>}/>
+          <Route path = "/signup" element = {<Signup/>}/>
+          <Route path = "/map" element = {<MapView/>}/>
+          <Route path = "/logout" element = {<Logout/>}/>
+          <Route path = "/readWrite" element = {<ReadWrite/>}/>
+          <Route path = "/profile" element = {<Profile/>}/>
+          <Route path = "/savedRoute" element = {<SavedRoute/>}/>
+          <Route path = "/directions" element = {<Directions/>}/>
+          <Route path = "/createRoutePage" element = {<CreateRoutePage/>}/>
+          <Route path = "/settings" element = {<Settings/>}/>
+        </Routes>
+      </Router>);
+  });
 
-- <b>App.js</b>
+});
+```
+#### index.js Test Results
+![](https://cdn.discordapp.com/attachments/1059991342266204242/1099865112027865179/indexTest.PNG)
+
+### App.js
 ```diff
-testFireBaseTokenGeneration()
-    - Test: Verify Firebase Authentication generate token
-    - Result: Pass if user token is generated successfully
+describe('App component', () => {
+//Verify that the App component renders without throwing an error
+  it('should render without throwing an error', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find('.App')).toHaveLength(1);
+  });
 
-testRoutes() 
-    - Test: Verify routing to different screen 
-    - Result: Pass if routing to different screen correctly 
+//Verify that the App component renders a Navbar component
+  it('should render the Navbar component', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.containsMatchingElement(<Navbar />)).toEqual(true);
+  });
 
-testSignupImport()
-    - Test: Verify Sign up component imports 
-    - Result: Pass if Sign up component is found successfully
-
-testLoginImport()
-    - Test: Verify Sign up component imports 
-    - Result: Pass if Login component is found successfully
+//Verify that the App component renders the Home Page header
+  it('should render the Home Page header', () => {
+    const wrapper = shallow(<App />);
+    expect(wrapper.find('h1')).toHaveLength(1);
+    expect(wrapper.find('h1').text()).toEqual('Home Page');
+  });
+});
 ```
+#### App.js Test Results
+![](https://cdn.discordapp.com/attachments/1059991342266204242/1099865549984501791/AppTest.PNG)
 
-- <b>Login.js</b>
+### Login.js
 ```diff
 // Test If Login Form Renders
   it('should render the Login form', () => {
@@ -154,66 +183,11 @@ it('should display an error message if login fails with null entry', async () =>
     expect(errorMessage).toBeInTheDocument();
   });
 
-// Verify if successful login displays navbar options
-  it('should display navbar options after successful login', async () => {
-    const mockUser = {
-      uid: '1234',
-      displayName: 'testuser',
-      email: 'te@email.com'
-    };
-    const mockOnAuthStateChanged = jest.fn((callback) => {
-      callback(mockUser);
-    });
-    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
-
-    render( <MemoryRouter><Login /></MemoryRouter>);
-    const emailInput = screen.getByLabelText('Email address');
-    const passwordInput = screen.getByLabelText('Password');
-    const loginButton = screen.getByTestId('login button');
-
-    fireEvent.change(emailInput, { target: { value: 'te@email.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'test123' } });
-    fireEvent.click(loginButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Logout')).toBeInTheDocument();
-      expect(screen.getByText('Profile')).toBeInTheDocument();
-      expect(screen.getByText('Map')).toBeInTheDocument();
-      expect(screen.getByText('Directions')).toBeInTheDocument();
-      expect(screen.getByText('Create Route')).toBeInTheDocument();
-      expect(screen.getByText('Saved Routes')).toBeInTheDocument();
-    });
-  });
-
 ```
-- <b>Login.js Test Results</b>
-```diff
-<testsuite name="Login" errors="0" failures="0" skipped="0" timestamp="2023-04-22T21:22:51" time="2.902" tests="11">
-    <testcase classname="Login should render the Login form" name="Login should render the Login form" time="0.125">
-    </testcase>
-    <testcase classname="Login should display Email Field" name="Login should display Email Field" time="0.016">
-    </testcase>
-    <testcase classname="Login should display Password Field" name="Login should display Password Field" time="0.012">
-    </testcase>
-    <testcase classname="Login should display Login Button" name="Login should display Login Button" time="0.012">
-    </testcase>
-    <testcase classname="Login should respond to a change of event in the email field" name="Login should respond to a change of event in the email field" time="0.019">
-    </testcase>
-    <testcase classname="Login should respond to a change of event in the password field" name="Login should respond to a change of event in the password field" time="0.015">
-    </testcase>
-    <testcase classname="Login should respond to a change of event on form submission" name="Login should respond to a change of event on form submission" time="0.074">
-    </testcase>
-    <testcase classname="Login should display an error message if login fails with null entry" name="Login should display an error message if login fails with null entry" time="0.205">
-    </testcase>
-    <testcase classname="Login should display an error message if login fails with password" name="Login should display an error message if login fails with password" time="0.238">
-    </testcase>
-    <testcase classname="Login should display an error message if login fails with email" name="Login should display an error message if login fails with email" time="0.2">
-    </testcase>
-    <testcase classname="Login should display navbar options after successful login" name="Login should display navbar options after successful login" time="0.035">
-    </testcase>
-  </testsuite>
-```
-- <b>Signup.js</b>
+#### Login.js Test Results
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474927884275722/image.png)
+
+### Signup.js
 ```diff
 //Verify that the signup for renders
   it('should render the Signup form', () => {
@@ -334,75 +308,273 @@ it('should display an error message if email is null', async () => {
     const errorMessage = await screen.findByText('Passwords do not match');
     expect(errorMessage).toBeInTheDocument();
   });
+```
+#### Signup.js Test Results
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474928240787516/image.png)
 
-// Verify if navbar options are displayed after successful signup
-  it('should display navbar options after successful signup', async () => {
+### Navbar.js
+```diff
+describe('NavBar component', () => {
+
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: 'te@email.com'
+        };
+        const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser);
+        });
+        jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    // Verify that the OptiMap logo renders on the Navbar
+  test('renders OptiMap logo', () => {
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const logo = screen.getByAltText('My logo');
+    expect(logo).toBeInTheDocument();
+  });
+
+  // Verify that the login link renders when a user is NOT logged in
+  test('renders login link when not logged in', () => {
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const loginLink = screen.getByText('Login');
+    expect(loginLink).toBeInTheDocument();
+  });
+
+  // Verify that the logout link renders when a user IS logged in
+  test('renders logout link when logged in', () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useNavigate: () => mockNavigate,
+    }));
+  
     const mockUser = {
       uid: '1234',
       displayName: 'testuser',
-      email: 'tea@email.com'
+      email: 'te@email.com'
     };
     const mockOnAuthStateChanged = jest.fn((callback) => {
       callback(mockUser);
     });
     jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
-
-    render( <MemoryRouter><Signup /></MemoryRouter>);
-    const emailInput = screen.getByLabelText('Email address');
-    const passwordInput = screen.getByLabelText('Password');
-    const confirmInput = screen.getByLabelText('Confirm Password');
-    const signupButton = screen.getByTestId('signup button');
-
-    fireEvent.change(emailInput, { target: { value: 'tea@email.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'test123' } });
-    fireEvent.change(confirmInput, { target: { value: 'test123' } });
-    fireEvent.click(signupButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Logout')).toBeInTheDocument();
-      expect(screen.getByText('Profile')).toBeInTheDocument();
-      expect(screen.getByText('Map')).toBeInTheDocument();
-      expect(screen.getByText('Directions')).toBeInTheDocument();
-      expect(screen.getByText('Create Route')).toBeInTheDocument();
-      expect(screen.getByText('Saved Routes')).toBeInTheDocument();
-    });
+  
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const logoutLink = screen.getByText('Logout');
+    expect(logoutLink).toBeInTheDocument();
   });
+// Verify that the directions link renders when a user IS logged in
+    test('renders directions link when logged in', () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+        ...jest.requireActual('react-router-dom'),
+        useNavigate: () => mockNavigate,
+    }));
+
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: '',
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser); 
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const directionsLink = screen.getByText('Directions');
+    expect(directionsLink).toBeInTheDocument();
+});
+
+// Verify that the Map link renders when a user IS logged in
+test('renders MapView link when logged in', () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+        ...jest.requireActual('react-router-dom'),
+        useNavigate: () => mockNavigate,
+    }));
+
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: '',
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser); 
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const directionsLink = screen.getByText('Map');
+    expect(directionsLink).toBeInTheDocument();
+});
+
+// Verify that the Create Route link renders when a user IS logged in
+test('renders Create Route link when logged in', () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+        ...jest.requireActual('react-router-dom'),
+        useNavigate: () => mockNavigate,
+    }));
+
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: '',
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser); 
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const directionsLink = screen.getByText('Create Route');
+    expect(directionsLink).toBeInTheDocument();
+});
+
+// Verify that the Profile link renders when a user IS logged in
+test('renders Profile link when logged in', () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+        ...jest.requireActual('react-router-dom'),
+        useNavigate: () => mockNavigate,
+    }));
+
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: '',
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser); 
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const directionsLink = screen.getByText('Profile');
+    expect(directionsLink).toBeInTheDocument();
+});
+
+// Verify that the Saved Routes link renders when a user IS logged in
+test('renders Saved Routes link when logged in', () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+        ...jest.requireActual('react-router-dom'),
+        useNavigate: () => mockNavigate,
+    }));
+
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: '',
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser); 
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    render(<MemoryRouter><NavBar /></MemoryRouter>);
+    const directionsLink = screen.getByText('Saved Routes');
+    expect(directionsLink).toBeInTheDocument();
+});
+
+});
 ```
-- <b>Signup.js Test Results</b>
+#### Navbar.js Test Results
+![](https://cdn.discordapp.com/attachments/1059991342266204242/1099866962219257866/image.png)
+
+### Profile.js Test
 ```diff
-<testsuite name="Signup" errors="0" failures="0" skipped="0" timestamp="2023-04-22T21:22:51" time="2.554" tests="12">
-    <testcase classname="Signup should render the Signup form" name="Signup should render the Signup form" time="0.128">
-    </testcase>
-    <testcase classname="Signup should display Email Field" name="Signup should display Email Field" time="0.018">
-    </testcase>
-    <testcase classname="Signup should display Password Field" name="Signup should display Password Field" time="0.014">
-    </testcase>
-    <testcase classname="Signup should display Confirm Password Field" name="Signup should display Confirm Password Field" time="0.019">
-    </testcase>
-    <testcase classname="Signup should display Signup Button" name="Signup should display Signup Button" time="0.01">
-    </testcase>
-    <testcase classname="Signup should respond to a change of event in the email field" name="Signup should respond to a change of event in the email field" time="0.01">
-    </testcase>
-    <testcase classname="Signup should respond to a change of event in the password field" name="Signup should respond to a change of event in the password field" time="0.019">
-    </testcase>
-    <testcase classname="Signup should respond to a change of event in the confirm password field" name="Signup should respond to a change of event in the confirm password field" time="0.018">
-    </testcase>
-    <testcase classname="Signup should respond to a click of the signup button" name="Signup should respond to a click of the signup button" time="0.075">
-    </testcase>
-    <testcase classname="Signup should display an error message if email is null" name="Signup should display an error message if email is null" time="0.237">
-    </testcase>
-    <testcase classname="Signup should display an error message if passwords do not match" name="Signup should display an error message if passwords do not match" time="0.03">
-    </testcase>
-    <testcase classname="Signup should display navbar options after successful signup" name="Signup should display navbar options after successful signup" time="0.042">
-    </testcase>
-</testsuite>
+describe('Profile', () => {
+    const mockUser = {
+        uid: '1234',
+        displayName: 'testuser',
+        email: 'te@email.com',
+    };
+
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+        callback(mockUser);
+    });
+
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    // Add your test cases here
+    // renders Profile component
+    test('renders Profile component', () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+        const profileElement = screen.getByTestId('profile');
+        expect(profileElement).toBeInTheDocument();
+    });
+
+    // renders User Email component
+    test('renders User Email component', () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+        const displayNameElement = screen.getByTestId('displayName');
+        expect(displayNameElement).toBeInTheDocument();
+    });
+
+    // clicking Saved Routes button calls to the navigateToSavedRoute fucntion
+    test("clicking the Saved Routes button navigates to the saved routes page", () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+        const savedRoutesButton = screen.getByTestId("saved-routes-button");
+        fireEvent.click(savedRoutesButton);
+        expect(mockNavigate).toHaveBeenCalledWith("/savedRoute");
+    });
+
+    // clicking the settings icon naivgates to the settings page
+    test("clicking the settings icon navigates to the settings page", () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+        const settingsIcon = screen.getByTestId("settings");
+        fireEvent.click(settingsIcon);
+        expect(mockNavigate).toHaveBeenCalledWith("/settings");
+    });
+
+    // Test case for friend request
+    test('sends a friend request', async () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+
+        // Find the input element and type the friend's email
+        const friendEmailInput = screen.getByPlaceholderText("Enter Email");
+        fireEvent.change(friendEmailInput, { target: { value: 'friend@example.com' } });
+
+        // Find the Add Friend button and click it
+        const addFriendButton = screen.getByText("Add Friend");
+        fireEvent.click(addFriendButton);
+
+        // Check input field if email was sent
+        expect(friendEmailInput.value).toBe('friend@example.com');
+    });
+
+    // test case for clicking Friends tab
+    test("clicking the friends tab", async () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+
+        // Find and click the friends tab
+        const friendsTab = screen.getByText("Friends");
+        fireEvent.click(friendsTab);
+
+        // Expect the friends tab to become active
+        await waitFor(() => {
+            expect(friendsTab.getAttribute("aria-selected")).toBe("true");
+        });
+    });
+
+    // test case for clicking Friend Request tab
+    test("clicking the friends tab", async () => {
+        render(<MemoryRouter><Profile /></MemoryRouter>);
+
+        // Find and click the friends tab
+        const friendReqTab = screen.getByText("Friend Requests");
+        fireEvent.click(friendReqTab);
+
+        // Expect the friends tab to become active
+        await waitFor(() => {
+            expect(friendReqTab.getAttribute("aria-selected")).toBe("true");
+        });
+    });
 ```
-- <b>Navbar.js</b>
-```diff
-testNavbarLogo()
-    - Test: Verify OptiMapLogo displays on navbar
-    - Result: Pass if image displays correctly
-```
+#### Profile Testing Results
+![](https://cdn.discordapp.com/attachments/707984984010522676/1099879057417576608/image.png)
+![](https://cdn.discordapp.com/attachments/707984984010522676/1099879129211490314/image.png)
 
 ## Back-end
 - <b>DataBase.js</b>

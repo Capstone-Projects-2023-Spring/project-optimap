@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Image, Form, InputGroup, Tabs, Tab } from "react-bootstrap";
 import Navbar from "./Navbar";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { onValue } from 'firebase/database';
 import { db } from "../firebase/Firebase";
 import { ref, get, set, push, remove, } from 'firebase/database';
@@ -21,15 +21,19 @@ const Profile = () => {
 
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
       } else {
-        setUserEmail(null);
+        setUserEmail("Not Logged In");
       }
     });
-
-    return () => unsubscribe();
+  
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, [auth]);
 
   useEffect(() => {
@@ -273,16 +277,17 @@ const Profile = () => {
               className="border p-2 rounded-lg shadow-sm text-center"
               style={{ backgroundColor: "#dbd3d3", position: "relative" }}
             >
-              <h1 className="mb-3">Profile</h1>
+              <h1 data-testid="profile" className="mb-3">Profile</h1>
               <Image
                 src="https://via.placeholder.com/150"
                 roundedCircle
                 className="mb-3"
               />
-              <h3 className="mb-3">{userEmail}</h3>
+              <h3 data-testid="displayName" className="mb-3">{userEmail}</h3>
               <h6>Click below to check Saved Routes</h6>
 
               <Button
+                data-testid="saved-routes-button"
                 onClick={navigateToSavedRoute}
                 className="mt-3"
                 variant="primary"
@@ -306,7 +311,7 @@ const Profile = () => {
                       onBlur={handleFriendEmailChange}
                       value={friendEmail}
                     />
-                    <Button variant="primary" type="submit">
+                    <Button block="true" variant="primary" type="submit">
                       Add Friend
                     </Button>
                   </InputGroup>
@@ -341,6 +346,7 @@ const Profile = () => {
 
               <div style={{ position: "absolute", top: "1rem", right: "1rem" }}>
                 <IconButton
+                  data-testid="settings"
                   onClick={navigateToSettings}
                   color="gray"
                   size="large"

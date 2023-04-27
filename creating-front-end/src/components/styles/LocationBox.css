@@ -1,0 +1,12 @@
+.mt-3{
+    {
+        width: '28vw',
+        position: 'absolute',
+        zIndex: '10',
+        right: '5vw',
+        top: '28vh',
+        border: '3px solid grey',
+        maxHeight: '50vh',
+        overflowY: 'scroll'
+    }
+}

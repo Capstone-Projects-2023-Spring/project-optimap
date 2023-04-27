@@ -5,8 +5,8 @@ sidebar_position: 1
 # Activities
 
 ## Requirements Gathering
-For OptiMap, it will be a mobile app which requires information from the Google Maps 
-API. The application will be written using React Native using the VSCode IDE, allowing 
+OptiMap will be a mobile app which requires information from the Google Maps 
+API. The application will be written using React JS using the VSCode IDE, allowing 
 it to be deployed to Android and iOS. We need to figure out the correct algorithm to 
 reroute the google maps api properly either using Dijkstra's Algorithm or finding a better 
 alternative. The next step is to link to the FireBase in order to start with database 
@@ -26,7 +26,7 @@ reroute during the route when traffic problems arise that require a change while
 OptiMap will also save routes to user accounts for easier reuse
 
 ## Detailed Design
-The front-end design will be written with React Native which uses JavaScript and 
+The front-end design will be written with React JS which uses JavaScript and 
 TypeScript. The backend will be Google Firebase, which provides user authentication 
 and storage of, for example, coordinates. A user can enter a list of routes, and our app 
 will optimize the trip for them based on the shortest and most efficient possible route 

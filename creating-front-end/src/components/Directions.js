@@ -71,9 +71,9 @@ function Directions() {
   }
   
   return (
-    <div>
-    <Navbar />
+    <div data-testid="directions">
     <Container fluid>
+    <Navbar />
     <Row className="justify-content-center align-items-center" style={{ height: 'calc(100vh - 56px)' }}>
     <Col md={6} className="text-center">
     <div className="border p-2 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3' }}>  
@@ -81,22 +81,22 @@ function Directions() {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <label>
           Start:
-          <input ref={startInputRef} style={{display: 'inline-block', width: '200px', marginRight: '10px'}} type="text" value={start} onChange={handleStartChange} />
+          <input ref={startInputRef} style={{display: 'inline-block', width: '200px', marginRight: '10px'}} type="text" value={start} onChange={handleStartChange} data-testid="start"/>
         </label>
         <br />
         <label>
           End:
-          <input ref={endInputRef} style={{display: 'inline-block', width: '200px', marginRight: '10px'}} type="text" value={end} onChange={handleEndChange}  />
+          <input ref={endInputRef} style={{display: 'inline-block', width: '200px', marginRight: '10px'}} type="text" value={end} onChange={handleEndChange} data-testid="end"/>
         </label>
         <br />
         </div>
-        <Button type="submit" variant="primary" className="mt-3" block>Get Directions</Button>
+        <Button type="submit" variant="primary" className="mt-3" block data-testid="get directions">Get Directions</Button>
       </form>
       <br />
       {directions && (
       <ol style={{ textAlign: 'left' }}>
         {directions.map((step, index) => (
-          <li key={index}>
+          <li key={index} data-testid="directions">
             {step.instruction} ({step.distance}, {step.direction}){step.name && ` on ${step.name}`}{step.streetName && ` on ${step.streetName}`}
           </li>
         ))}

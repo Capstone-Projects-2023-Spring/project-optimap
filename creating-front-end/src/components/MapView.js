@@ -140,6 +140,8 @@ const MapView = () => {
             }));
           }
           getDirections(steps);
+          console.log('transyt' + transitType)
+          console.log('durantion' + avoidHighways)
         } else {
           setError('Failed to fetch directions.');
           console.log("no directions")
@@ -391,10 +393,10 @@ const MapView = () => {
 
   return (
     <div>
-      <Navbar />
-      {currentLocation ? (
-        <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} />
-      ) : (<></>)}
+    <Navbar />
+    {currentLocation ? (
+    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} avoidTolls ={avoidTolls} avoidFerries= {avoidFerries} avoidHighways = {avoidHighways} transitType={transitType}/>
+    ):(<></>)}
       <div className="map-container">
         <div className={`main ${isDropdownOpen ? 'open' : 'closed'}`}>
           <label onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Main</label>
@@ -426,17 +428,17 @@ const MapView = () => {
               <option value="BICYCLING">Bicycling</option>
             </select>
           </div>
-
-          <div className="routes-panel">
-            {routes ? (
-              <select id="routes-dropdown" >
-                {routes.map((route, idy) => (
-                  <option key={idy} style={{ display: 'flex' }}>{route.instruction}</option>
-                ))}
-              </select>
-            ) : (
-              <p>No Directions Display</p>
-            )}
+            <div className="routes-panel">
+              {routes ? (
+                <select id="routes-dropdown" style={{ width: '100%' }}>
+                  {routes.map((route, idy) => (
+                    <option key={idy} style={{ width: '100%', display: 'flex' }}>{route.instruction}({route.distance})</option>
+                  ))}
+                </select>
+              ) : (
+                <p>No Directions Display</p>
+              )}
+            </div>
           </div>
         </div>
         {currentLocation ? (

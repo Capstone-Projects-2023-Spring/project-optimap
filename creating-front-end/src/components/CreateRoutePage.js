@@ -208,19 +208,23 @@ const CreateRoutePage = () => {
 
     // Create autocomplete instance for location input field
     const locationInput = document.getElementById('location-input');
-    const startAutocomplete = new window.google.maps.places.Autocomplete(locationInput);
-    startAutocomplete.addListener('place_changed', () => {
-        const place = startAutocomplete.getPlace();
-        setGoogleInput({
-            location: place.formatted_address,
-            coords: {
-                lat: place.geometry.location.lat(),
-                lng: place.geometry.location.lng(),
-            },
+    var startAutocomplete = "";
+    if(window.google){
+        startAutocomplete = new window.google.maps.places.Autocomplete(locationInput);
+        startAutocomplete.addListener('place_changed', () => {
+            const place = startAutocomplete.getPlace();
+            setGoogleInput({
+                location: place.formatted_address,
+                coords: {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng(),
+                },
+            });
+    
+            setInputValue(place.formatted_address);
         });
-
-        setInputValue(place.formatted_address);
-    });
+    }
+    
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
@@ -269,34 +273,34 @@ const CreateRoutePage = () => {
 
                     <Col md={4} className="locationCol">
                         <div className="border p-10 rounded-lg shadow-sm text-center" style={{ backgroundColor: '#dbd3d3', minHeight: '100%' }}>
-                            <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 2 }}>
+                            <h1 data-testid="listoflocations"style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 2 }}>
                                 List of Locations
                             </h1>
-                            <ListGroup className='mt-3'>
+                            <ListGroup data-testid="listgroup" className='mt-3'>
                                 {locationList.map((item, index) => {
                                     /* conditional rendering with commas and stuff depending on if arrival time and/or time spent is set */
                                     if (item.arrival_time && item.hours_spent) {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}
+                                            <ListGroup.Item data-testid="listgroupitem" key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m, {item.arrival_time}{")"}
                                             <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
                                             </ListGroup.Item>
                                             
                                         );
                                     } else if (item.arrival_time) {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.arrival_time}{")"}
+                                            <ListGroup.Item data-testid="listgroupitem" key={index}>{item.street_address} {"("}{item.arrival_time}{")"}
                                             <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
                                             </ListGroup.Item>
                                         );
                                     } else if (item.hours_spent) {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}
+                                            <ListGroup.Item data-testid="listgroupitem" key={index}>{item.street_address} {"("}{item.hours_spent}hr {item.minutes_spent}m{")"}
                                             <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
                                             </ListGroup.Item>
                                         );
                                     } else {
                                         return (
-                                            <ListGroup.Item key={index}>{item.street_address}
+                                            <ListGroup.Item data-testid="listgroupitem" key={index}>{item.street_address}
                                             <Button variant="danger" style={{float: "right"}} onClick={() => handleDelete(index)}>Delete</Button>
                                             </ListGroup.Item>
                                         );
@@ -317,7 +321,7 @@ const CreateRoutePage = () => {
                                 <Form.Group as={Row} style={{ marginBottom: '2rem' }}>
                                     <Form.Label column sm="3" className="d-flex align-items-center">Location</Form.Label>
                                     <Col>
-                                        <FormControl id="location-input" type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
+                                        <FormControl data-testid="locationinput" id="location-input" type="text" placeholder="123 Broad St" value={inputValue} onChange={handleInputChange} />
                                     </Col>
                                 </Form.Group>
 
@@ -342,10 +346,12 @@ const CreateRoutePage = () => {
                                             as="select"
                                             onChange={handleTimeChange}
                                             disabled={!arrivalIsChecked}
+                                            data-testid="arrivaltimeinput"
                                         >
                                             {times.map(option => (
                                                 <option key={option.value} value={option.value}>{option.label}</option>
                                             ))}
+                                            
                                         </FormControl>
                                     </Col>
 
@@ -375,6 +381,7 @@ const CreateRoutePage = () => {
                                             value={hours}
                                             onChange={handleHourChange}
                                             disabled={!spentIsChecked}
+                                            data-testid="timespentinput"
                                         >
                                             {[...Array(13).keys()].map((hour) => (
                                                 <option key={hour} value={hour}>
@@ -401,7 +408,7 @@ const CreateRoutePage = () => {
                                     </Col>
 
                                 </Form.Group>
-                                <Button type="submit">+</Button>
+                                <Button data-testid="addbutton" type="submit">+</Button>
 
                                 <div style={{ marginTop: '1rem' }}>{message}</div>
                             </Form>

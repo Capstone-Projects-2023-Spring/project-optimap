@@ -88,7 +88,7 @@ it('should display an error message if email is null', async () => {
     const mockSignInWithEmailAndPassword = jest.fn(() => {
         throw new Error('auth/invalid-email');
     });
-    jest.mock('../firebase/Firebase', () => ({
+    jest.mock('../../firebase/Firebase', () => ({
         signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
     }));
 
@@ -112,7 +112,7 @@ it('should display an error message if email is null', async () => {
     const mockSignInWithEmailAndPassword = jest.fn(() => {
       throw new Error('auth/wrong-password');
     });
-    jest.mock('../firebase/Firebase', () => ({
+    jest.mock('../../firebase/Firebase', () => ({
       signInWithEmailAndPassword: mockSignInWithEmailAndPassword,
     }));
 

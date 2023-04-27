@@ -2,41 +2,81 @@
 sidebar_position: 2
 ---
 # Integration tests
-Jest will be used alongside React to mock objects
+Jest is used alongside React to mock objects
 
-### Add Location Test (Use Case #1)
+### Login.js 
 ```diff
-Test: Verify user can add a list of routes into a text field followed by clicking on submit, which calculates the best routes by reordering the destinations for the 
-shortest time
+// Verify if successful login displays navbar options
+  it('should display navbar options after successful login', async () => {
+    const mockUser = {
+      uid: '1234',
+      displayName: 'testuser',
+      email: 'te@email.com'
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+      callback(mockUser);
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
 
-Result: Pass if user can correctly add a list of routes and after clicking on submit, their route is correctly calculated and trip begins
+    render( <MemoryRouter><Login /></MemoryRouter>);
+    const emailInput = screen.getByLabelText('Email address');
+    const passwordInput = screen.getByLabelText('Password');
+    const loginButton = screen.getByTestId('login button');
+
+    fireEvent.change(emailInput, { target: { value: 'te@email.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'test123' } });
+    fireEvent.click(loginButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Logout')).toBeInTheDocument();
+      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getByText('Map')).toBeInTheDocument();
+      expect(screen.getByText('Directions')).toBeInTheDocument();
+      expect(screen.getByText('Create Route')).toBeInTheDocument();
+      expect(screen.getByText('Saved Routes')).toBeInTheDocument();
+    });
+  });
+```
+#### Login.js test results
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474068194574447/image.png)
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474068408467587/image.png)
+
+### Signup.js
+```diff
+// Verify if navbar options are displayed after successful signup
+  it('should display navbar options after successful signup', async () => {
+    const mockUser = {
+      uid: '1234',
+      displayName: 'testuser',
+      email: 'tea@email.com'
+    };
+    const mockOnAuthStateChanged = jest.fn((callback) => {
+      callback(mockUser);
+    });
+    jest.spyOn(auth, 'onAuthStateChanged').mockImplementation(mockOnAuthStateChanged);
+
+    render( <MemoryRouter><Signup /></MemoryRouter>);
+    const emailInput = screen.getByLabelText('Email address');
+    const passwordInput = screen.getByLabelText('Password');
+    const confirmInput = screen.getByLabelText('Confirm Password');
+    const signupButton = screen.getByTestId('signup button');
+
+    fireEvent.change(emailInput, { target: { value: 'tea@email.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'test123' } });
+    fireEvent.change(confirmInput, { target: { value: 'test123' } });
+    fireEvent.click(signupButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Logout')).toBeInTheDocument();
+      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getByText('Map')).toBeInTheDocument();
+      expect(screen.getByText('Directions')).toBeInTheDocument();
+      expect(screen.getByText('Create Route')).toBeInTheDocument();
+      expect(screen.getByText('Saved Routes')).toBeInTheDocument();
+    });
+  });
 ```
 
-### Access Saved Route Test (Use Case #2)
-```diff
-Test: Verify user can view previously saved routes and begin their trip upon clicking a saved route
-
-Result: Pass if user can correctly view their saved routes and begin their trip upon clicking a saved route
-```
-
-### Transportation Mode Test (Use Case #3)
-```diff
-Test: Verify user can change their transportation mode to either walking, driving, or biking
-
-Result: Pass if user can correctly change their transportation mode and starting a trip will have the updated transportation mode
-```
-
-### Set Time Arival Test (Use Case #4)
-```diff
-Test: Verify user can set an arrival time on locations being added onto a trip
-
-Result: Pass if user can correctly set an arrival time on locations
-```
-
-### Reroute on Traffic Test (Use Case #5)
-```diff
-Test: Verify user can rearrange their route 
-
-Result: Pass if user can correctly rearrange their route
-```
-
+#### Signup.js test results
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474068660129953/image.png)
+![](https://media.discordapp.net/attachments/1059991342266204242/1100474068928577686/image.png)
