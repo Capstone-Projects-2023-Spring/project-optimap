@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import LocationBox from './LocationBox';
 import { db } from '../firebase/Firebase';
 import { ref, onValue, off } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 import car from '../assets/car.png';
 import bike from '../assets/bike.png';
 import person from '../assets/walking.png';
@@ -60,7 +61,10 @@ const MapView = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const settingsRef = ref(db, 'settings/routeOptions');
+      const auth = getAuth();
+      const userId = auth.currentUser.uid;
+
+      const settingsRef = ref(db, `users/${userId}/settings/routeOptions`);
       onValue(settingsRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -73,7 +77,9 @@ const MapView = () => {
 
     fetchData();
     return () => {
-      const settingsRef = ref(db, 'settings/routeOptions');
+      const auth = getAuth();
+      const userId = auth.currentUser.uid;
+      const settingsRef = ref(db, `users/${userId}/settings/routeOptions`);
       off(settingsRef);
     };
   }, []);
@@ -90,22 +96,22 @@ const MapView = () => {
     const d = R * c;
     return d;
   }
-  
+
   function toRadians(deg) {
     return deg * Math.PI / 180;
   }
-  
+
   //Handles the display of the route
   function handleShowRoute() {
     const DirectionsService = new window.google.maps.DirectionsService();
-  
+
     // Sort the markers array based on their distance from the current location
     const sortedMarkers = markers.sort((a, b) => {
       const distA = calculateDistance(currentLocation, a.position);
       const distB = calculateDistance(currentLocation, b.position);
       return distA - distB;
     });
-  
+
     DirectionsService.route(
       {
         origin: currentLocation,
@@ -141,7 +147,7 @@ const MapView = () => {
       }
     );
   };
-    
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -156,41 +162,41 @@ const MapView = () => {
         (error) => console.log(error)
       );
 
-        const passedLocsTemp = [];
-        const passedAddrTemp = [];
-        if(pageLocation.state){
-          for(var i = 0; i < pageLocation.state.locations.length; i++){
+      const passedLocsTemp = [];
+      const passedAddrTemp = [];
+      if (pageLocation.state) {
+        for (var i = 0; i < pageLocation.state.locations.length; i++) {
 
-            // format the time to show in map view (nicer, conditional rendering)
-            var formattedTime = "";
-            const h = pageLocation.state.locations[i].hours_spent;
-            const a = pageLocation.state.locations[i].arrival_time;
-            const m = pageLocation.state.locations[i].minutes_spent;
+          // format the time to show in map view (nicer, conditional rendering)
+          var formattedTime = "";
+          const h = pageLocation.state.locations[i].hours_spent;
+          const a = pageLocation.state.locations[i].arrival_time;
+          const m = pageLocation.state.locations[i].minutes_spent;
 
-            if(h && a){
-               formattedTime = a + ", " + h + "hr " + m + "m";
-            } else if (h) {
-               formattedTime = h + "hr " + m + "m"
-            } else if (a) {
-                formattedTime = a;
-            }
-
-            passedLocsTemp[i] = {
-              position: pageLocation.state.locations[i].coordinates, 
-              street_address: pageLocation.state.locations[i].street_address,
-              arrival_time: pageLocation.state.locations[i].arrival_time,
-              hours_spent: pageLocation.state.locations[i].hours_spent,
-              minutes_spent: pageLocation.state.locations[i].minutes_spent,
-              formatted_time: formattedTime,
-            };
+          if (h && a) {
+            formattedTime = a + ", " + h + "hr " + m + "m";
+          } else if (h) {
+            formattedTime = h + "hr " + m + "m"
+          } else if (a) {
+            formattedTime = a;
           }
-  
-          // setPassedLocations(passedLocsTemp)
-  
-          console.log("setting markers to ")
-          console.dir(passedLocsTemp)
-          setMarkers(passedLocsTemp)
+
+          passedLocsTemp[i] = {
+            position: pageLocation.state.locations[i].coordinates,
+            street_address: pageLocation.state.locations[i].street_address,
+            arrival_time: pageLocation.state.locations[i].arrival_time,
+            hours_spent: pageLocation.state.locations[i].hours_spent,
+            minutes_spent: pageLocation.state.locations[i].minutes_spent,
+            formatted_time: formattedTime,
+          };
         }
+
+        // setPassedLocations(passedLocsTemp)
+
+        console.log("setting markers to ")
+        console.dir(passedLocsTemp)
+        setMarkers(passedLocsTemp)
+      }
 
 
     } else {
@@ -226,7 +232,7 @@ const MapView = () => {
 
     // autocompleteRef.current = autocomplete; ?
     console.log("len " + markers.length)
-    if(markers.length > 1 && currentLocation){
+    if (markers.length > 1 && currentLocation) {
       handleShowRoute();
     }
     console.log("len " + markers.length)
@@ -281,16 +287,16 @@ const MapView = () => {
 
   const handleAddDestination = () => {
     const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ address: destinationInput }, (results, status) => {
-        if (status === 'OK') {
-          const location = results[0].geometry.location;
-          const newMarkers = [...markers, { position: location }];
-          setMarkers(newMarkers);
-          setDestinationInput('');
-        } else {
-          setError('Failed to geocode destination.');
-        }
-      });
+    geocoder.geocode({ address: destinationInput }, (results, status) => {
+      if (status === 'OK') {
+        const location = results[0].geometry.location;
+        const newMarkers = [...markers, { position: location }];
+        setMarkers(newMarkers);
+        setDestinationInput('');
+      } else {
+        setError('Failed to geocode destination.');
+      }
+    });
   };
 
   const handleMarkerClick = (props, marker, e) => {
@@ -311,7 +317,7 @@ const MapView = () => {
           if (place.photos) {
             place.photos.forEach((photo) => {
               const url = photo.getUrl({ maxWidth: 500, maxHeight: 500 });
-                setPhotos([...photos, url])
+              setPhotos([...photos, url])
             });
           }
         } else {
@@ -331,7 +337,7 @@ const MapView = () => {
     const newMarkers = [...markers];
     newMarkers.splice(index, 1);
     setMarkers(newMarkers);
-  
+
     if (newMarkers.length === 0) {
       setShowRoute(false);
     } else {
@@ -339,9 +345,9 @@ const MapView = () => {
         location: marker.position,
         stopover: true,
       }));
-  
+
       const directionsService = new window.google.maps.DirectionsService();
-  
+
       directionsService.route(
         {
           origin: currentLocation,
@@ -364,7 +370,7 @@ const MapView = () => {
 
 
   const handleTransitTypeChange = e => {
-    setTransitType(e.target.value );
+    setTransitType(e.target.value);
   };
 
   //Changes marker icon for current location based on transit type
@@ -381,127 +387,128 @@ const MapView = () => {
     }
   };
 
-  
+
 
   return (
     <div>
-    <Navbar />
-    {currentLocation ? (
-    <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers}/>
-    ):(<></>)}
+      <Navbar />
+      {currentLocation ? (
+        <LocationBox setIdx={setIdx} handleRemoveDestination={handleRemoveDestination} locations={markers} />
+      ) : (<></>)}
       <div className="map-container">
-          <div className={`main ${isDropdownOpen ? 'open' : 'closed'}`}>
-            <label onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Main</label>
-            
-            <div className="search-container">
-              <input id="search" type="text" onChange={handleChange} />
-              <button onClick={handleSearch}>Search</button>
-              <div className="input-container">
-                <input
-                  id="destination-input"
-                  type="text"
-                  placeholder="Enter a destination"
-                  value={destinationInput}
-                  onChange={handleDestinationChange}
-                />
-                <button onClick={handleShowRoute}>Update Route</button>
-              </div>
-            </div>
+        <div className={`main ${isDropdownOpen ? 'open' : 'closed'}`}>
+          <label onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Main</label>
 
-            <div className="transit-type-container">
-              <label htmlFor="transit-type">Transit Type: </label>
-              <select
-                id="transit-type"
-                value={transitType}
-                onChange={handleTransitTypeChange}
-              >
-                <option value="DRIVING">Driving</option>
-                <option value="WALKING">Walking</option>
-                <option value="BICYCLING">Bicycling</option>
-              </select>
-            </div>
-
-            <div className="routes-panel">
-              {routes ? (
-                <select id="routes-dropdown" >
-                  {routes.map((route, idy) => (
-                    <option key={idy} style={{ display: 'flex' }}>{route.instruction}</option>
-                  ))}
-                </select>
-              ) : (
-                <p>No Directions Display</p>
-              )}
+          <div className="search-container">
+            <input id="search" type="text" onChange={handleChange} />
+            <button onClick={handleSearch}>Search</button>
+            <div className="input-container">
+              <input
+                id="destination-input"
+                type="text"
+                placeholder="Enter a destination"
+                value={destinationInput}
+                onChange={handleDestinationChange}
+              />
+              <button onClick={handleShowRoute}>Update Route</button>
             </div>
           </div>
-        {currentLocation ? (
-        <Map
-          google={window.google}
-          zoom={14}
-          style={mapStyles}
-          initialCenter={currentLocation}
-          // center={searchedLocationCoords}
-        >
-          {searchedLocationCoords.lat !== 0 && (
-            <Marker
-              onClick={handleMarkerClick}
-              position={searchedLocationCoords}
-              locationInfo={locationInfo}
-            />
-          )}
-          {currentLocation.lat && currentLocation.lng && (
-            <Marker
-            position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
-            icon={{
-              url: getMarkerIcon()}} />
-          )}
-          {markers.map((marker, index) => (
-            <Marker 
-            key={index} 
-            position={marker.position} 
-            onClick={() => handleRemoveDestination(index)} 
-            icon={index === markers.length - 1
-                  ? { url: finishFlag}
-                  : { url: greenMarker }}
-            label={{
-              text: (index === markers.length - 1) ? " " : (index + 1).toString(),
-              className: "marker-label"
-            }}
-            />
-          ))}
 
-          {showRoute && directions && (
-            <Polyline
-              path={directions.routes[0].overview_path}
-              strokeColor="#006eff"
-              strokeOpacity={0.8}
-              strokeWeight={4}
-            />
-          )}
-          <InfoWindow
-            marker={activeMarker}
-            visible={showingInfoWindow}
-          >
-            <div>
-              <div>
-                <img src={photos[0]} alt="photo_0" />
-              </div>
-              <div>{locationInfo.formatted_phone_number}</div>
-              <div>{locationInfo.rating} / 5.0</div>
-              <div>
-                {places.map((place, index) => (
-                  <div key={index}>
-                    {place.name} - {place.formatted_address}
-                  </div>
+          <div className="transit-type-container">
+            <label htmlFor="transit-type">Transit Type: </label>
+            <select
+              id="transit-type"
+              value={transitType}
+              onChange={handleTransitTypeChange}
+            >
+              <option value="DRIVING">Driving</option>
+              <option value="WALKING">Walking</option>
+              <option value="BICYCLING">Bicycling</option>
+            </select>
+          </div>
+
+          <div className="routes-panel">
+            {routes ? (
+              <select id="routes-dropdown" >
+                {routes.map((route, idy) => (
+                  <option key={idy} style={{ display: 'flex' }}>{route.instruction}</option>
                 ))}
-              </div>
-            </div>
-          </InfoWindow>
-        </Map> ) : (
+              </select>
+            ) : (
+              <p>No Directions Display</p>
+            )}
+          </div>
+        </div>
+        {currentLocation ? (
+          <Map
+            google={window.google}
+            zoom={14}
+            style={mapStyles}
+            initialCenter={currentLocation}
+          // center={searchedLocationCoords}
+          >
+            {searchedLocationCoords.lat !== 0 && (
+              <Marker
+                onClick={handleMarkerClick}
+                position={searchedLocationCoords}
+                locationInfo={locationInfo}
+              />
+            )}
+            {currentLocation.lat && currentLocation.lng && (
+              <Marker
+                position={{ lat: currentLocation.lat, lng: currentLocation.lng }}
+                icon={{
+                  url: getMarkerIcon()
+                }} />
+            )}
+            {markers.map((marker, index) => (
+              <Marker
+                key={index}
+                position={marker.position}
+                onClick={() => handleRemoveDestination(index)}
+                icon={index === markers.length - 1
+                  ? { url: finishFlag }
+                  : { url: greenMarker }}
+                label={{
+                  text: (index === markers.length - 1) ? " " : (index + 1).toString(),
+                  className: "marker-label"
+                }}
+              />
+            ))}
 
-      <div>Loading...</div>
-    )}
+            {showRoute && directions && (
+              <Polyline
+                path={directions.routes[0].overview_path}
+                strokeColor="#006eff"
+                strokeOpacity={0.8}
+                strokeWeight={4}
+              />
+            )}
+            <InfoWindow
+              marker={activeMarker}
+              visible={showingInfoWindow}
+            >
+              <div>
+                <div>
+                  <img src={photos[0]} alt="photo_0" />
+                </div>
+                <div>{locationInfo.formatted_phone_number}</div>
+                <div>{locationInfo.rating} / 5.0</div>
+                <div>
+                  {places.map((place, index) => (
+                    <div key={index}>
+                      {place.name} - {place.formatted_address}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </InfoWindow>
+          </Map>) : (
+
+          <div>Loading...</div>
+        )}
       </div>
-   
+
     </div>
   );
 }
