@@ -5,11 +5,14 @@ import './MapView.js'
 
 function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHighways, avoidFerries, transitType }) {
     const [showModal, setShowModal] = useState(false);
+    const [showModalSecond, setShowModalSecond] = useState(false);
     const [endLocation, setEndLocation] = useState(null);
     const transitTypes = transitType.toString().toUpperCase();
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
+    const handleShowModalSecond = () => setShowModalSecond(true);
+    const handleCloseModalSecond = () => setShowModalSecond(false);
     const styles = {
         width: '28vw',
         position: 'absolute',
@@ -77,7 +80,6 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                 const origin = `${position.coords.latitude},${position.coords.longitude}`;
                 const destination = endLocation.street_address;
                 calculateDistance(origin, destination);
-                handleRemoveDestination(0);
             });
         }
     };
@@ -108,9 +110,11 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                     <Button variant="success" onClick={handleStart}>Start</Button>
                 </Card.Footer>
             </Card>
-            <Button variant="primary" className="d-md-none" onClick={handleShowModal}>
+
+
+            <button variant="primary" className="d-md-none" style={{ width:"30%", backgroundColor:"green"}} onClick={handleShowModal}>
                 Locations
-            </Button>
+            </button>
             <Modal show={showModal} onHide={handleCloseModal} className="d-md-none" style={{maxWidth: '100%'}}>
                 <Modal.Header closeButton>
                     <Modal.Title>Locations</Modal.Title>
@@ -131,12 +135,41 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
                     </ListGroup>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="success" onClick={handleStart}>Start</Button>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <button variant="secondary" className="d-md-three" style={{ width:"35%",backgroundColor:"red"}} onClick={handleShowModalSecond} >
+                Next Stop
+            </button>
+            <Modal show={showModalSecond} onHide={handleCloseModalSecond} className="d-md-three" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, maxWidth: '100%' }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Next Stop</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ListGroup>
+                        {locations.slice(0, 1).map((location, index) => {
+                            return (
+                            <ListGroup.Item style={{ fontSize: '2vh', display: 'flex', justifyContent: 'space-between' }} key={index}>
+                                <div>
+                                <div>{location.street_address}</div>
+                                {location.formatted_time}
+                                </div>
+                            </ListGroup.Item>
+                            )
+                        })}
+                    </ListGroup>
+
+                </Modal.Body>
+                <Modal.Footer>
+                        <Button variant="danger" onClick={() => handleRemoveDestination(0)} size="sm">Confirm Finish</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <button variant="secondary" className="d-md-three" style={{ width:"35%", backgroundColor:"yellow"}}  onClick={handleStart}>Start</button>
+
         </>
         
     );
