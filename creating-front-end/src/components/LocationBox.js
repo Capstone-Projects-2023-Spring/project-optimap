@@ -83,6 +83,19 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
             });
         }
     };
+
+    const handleNextStop = () => {
+        handleRemoveDestination(locations[0]);
+        console.log("handleNextStop", locations[0]);
+        if (endLocation && locations.length > 1) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const origin = `${position.coords.latitude},${position.coords.longitude}`;
+                const destination = locations[1].street_address;
+                calculateDistance(origin, destination);
+            });
+        }
+
+    }
       
 
     return (
@@ -112,7 +125,7 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
             </Card>
 
 
-            <button variant="primary" className="d-md-none" style={{ width:"30%", backgroundColor:"green"}} onClick={handleShowModal}>
+            <button variant="primary" className="d-md-none" style={{ width:"30%", backgroundColor:"yellow   "}} onClick={handleShowModal}>
                 Locations
             </button>
             <Modal show={showModal} onHide={handleCloseModal} className="d-md-none" style={{maxWidth: '100%'}}>
@@ -164,11 +177,12 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
 
                 </Modal.Body>
                 <Modal.Footer>
-                        <Button variant="danger" onClick={() => handleRemoveDestination(0)} size="sm">Confirm Finish</Button>
+                        <Button variant="danger" onClick={handleNextStop} size="sm">Confirm Finish</Button>
+                        <Button variant="success" onClick={handleStart} size="sm"> Start Current</Button>  
                 </Modal.Footer>
             </Modal>
 
-            <button variant="secondary" className="d-md-three" style={{ width:"35%", backgroundColor:"yellow"}}  onClick={handleStart}>Start</button>
+            <button variant="secondary" className="d-md-three" style={{ width:"35%", backgroundColor:"green"}}  onClick={handleStart}>Start</button>
 
         </>
         
@@ -176,4 +190,4 @@ function LocationBox({ handleRemoveDestination, locations, avoidTolls, avoidHigh
 }
 
 export default LocationBox
-// Path: src\components\MapView.js
+// export default LocationBox;
