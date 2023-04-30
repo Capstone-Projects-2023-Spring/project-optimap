@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase/Firebase';
-import { ref, onValue, onChildChanged, get, set, push, remove, child, update } from "firebase/database";
+import { ref, onValue, onChildChanged, get, set, push, remove, child, update, getDatabase } from "firebase/database";
 import 'firebase/auth'
 import { Container, Row, Accordion, Button, ListGroup , Modal } from 'react-bootstrap';
 import NavBar from './Navbar';
@@ -21,6 +21,9 @@ const SavedRoute = () => {
 	const [friends, setFriends] = useState([])
 	const [selectedRouteId, setSelectedRouteId] = useState(null);
 	const [showFriendList, setShowFriendList] = useState(false);
+
+	const [userEmail, setUserEmail] = useState('');
+	const [emails, setEmails] = useState({});
 
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
@@ -132,6 +135,20 @@ const SavedRoute = () => {
 	function handleCancelClick(){
 		setShowFriendList(false);
 	}
+
+	async function getUserEmailById(userId) {
+		const db = getDatabase();
+		const userRef = ref(db, `users/${userId}`);
+		try {
+			const snapshot = await get(userRef);
+			const userData = snapshot.val();
+			console.log("inside get user by email: " + userId);
+			console.log(userData.email);
+			return userData.email || '';
+		} catch (error) {
+		 	throw new Error(`Could not get user email: ${error.message}`);
+		}
+	}
 	
 
 
@@ -164,6 +181,18 @@ const SavedRoute = () => {
 			update(friendSharedRoutesRef, updates);
 		});
 	}
+
+	useEffect(() => {
+		async function fetchEmails() {
+		  const newEmails = {};
+		  for (const route of sharedRoutes) {
+			const email = await getUserEmailById(route[1].owner);
+			newEmails[route[0]] = email;
+		  }
+		  setEmails(newEmails);
+		}
+		fetchEmails();
+	}, [sharedRoutes]);
 
 	useEffect(() => {
 		console.log("friends has been updated:", friends);
@@ -301,14 +330,19 @@ const SavedRoute = () => {
 						<Accordion alwaysOpen>
 							{sharedRoutes.map(route => (
 								<Accordion.Item key={route[0]} eventKey={route[0]}>
-									<Accordion.Header style={{ display: 'flex', flexDirection: 'row' }}>
-										{route[1].route.name}
-										<div style={{textAlign: 'right', width: "100%"}}>
+									<Accordion.Header style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+										<div style={{ flexGrow: 1 }}>
+											{route[1].route.name}
+										</div>
+										<div style={{ flexBasis: '50%', textAlign: 'center' }}>
+											<span style={{ fontSize: '0.8rem', color: '#666' }} >Owner: {emails[route[0]]}</span>
+										</div>
+										<div style={{ flexShrink: 0 }}>
 											<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSharedDelete(route[0])}>
-												Delete
+											Delete
 											</Button>
 											<Button  variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route.route)}>
-												Load
+											Load
 											</Button>
 										</div>
 									</Accordion.Header>
