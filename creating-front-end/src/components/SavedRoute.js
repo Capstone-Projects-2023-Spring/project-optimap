@@ -54,8 +54,11 @@ const SavedRoute = () => {
 					if (data) {
 						const routesArray = Object.entries(data).map(([key, value]) => [key, value]);
 						setSharedRoutes(routesArray);
-						console.log("SHARED ROUTES LENGTH" +sharedRoutes.length);
-						console.log("SHARED ROUTES: ", routesArray[1][1].route.name);
+						routesArray.forEach((route) => {
+							if (route && route[1].route && route[1].route.name) {
+							  console.log(route[0]);
+							}
+						});
 					};
 				});
 
@@ -65,7 +68,6 @@ const SavedRoute = () => {
 					const friendsArray = [];
 					if (data) {
 						for (const key in data) {
-							console.log(key);
 							friendsArray.push({
 								id: key,
 								email: data[key],
@@ -103,6 +105,17 @@ const SavedRoute = () => {
 		});
 	}
 
+	function handleSharedDelete(id) {
+		console.log("deleting " + id)
+		const delref = ref(db, `users/${userId}/sharedRoutes/${id}`);
+
+		setSharedRoutes([])
+
+		remove(delref).then(() => {
+			console.log("location removed");
+		});
+	}
+
 	function handleSavedLoad(route){
 		console.log("loading ")
 		console.dir(route)
@@ -120,6 +133,8 @@ const SavedRoute = () => {
 		setShowFriendList(false);
 	}
 	
+
+
 	function handleShareRoute(friendId, routeId) {
 		const sharedRoutesRef = ref(db, 'sharedRoutes');
 		const sharedRouteRef = push(sharedRoutesRef);
@@ -129,24 +144,24 @@ const SavedRoute = () => {
 		
 		const routeRef = ref(db, `users/${userId}/savedRoutes/${routeId}`);
 		get(routeRef).then((snapshot) => {
-		  const routeData = snapshot.val();
-	  
-		  const sharedRouteData = {
-			owner: userId,
-			friend: friendUserID,
-			route: routeData,
-		  };
-	  
-		  set(sharedRouteRef, sharedRouteData);
+			const routeData = snapshot.val();
+			console.log(routeData);
+			const sharedRouteData = {
+				owner: userId,
+				friend: friendUserID,
+				route: routeData,
+			};
+		
+			set(sharedRouteRef, sharedRouteData);
 
-		  const ownerSharedRoutesRef = ref(db, `users/${userId}/sharedRoutes`);
-		  const friendSharedRoutesRef = ref(db, `users/${friendId}/sharedRoutes`);
-	  
-		  const updates = {};
-		  updates[`/${sharedRouteId}`] = sharedRouteData;
-	  
-		  update(ownerSharedRoutesRef, updates);
-		  update(friendSharedRoutesRef, updates);
+			const ownerSharedRoutesRef = ref(db, `users/${userId}/sharedRoutes`);
+			const friendSharedRoutesRef = ref(db, `users/${friendId}/sharedRoutes`);
+		
+			const updates = {};
+			updates[`/${sharedRouteId}`] = sharedRouteData;
+		
+			update(ownerSharedRoutesRef, updates);
+			update(friendSharedRoutesRef, updates);
 		});
 	}
 
@@ -289,7 +304,7 @@ const SavedRoute = () => {
 									<Accordion.Header style={{ display: 'flex', flexDirection: 'row' }}>
 										{route[1].route.name}
 										<div style={{textAlign: 'right', width: "100%"}}>
-											<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSavedDelete(route[1].route.name)}>
+											<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSharedDelete(route[0])}>
 												Delete
 											</Button>
 											<Button  variant="success" size="sm" className="ml-auto" onClick={() => handleSavedLoad(route[1].route.route)}>
@@ -328,7 +343,7 @@ const SavedRoute = () => {
 
 				) : (
 					<Row>
-						<h4 style={{ marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw' }}>No saved routes</h4>
+						<h4 style={{ marginTop: "1rem", marginLeft: "3rem", backgroundColor: 'white', width: '33vw' }}>No shared routes</h4>
 					</Row>
 				)}
 				
