@@ -140,13 +140,13 @@ const SavedRoute = () => {
 		const db = getDatabase();
 		const userRef = ref(db, `users/${userId}`);
 		try {
-		  const snapshot = await get(userRef);
-		  const userData = snapshot.val();
-		  console.log("inside get user by email: " + userId);
-		  console.log(userData.email);
-		  return userData.email || '';
+			const snapshot = await get(userRef);
+			const userData = snapshot.val();
+			console.log("inside get user by email: " + userId);
+			console.log(userData.email);
+			return userData.email || '';
 		} catch (error) {
-		  throw new Error(`Could not get user email: ${error.message}`);
+		 	throw new Error(`Could not get user email: ${error.message}`);
 		}
 	}
 	
@@ -335,7 +335,7 @@ const SavedRoute = () => {
 											{route[1].route.name}
 										</div>
 										<div style={{ flexBasis: '50%', textAlign: 'center' }}>
-											<span>Owner: {emails[route[0]]}</span>
+											<span style={{ fontSize: '0.8rem', color: '#666' }} >Owner: {emails[route[0]]}</span>
 										</div>
 										<div style={{ flexShrink: 0 }}>
 											<Button variant="danger" size="sm" className="ml-auto" onClick={() => handleSharedDelete(route[0])}>
